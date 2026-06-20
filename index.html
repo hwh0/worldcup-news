@@ -31,6 +31,13 @@
         .tab-panel.active { display: block; }
         .team-chip { transition: transform 0.15s; }
         .team-chip:hover { transform: scale(1.03); }
+        .trend-card { transition: border-color 0.2s; }
+        .trend-card:hover { border-color: rgba(255,255,255,0.15); }
+        .reaction-quote { border-left: 3px solid; padding-left: 12px; }
+        .reaction-positive { border-color: #34d399; }
+        .reaction-negative { border-color: #f87171; }
+        .reaction-neutral { border-color: #71717a; }
+        .reaction-funny { border-color: #fbbf24; }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-200 min-h-screen">
@@ -88,6 +95,11 @@
                 <i class="fa-solid fa-mug-hot"></i>
                 無賽事球隊動態
                 <span id="tab-idle-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400"></span>
+            </button>
+            <button id="tab-trending" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
+                <i class="fa-brands fa-x-twitter"></i>
+                X 熱議話題
+                <span id="tab-trending-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400">10 則</span>
             </button>
         </div>
 
@@ -152,6 +164,26 @@
                     <div class="skeleton h-28 rounded-3xl"></div>
                 </div>
                 <p id="no-idle-news" class="hidden text-zinc-500 text-sm mt-3">今日暫無其他隊伍的重要新聞。</p>
+            </section>
+        </div>
+
+        <!-- 分頁三：X 熱議話題 -->
+        <div id="panel-trending" class="tab-panel">
+            <section class="mb-6">
+                <p class="text-sm text-zinc-400 leading-relaxed">
+                    彙整本日 X（Twitter）上討論量最高的世足話題，並摘要網友主要觀點與情緒走向。
+                </p>
+            </section>
+            <section>
+                <h2 class="section-title flex items-center gap-3 mb-5">
+                    <i class="fa-brands fa-x-twitter text-zinc-200"></i>
+                    本日 X 熱議 Top 10
+                    <span class="text-xs font-normal text-zinc-500">網友評論摘要</span>
+                </h2>
+                <div id="trending-list" class="space-y-4">
+                    <div class="skeleton h-36 rounded-3xl"></div>
+                    <div class="skeleton h-36 rounded-3xl"></div>
+                </div>
             </section>
         </div>
     </main>
@@ -511,6 +543,147 @@ const IDLE_TEAM_NEWS = [
     },
 ];
 
+/** 本日 X 全平台熱議 Top 10（含網友評論摘要，每日更新） */
+const X_TRENDING_TOP10 = [
+    {
+        id: 'usmnt-knockout',
+        priority: 1,
+        hashtag: '#USMNT',
+        heat: '🔥 極熱',
+        topic: '美國隊兩連勝晉級十六強',
+        summary: '美國 2-0 勝澳洲後確定晉級，Freeman 世界盃首球成為美國社群最大亮點。東道主能否延續氣勢成為全美趨勢榜首話題。',
+        reactions: [
+            { tone: 'positive', text: '「終於像支世界盃球隊了！」——多數美國球迷認為進攻火力與團隊紀律達到近年最佳。' },
+            { tone: 'neutral', text: '「Pulisic 什麼時候回來？」——討論焦點轉向傷兵復出與十六強對手。' },
+            { tone: 'funny', text: '「Freeman 老爸是 Super Bowl 冠軍，兒子是世足進球者，這家族開掛了吧。」' },
+        ],
+    },
+    {
+        id: 'almiron-red',
+        priority: 2,
+        hashtag: '#Almiron',
+        heat: '🔥 極熱',
+        topic: '掩嘴說話首例紅牌',
+        summary: '巴拉圭 Almirón 因對 Müldür 掩嘴說話被 VAR 直紅，成為 IFAB 新規在世足的首位受害者，全球足球社群炸鍋。',
+        reactions: [
+            { tone: 'negative', text: '「足球變成語言警察了？」——大批網友認為規則過嚴、缺乏明確界線。' },
+            { tone: 'positive', text: '「終於有人被罰了，歧視行為不該被掩嘴隱藏。」——支持派認為此舉具警示作用。' },
+            { tone: 'neutral', text: '「黃牌改紅牌、Tim Ream 逃過一劫——裁判一致性才是爭議核心。」' },
+        ],
+    },
+    {
+        id: 'galarza-goal',
+        priority: 3,
+        hashtag: '#Galarza',
+        heat: '🔥 高熱',
+        topic: '開賽 64 秒世界波',
+        summary: '巴拉圭 Galarza 開賽 64 秒遠射破門，一度登頂本屆最快進球，土耳其 32 射門 0 進的對比讓此球更具傳奇色彩。',
+        reactions: [
+            { tone: 'positive', text: '「La Albirroja 回來了！」——巴拉圭球迷狂歡，認為這是首戰慘敗後的完美反彈。' },
+            { tone: 'funny', text: '「土耳其射門比進球多 32 倍，建議改打籃球。」——迷因圖洗版。' },
+            { tone: 'neutral', text: '「64 秒進球會不會被後來者超越？世足最快進球榜還在更新中。」' },
+        ],
+    },
+    {
+        id: 'raphinha-injury',
+        priority: 4,
+        hashtag: '#Raphinha',
+        heat: '🔥 高熱',
+        topic: 'Raphinha 無碰撞傷退',
+        summary: '巴西 3-0 勝海地，但 Raphinha 上半場突然倒地傷退，#Raphinha 登上巴西區趨勢第一，傷情陰影籠罩桑巴軍團。',
+        reactions: [
+            { tone: 'negative', text: '「2022 的傷病噩夢又來了？」——巴西球迷普遍焦慮，擔心攻擊線崩塌。' },
+            { tone: 'positive', text: '「Cunha 梅開二度證明板凳深度夠，別只盯著一個人。」——樂觀派安撫情緒。' },
+            { tone: 'neutral', text: '「等 MRI 報告再說，現在猜測都是多餘的。」——醫療派呼籲冷靜。' },
+        ],
+    },
+    {
+        id: 'hydration-breaks',
+        priority: 5,
+        hashtag: '#HydrationBreak',
+        heat: '📈 升溫',
+        topic: '補水暫停遭全場噓聲',
+        summary: 'FIFA 強制三分鐘補水暫停引發球員、教練、球迷罕見一致批評，商業廣告插入成為眾矢之的。',
+        reactions: [
+            { tone: 'negative', text: '「球員需要喝水，不需要看廣告！」——最常見的留言，認為 FIFA 商業化過度。' },
+            { tone: 'neutral', text: '「高溫保護球員合理，但兩次暫停 + 廣告確實破壞節奏。」——妥協派居多。' },
+            { tone: 'funny', text: '「Zwayer 抽筋時怎麼沒人給他 pickle juice？」——與裁判抽筋梗連動。' },
+        ],
+    },
+    {
+        id: 'isak-vandijk',
+        priority: 6,
+        hashtag: '#Isak',
+        heat: '📈 升溫',
+        topic: 'Isak vs Van Dijk 英超內戰',
+        summary: '利物浦隊友 Isak 與 Van Dijk 將在世足直接對位，賽前戰術剪輯與對決預告片在 X 瘋傳。',
+        reactions: [
+            { tone: 'positive', text: '「Isak 首戰一射兩傳，狀態比俱樂部賽季好太多了！」——瑞典球迷信心爆棚。' },
+            { tone: 'neutral', text: '「Van Dijk 會手下留情嗎？當然不會，這是世界盃。」——務實派這樣說。' },
+            { tone: 'funny', text: '「訓練時稱兄道弟，比賽時六親不認——英超日常。」' },
+        ],
+    },
+    {
+        id: 'zwayer-cramp',
+        priority: 7,
+        hashtag: '#Zwayer',
+        heat: '📈 升溫',
+        topic: '主裁補時抽筋 viral 影片',
+        summary: '德國主裁 Zwayer 炎熱天氣下抽筋倒地，Balogun 與 O\'Neill 幫忙拉筋的畫面成為本屆最暖心片段之一。',
+        reactions: [
+            { tone: 'positive', text: '「足球的體育精神！對手也能互相幫助。」——跨國球迷一致稱讚。' },
+            { tone: 'funny', text: '「裁判跑 12 公里比有些前鋒還多，該加薪。」——調侃體能數據。' },
+            { tone: 'negative', text: '「諷刺的是，他本場 VAR 判決讓澳洲很不滿。」——澳洲球迷仍餘怒未消。' },
+        ],
+    },
+    {
+        id: 'turkey-shots',
+        priority: 8,
+        hashtag: '#Turkey',
+        heat: '📈 升溫',
+        topic: '土耳其 62 射門 0 進球',
+        summary: '土耳其兩場小組賽合計 62 腳射門卻顆粒無收，成為本屆最離譜數據之一，#Turkey 標籤充滿嘲諷迷因。',
+        reactions: [
+            { tone: 'funny', text: '「射門機器、進球絕緣體——土耳其足球的新代名詞。」——迷因創作者洗版。' },
+            { tone: 'negative', text: '「Montella 說拼盡全力，但數據不會騙人，進攻效率慘不忍睹。」' },
+            { tone: 'neutral', text: '「Yıldız 和 Güler 還年輕，這不是結束，只是殘酷的成長代價。」' },
+        ],
+    },
+    {
+        id: 'germany-fan-freddy',
+        priority: 9,
+        hashtag: '#DieMannschaft',
+        heat: '💬 討論',
+        topic: '德國球迷單車橫美 2.6 萬公里',
+        summary: '德國球迷 Freddy 騎單車從德國趕赴休士頓觀戰，途中影片累積千萬觀看，成為本屆最感人球迷故事。',
+        reactions: [
+            { tone: 'positive', text: '「這才是足球的魅力——跨越洲際只為 90 分鐘。」——全球球迷轉發致敬。' },
+            { tone: 'funny', text: '「我連從沙發走到冰箱都懶，他騎了兩個月。」——自嘲體對比。' },
+            { tone: 'neutral', text: '「德國 7-1 大勝後他趕上了，這趟旅程值了。」' },
+        ],
+    },
+    {
+        id: 'messi-tears',
+        priority: 10,
+        hashtag: '#Messi',
+        heat: '💬 討論',
+        topic: 'Messi 落淚與父親健康',
+        summary: 'Messi 帽子戲法後落淚，家族澄清父親 Jorge 健康狀況並呼籲尊重隱私，#Messi 貼文破萬，全球關注。',
+        reactions: [
+            { tone: 'positive', text: '「16 球追平 Klose 紀錄，同時面對家庭困難——傳奇不只是足球。」——同情與敬佩並存。' },
+            { tone: 'negative', text: '「媒體和網友應停止猜測病情，家族已明確要求尊重隱私。」' },
+            { tone: 'neutral', text: '「最後一屆世足，每一滴淚都被放大，但誰能怪他？」' },
+        ],
+    },
+];
+
+const REACTION_TONE = {
+    positive: { label: '支持', cls: 'text-emerald-400 bg-emerald-950', quote: 'reaction-positive' },
+    negative: { label: '質疑', cls: 'text-red-400 bg-red-950', quote: 'reaction-negative' },
+    neutral:  { label: '中立', cls: 'text-zinc-400 bg-zinc-800', quote: 'reaction-neutral' },
+    funny:    { label: '迷因', cls: 'text-amber-400 bg-amber-950', quote: 'reaction-funny' },
+};
+
 const TEAM_ZH = {
     'Mexico': '墨西哥', 'South Africa': '南非', 'South Korea': '南韓', 'Czech Republic': '捷克',
     'Canada': '加拿大', 'Bosnia and Herzegovina': '波士尼亞', 'United States': '美國', 'Paraguay': '巴拉圭',
@@ -816,6 +989,41 @@ function renderNews() {
     $('news-list').innerHTML = news.map((n, i) => renderNewsCard(n, i)).join('');
 }
 
+function renderTrendingCard(t, i) {
+    const reactions = (t.reactions || []).map(r => {
+        const tone = REACTION_TONE[r.tone] || REACTION_TONE.neutral;
+        return `
+            <div class="reaction-quote ${tone.quote} py-2">
+                <span class="text-xs font-bold px-2 py-0.5 rounded-lg ${tone.cls} mr-2">${tone.label}</span>
+                <span class="text-sm text-zinc-400 leading-relaxed">${r.text}</span>
+            </div>`;
+    }).join('');
+
+    return `
+        <article class="trend-card fade-in bg-zinc-900 border border-zinc-700 rounded-3xl p-6 md:p-7">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="text-xs font-bold text-zinc-500 tabular-nums">#${i + 1}</span>
+                <span class="text-sm font-bold text-zinc-200">${t.hashtag}</span>
+                <span class="text-xs font-bold px-3 py-1 rounded-2xl text-rose-400 bg-rose-950">${t.heat}</span>
+            </div>
+            <h3 class="font-bold text-lg md:text-xl leading-snug">${t.topic}</h3>
+            <p class="text-sm md:text-base text-zinc-300 mt-3 leading-relaxed">${t.summary}</p>
+            ${reactions ? `
+                <div class="mt-4 pt-4 border-t border-zinc-800 space-y-1">
+                    <p class="text-xs font-semibold text-zinc-500 mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-comments text-zinc-600"></i>網友評論摘要
+                    </p>
+                    ${reactions}
+                </div>
+            ` : ''}
+        </article>`;
+}
+
+function renderTrending() {
+    const items = [...X_TRENDING_TOP10].sort((a, b) => a.priority - b.priority);
+    $('trending-list').innerHTML = items.map((t, i) => renderTrendingCard(t, i)).join('');
+}
+
 function renderIdleTeams() {
     const idle = getIdleTeams();
     const grid = $('idle-teams-grid');
@@ -856,16 +1064,17 @@ function updateTabBadges() {
 }
 
 function switchTab(tab) {
-    const isResults = tab === 'results';
-    $('tab-results').classList.toggle('active', isResults);
-    $('tab-idle').classList.toggle('active', !isResults);
-    $('panel-results').classList.toggle('active', isResults);
-    $('panel-idle').classList.toggle('active', !isResults);
+    const tabs = ['results', 'idle', 'trending'];
+    tabs.forEach(t => {
+        $(`tab-${t}`).classList.toggle('active', t === tab);
+        $(`panel-${t}`).classList.toggle('active', t === tab);
+    });
 }
 
 function setupTabs() {
     $('tab-results').addEventListener('click', () => switchTab('results'));
     $('tab-idle').addEventListener('click', () => switchTab('idle'));
+    $('tab-trending').addEventListener('click', () => switchTab('trending'));
 }
 
 function renderAll() {
@@ -876,6 +1085,7 @@ function renderAll() {
     renderNews();
     renderIdleTeams();
     renderIdleNews();
+    renderTrending();
     updateTabBadges();
 }
 
