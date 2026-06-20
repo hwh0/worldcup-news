@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚽ Grok 每日世界盃新聞</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', system-ui, sans-serif; }
+        .section-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 12px; }
+        .match-card { transition: transform 0.2s, box-shadow 0.2s; }
+        .match-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+        .fade-in { animation: fadeIn 0.35s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spin { animation: spin 0.8s linear infinite; }
+        @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(1.3); } }
+        .live-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+        .skeleton { background: linear-gradient(90deg, #27272a 25%, #3f3f46 50%, #27272a 75%); background-size: 200% 100%; animation: shimmer 1.2s infinite; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .toast { transition: transform 0.3s, opacity 0.3s; }
+        .toast.hidden { transform: translateY(12px); opacity: 0; pointer-events: none; }
+        .news-card { transition: border-color 0.2s; }
+        .news-card:hover { border-color: rgba(59,130,246,0.35); }
+        .news-points li::marker { color: #60a5fa; }
+        .tab-btn { transition: all 0.2s; }
+        .tab-btn.active { background: #059669; color: #fff; box-shadow: 0 4px 14px rgba(5,150,105,0.35); }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        .team-chip { transition: transform 0.15s; }
+        .team-chip:hover { transform: scale(1.03); }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200 min-h-screen">
+
+    <!-- 頂部導覽 -->
+    <header class="sticky top-0 z-50 bg-zinc-950/90 backdrop-blur-xl border-b border-zinc-800">
+        <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between gap-4 flex-wrap">
+            <div class="flex items-center gap-4">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500 to-emerald-500 flex items-center justify-center text-xl shadow-lg shadow-blue-500/20">⚽</div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Grok 每日世界盃新聞</h1>
+                    <p class="text-zinc-400 text-sm mt-0.5">
+                        <span id="date-label">載入中…</span>
+                        <span class="mx-2 text-zinc-600">|</span>
+                        <span id="last-updated" class="text-zinc-500">尚未更新</span>
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 flex-wrap">
+                <label class="flex items-center gap-2 text-sm text-zinc-400 cursor-pointer select-none">
+                    <input type="checkbox" id="auto-refresh" class="rounded accent-emerald-500">
+                    <span class="flex items-center gap-1.5">
+                        <span id="live-indicator" class="w-2 h-2 rounded-full bg-zinc-600"></span>
+                        自動更新
+                    </span>
+                </label>
+                <button id="btn-refresh"
+                        class="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-3xl text-sm font-semibold transition-colors shadow-lg shadow-emerald-600/20">
+                    <i id="refresh-icon" class="fa-solid fa-bolt"></i>
+                    <span id="refresh-text">一鍵即時更新</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-8">
+
+        <!-- 錯誤提示 -->
+        <div id="error-banner" class="hidden mb-6 p-4 bg-red-950/60 border border-red-500/40 rounded-2xl text-red-300 text-sm flex items-start gap-3">
+            <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+            <div>
+                <p class="font-medium" id="error-title">無法取得最新資料</p>
+                <p class="text-red-400/80 mt-1" id="error-detail"></p>
+            </div>
+        </div>
+
+        <!-- 分頁切換 -->
+        <div class="flex gap-2 mb-8 p-1.5 bg-zinc-900 border border-zinc-800 rounded-3xl w-fit flex-wrap">
+            <button id="tab-results" class="tab-btn active flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
+                <i class="fa-solid fa-futbol"></i>
+                今日賽果
+                <span id="tab-results-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400"></span>
+            </button>
+            <button id="tab-idle" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
+                <i class="fa-solid fa-mug-hot"></i>
+                無賽事球隊動態
+                <span id="tab-idle-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400"></span>
+            </button>
+        </div>
+
+        <!-- 分頁一：今日賽果 -->
+        <div id="panel-results" class="tab-panel active">
+            <section class="mb-10">
+                <h2 class="section-title flex items-center gap-3">
+                    <i class="fa-solid fa-futbol text-blue-500"></i>
+                    今日比賽比分戰績
+                    <span id="match-count" class="text-xs font-normal text-zinc-500"></span>
+                </h2>
+                <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="skeleton h-24 rounded-3xl"></div>
+                    <div class="skeleton h-24 rounded-3xl"></div>
+                </div>
+                <p id="no-matches" class="hidden text-zinc-500 text-sm mt-3">今日尚無比賽，或賽事尚未開始。</p>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="section-title flex items-center gap-3">
+                    <i class="fa-solid fa-table text-blue-500"></i>
+                    各組目前積分排序（重點小組）
+                </h2>
+                <div id="standings-container" class="space-y-6">
+                    <div class="skeleton h-40 rounded-3xl"></div>
+                    <div class="skeleton h-32 rounded-3xl"></div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title flex items-center gap-3 mb-5">
+                    <i class="fa-solid fa-newspaper text-blue-500"></i>
+                    賽事相關新聞
+                    <span class="text-xs font-normal text-zinc-500">X 熱議 Top 10</span>
+                </h2>
+                <div id="news-list" class="space-y-4">
+                    <div class="skeleton h-28 rounded-3xl"></div>
+                    <div class="skeleton h-28 rounded-3xl"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 分頁二：無賽事球隊 -->
+        <div id="panel-idle" class="tab-panel">
+            <section class="mb-8">
+                <h2 class="section-title flex items-center gap-3">
+                    <i class="fa-solid fa-calendar-xmark text-purple-500"></i>
+                    今日無賽事的隊伍
+                    <span id="idle-team-count" class="text-xs font-normal text-zinc-500"></span>
+                </h2>
+                <p class="text-sm text-zinc-400 mb-4">以下隊伍今日沒有比賽，但仍可能有訓練、記者會、傷病或場外新聞值得關注。</p>
+                <div id="idle-teams-grid" class="flex flex-wrap gap-2"></div>
+            </section>
+
+            <section>
+                <h2 class="section-title flex items-center gap-3 mb-5">
+                    <i class="fa-solid fa-newspaper text-purple-500"></i>
+                    無賽事球隊 · 當日重要新聞
+                </h2>
+                <div id="idle-news-list" class="space-y-4">
+                    <div class="skeleton h-28 rounded-3xl"></div>
+                    <div class="skeleton h-28 rounded-3xl"></div>
+                </div>
+                <p id="no-idle-news" class="hidden text-zinc-500 text-sm mt-3">今日暫無其他隊伍的重要新聞。</p>
+            </section>
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden fixed bottom-6 right-6 z-50 px-5 py-3 bg-zinc-800 border border-zinc-600 rounded-2xl text-sm shadow-2xl flex items-center gap-2">
+        <i id="toast-icon" class="fa-solid fa-check text-emerald-400"></i>
+        <span id="toast-msg">更新成功</span>
+    </div>
+
+<script>
+const API = {
+    games: 'https://worldcup26.ir/get/games',
+    groups: 'https://worldcup26.ir/get/groups',
+    teams: 'https://worldcup26.ir/get/teams',
+};
+
+const FOCUS_GROUPS = ['C', 'D'];
+const AUTO_REFRESH_SEC = 60;
+const CACHE_KEY = 'wc_news_cache_v1';
+
+/** 今日四場比賽 X 熱議 Top 10（固定 10 則，均衡覆蓋 C/D 組） */
+const TODAY_TOP10_NEWS = [
+    {
+        id: 'galarza-fastest',
+        priority: 1,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '巴拉圭', cls: 'text-red-400 bg-red-950' }],
+        border: 'border-rose-500/40',
+        match: { home: 'Turkey', away: 'Paraguay' },
+        meta: 'D 組 · 土耳其 0-1 巴拉圭 · 開賽 64 秒',
+        title: 'Galarza 開賽 64 秒遠射破門，暫登本屆世足最快進球',
+        summary: '巴拉圭中場 Matías Galarza 在舊金山灣區球場開賽僅 64 秒就轟入 25 米低平球，這粒世界波成為全場唯一進球，也讓土耳其再度吞下苦果。',
+        points: [
+            '此球一度超越摩洛哥 Saibari 的 71 秒閃擊，成為本屆賽事最快進球。',
+            'Galarza 賽後形容這是「人生最好的一天之一」，並感謝上帝眷顧巴拉圭。',
+            '巴拉圭在首戰 1-4 慘敗美國後強勢反彈，展現「La Albirroja」的鬥志。',
+            'X 上 #Galarza、#Paraguay 標籤迅速登上世足趨勢榜。',
+        ],
+        source: 'Al Jazeera · Reuters · ESPN',
+    },
+    {
+        id: 'almiron-mouth-red',
+        priority: 2,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '首例紅牌', cls: 'text-red-400 bg-red-950' }],
+        border: 'border-red-500/40',
+        match: { home: 'Turkey', away: 'Paraguay' },
+        meta: 'D 組 · 土耳其 0-1 巴拉圭 · 上半場補時',
+        title: 'Almirón 成世足首位「掩嘴」紅牌，巴拉圭 10 人守住勝果',
+        summary: 'Miguel Almirón 與 Mert Müldür 口角時以手掩嘴說話，主裁 Ivan Barton 經 VAR 確認後直接紅牌——這是 IFAB 新規在本屆世足的首度執行，X 上引發巨大爭論。',
+        points: [
+            '新規源於 Prestianni 掩嘴歧視 Vinícius 事件，旨在杜絕隱藏言論的歧視行為。',
+            '友好交談可掩嘴；一旦形成對峙，即可能構成紅牌。',
+            '巴拉圭在 1-0 領先下以 10 人守完全場，這是隊史世足第三張紅牌。',
+            '本屆已出現 7 張紅牌，為 2014 年以來單屆最多。',
+        ],
+        source: 'ESPN · Al Jazeera',
+    },
+    {
+        id: 'turkey-shots',
+        priority: 3,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '土耳其', cls: 'text-red-400 bg-red-950' }],
+        border: 'border-red-500/40',
+        match: { home: 'Turkey', away: 'Paraguay' },
+        meta: 'D 組 · 土耳其 0-1 巴拉圭',
+        title: '土耳其兩戰 62 射門 0 進球出局，Montella：已拼盡全力',
+        summary: '土耳其全場控球率高達 79%、射門 32 次卻顆粒無收，兩場小組賽合計 62 腳射門 0 進球，成為 X 上最被嘲諷的數據之一。',
+        points: [
+            'Kenan Yıldız、Arda Güler 等人屢次錯失良機，進攻效率慘不忍睹。',
+            '教練 Montella 賽後表示球員已拼盡全力，但足球就是這樣殘酷。',
+            '土耳其兩連敗積分掛零，小組出局幾成定局。',
+            '網友製作迷因圖調侃「射門機器、進球絕緣」，#Turkey 趨勢爆發。',
+        ],
+        source: 'Al Jazeera · BBC',
+    },
+    {
+        id: 'saibari-early',
+        priority: 4,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '摩洛哥', cls: 'text-green-400 bg-green-950' }],
+        border: 'border-green-500/40',
+        match: { home: 'Scotland', away: 'Morocco' },
+        meta: 'C 組 · 蘇格蘭 0-1 摩洛哥 · 開賽 70 秒',
+        title: 'Saibari 開賽 70 秒閃擊破門，摩洛哥逆轉 C 組榜首',
+        summary: 'Brahim Díaz 直塞，PSV 中場 Ismael Saibari 停球後遠角低射破網，開賽僅 70 秒就取得領先，最終 1-0 帶走三分。',
+        points: [
+            '摩洛哥賽後幾乎鎖定十六強席位，末輪對海地形勢有利。',
+            '蘇格蘭原本位居小組第一，此敗讓 C 組陷入三隊混戰。',
+            '波士頓球場的 Tartan Army 聲勢浩大，但早失球打亂全場節奏。',
+            'X 上摩洛哥球迷與 Saibari 剪輯影片大量轉發。',
+        ],
+        source: 'ESPN · BBC',
+    },
+    {
+        id: 'scotland-penalties',
+        priority: 5,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '蘇格蘭', cls: 'text-blue-400 bg-blue-950' }],
+        border: 'border-blue-500/40',
+        match: { home: 'Scotland', away: 'Morocco' },
+        meta: 'C 組 · 蘇格蘭 0-1 摩洛哥 · 波士頓',
+        title: '蘇格蘭兩次點球漏判？McGinn、McTominay 倒地引裁判風暴',
+        summary: '蘇格蘭下半場兩度在禁區倒地索求點球均被烏茲別克主裁 Tantashev 拒絕，賽後 Keane、McGinn、Clarke 各執一詞，X 上 #ScotlandRef 吵翻。',
+        points: [
+            'ITV 裁判專家 Unkel 認為 McTominay 被絆倒應判點球；Keane 則持相反意見。',
+            'McGinn 直言「摩洛哥僥倖逃過一劫」，但強調不能依賴裁判。',
+            '上半場 Issa Diop 絆倒 Che Adams 僅吃黃牌，蘇格蘭名宿認為應為紅牌。',
+            '蘇格蘭仍保有晉級希望，末輪對巴西前必須拿出更好表現。',
+        ],
+        source: 'BBC · ESPN',
+    },
+    {
+        id: 'raphinha-injury',
+        priority: 6,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }],
+        border: 'border-yellow-500/40',
+        match: { home: 'Brazil', away: 'Haiti' },
+        meta: 'C 組 · 巴西 3-0 海地 · 費城 · 上半場',
+        title: 'Raphinha 無碰撞傷退，巴西攻擊線拉響警報',
+        summary: '巴西 3-0 大勝海地，但 Raphinha 在上半場無明顯對抗下突然倒地，疑似右腿後肌拉傷，Vinícius Júnior 緊急替補，#Raphinha 登上巴西趨勢第一。',
+        points: [
+            'Raphinha 倒地後無法繼續，隊醫迅速入場，全場巴西球迷陷入沉默。',
+            '賽後將接受 MRI 檢查，能否趕上淘汰賽是巴西媒體最關心話題。',
+            'Dorival Júnior 表示傷勢令人擔憂，但會等待醫療報告。',
+            '球迷擔心重演 2022 傷病潮，X 上「沒有 Raphinha 的巴西能走多遠」引發熱議。',
+        ],
+        source: 'USA Today · ESPN · BBC',
+    },
+    {
+        id: 'cunha-brace',
+        priority: 7,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }],
+        border: 'border-yellow-500/30',
+        match: { home: 'Brazil', away: 'Haiti' },
+        meta: 'C 組 · 巴西 3-0 海地 · 費城',
+        title: 'Matheus Cunha 梅開二度，巴西終取本屆首勝',
+        summary: '曼聯前鋒 Matheus Cunha 本場獨進兩球，帶領巴西 3-0 擊敗海地。BBC 評論「真正的巴西尚未現身」，但 Cunha 的表現已在 X 上獲得大量稱讚。',
+        points: [
+            '巴西首戰僅 1-1 戰平摩洛哥，本場勝利壓力巨大。',
+            'Cunha 禁區內嗅覺敏銳，被視為取代 Raphinha 傷退後的進攻核心。',
+            '費城街頭巴西球迷狂歡影片在 X 瘋傳，#Brazil 標籤熱度飆升。',
+            '海地兩連敗積分掛零，但球迷仍展現感人支持。',
+        ],
+        source: 'Al Jazeera · BBC',
+    },
+    {
+        id: 'usa-var-freeman',
+        priority: 8,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: 'VAR', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-amber-500/40',
+        match: { home: 'United States', away: 'Australia' },
+        meta: 'D 組 · 美國 2-0 澳洲 · 西雅圖 · 第 43 分鐘',
+        title: 'Freeman 頭槌進球 VAR 覆核：為何不算越位？',
+        summary: 'Alex Freeman 頭槌破網後邊裁舉旗，VAR Bastian Dankert 覆核後改判進球有效。這是今日 D 組最大 VAR 爭議，#USAvAUS 在 X 上討論量破百萬。',
+        points: [
+            'Dest 射門被擋後皮球彈高，Freeman 搶先 Balogun 頭槌得分。',
+            '越位以 Dest 出腳瞬間判定；Freeman 當時在防線內，半自動系統確認 on side。',
+            'Balogun 雖越位但未觸球，不影響判決；澳洲質疑其干擾門將，專家認為不成立。',
+            '前英超裁判 Andy Davies 稱 VAR 介入正確，但驚訝邊裁最初舉旗。',
+        ],
+        source: 'ESPN · Yahoo Sports',
+    },
+    {
+        id: 'zwayer-cramp',
+        priority: 9,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '場邊花絮', cls: 'text-cyan-400 bg-cyan-950' }],
+        border: 'border-cyan-500/40',
+        match: { home: 'United States', away: 'Australia' },
+        meta: 'D 組 · 美國 2-0 澳洲 · 補時 · 西雅圖',
+        title: '主裁 Zwayer 補時抽筋，Balogun 幫忙拉筋成 viral 影片',
+        summary: '德國主裁 Felix Zwayer 在炎熱天氣下補時抽筋倒地，美國 Balogun 與澳洲 O\'Neill 雙雙上前協助伸展，醫療人員送上 pickle juice，成為 X 本日最瘋傳片段之一。',
+        points: [
+            'Zwayer 拉筋後恢復執法，比賽僅短暫中斷。',
+            '職業裁判單場跑動可達 10-12 公里，體能要求不亞於球員。',
+            '諷刺的是，Zwayer 本場 VAR 判決已讓澳洲不滿，Irankunda 批其「表現失常」。',
+            'The Guardian 稱澳洲對裁判「stinker（糟透了）」表現感到憤怒。',
+        ],
+        source: 'Fox Sports · The Guardian · The Sun',
+    },
+    {
+        id: 'usa-knockout',
+        priority: 10,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '美國', cls: 'text-blue-400 bg-blue-950' }],
+        border: 'border-blue-500/30',
+        match: { home: 'United States', away: 'Australia' },
+        meta: 'D 組 · 美國 2-0 澳洲 · 西雅圖',
+        title: '東道主美國兩戰全勝晉級，Freeman 世界盃首球寫歷史',
+        summary: '美國在 Pulisic 缺陣下靠 Freeman 頭槌與 Burgess 烏龍 2-0 勝澳洲，確定晉級十六強並暫列 D 組第一。Super Bowl 冠軍之子 Freeman 的世界盃首球成為美國媒體頭條。',
+        points: [
+            '美國三個半場攻入 6 球，進攻火力為本屆東道主之最。',
+            '澳洲仍有望以第二名晉級，末輪對巴拉圭不容有失。',
+            '巴拉圭擊敗土耳其後，美國正式鎖定小組第一。',
+            '西雅圖 6.8 萬球迷見證歷史，#USMNT 趨勢霸榜美國區。',
+        ],
+        source: 'Yahoo Sports · BBC · The Guardian',
+    },
+];
+
+/** 今日無賽事隊伍的場外新聞（relatedTeams 全部不在今日賽程才顯示） */
+const IDLE_TEAM_NEWS = [
+    {
+        id: 'yamal-minutes',
+        priority: 1,
+        relatedTeams: ['Spain'],
+        tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '球星', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-red-500/30',
+        meta: '西班牙 · 休息備戰日',
+        title: 'Yamal 坦言「太早踢滿 90 分鐘沒必要」，出場時間成焦點',
+        summary: '西班牙新星 Lamine Yamal 在記者會表示，小組賽階段不必強求踢滿全場，教練團如何分配他的體能成為 X 熱議話題。',
+        points: [
+            '16 歲的 Yamal 是本屆最年輕參賽者之一，每一場出場都牽動全球目光。',
+            '西班牙下一戰前教練 Luis de la Fuente 可能輪休部分主力。',
+            '球迷擔心過度使用年輕球員，#Yamal 標籤持續升溫。',
+        ],
+        source: 'ESPN',
+    },
+    {
+        id: 'england-dilemma',
+        priority: 2,
+        relatedTeams: ['England'],
+        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }],
+        border: 'border-blue-500/30',
+        meta: '英格蘭 · 陣容抉擇',
+        title: 'Tuchel 煩惱：Rashford 還是 Guehi 先發？',
+        summary: '英格蘭主帥 Tuchel 在休息日被問及下一場陣容，Marcus Rashford 與 Marc Guehi 是否同時先發成為媒體與 X 討論焦點。',
+        points: [
+            'Rashford 近期狀態回升，但後防穩定性同樣關鍵。',
+            '英格蘭小組形勢尚可，此場輪休或實驗陣容空間大。',
+            '英媒稱 Tuchel 傾向「stick or twist」戰術兩難。',
+        ],
+        source: 'BBC',
+    },
+    {
+        id: 'argentina-rest',
+        priority: 3,
+        relatedTeams: ['Argentina'],
+        tags: [{ text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }],
+        border: 'border-sky-500/30',
+        meta: '阿根廷 · 備戰',
+        title: '阿根廷全隊休息日：Messi 訓練量受控，備戰下一輪',
+        summary: '衛冕冠軍阿根廷今日無賽事，球隊進行輕量訓練，Messi 出場時間與體能分配再度成為阿根廷媒體頭條。',
+        points: [
+            '教練組刻意降低訓練強度，為小組賽後段保留體能。',
+            '球迷在訓練基地外集結，X 上 #Messi 相關貼文破萬。',
+            '阿根廷積分領先小組，晉級形勢樂觀。',
+        ],
+        source: 'TyC Sports · ESPN',
+    },
+    {
+        id: 'france-presser',
+        priority: 4,
+        relatedTeams: ['France'],
+        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }],
+        border: 'border-blue-500/30',
+        meta: '法國 · 記者會',
+        title: '德尚：Mbappé 狀態良好，法國隊蓄勢待發',
+        summary: '法國主帥 Didier Deschamps 在賽前記者會表示 Mbappé 身體狀況理想，球隊利用休息日調整戰術細節。',
+        points: [
+            '法國被視為奪冠熱門，每一句話都被全球媒體放大解讀。',
+            '球隊今日無賽事，專注影片分析與定位球演練。',
+            'X 法語區 #LesBleus 討論量穩居世足球隊前列。',
+        ],
+        source: 'L\'Équipe · ESPN',
+    },
+    {
+        id: 'mexico-party',
+        priority: 5,
+        relatedTeams: ['Mexico'],
+        tags: [{ text: '墨西哥', cls: 'text-green-400 bg-green-950' }, { text: '場外', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-green-500/30',
+        meta: '墨西哥 · 墨西哥城',
+        title: '世足狂歡後，墨西哥城加強街頭饮酒管制',
+        summary: '開幕週墨西哥城 Reforma 大道湧入數十萬球迷慶祝，當局清運 40 噸垃圾並加強公共饮酒限制，引發本地與 X 上的文化討論。',
+        points: [
+            '世足帶動的街頭派對規模超乎預期，城市基礎設施壓力大增。',
+            '球迷普遍支持慶祝氛圍，但也認同需維持公共秩序。',
+            '主辦國墨西哥的場外新聞持續吸引全球目光。',
+        ],
+        source: 'Al Jazeera',
+    },
+    {
+        id: 'hydration-break',
+        priority: 6,
+        relatedTeams: ['Mexico', 'South Korea', 'Canada'],
+        tags: [{ text: '賽制', cls: 'text-orange-400 bg-orange-950' }],
+        border: 'border-orange-500/30',
+        meta: '多隊 · FIFA 新制',
+        title: '補水時間遭噓聲？FIFA 三分鐘暫停引發球員、教練、球迷罕見一致批評',
+        summary: '本屆世足引入高溫補水暫停，卻因商業廣告與比賽節奏中斷引發噓聲，多支已踢過比賽的隊伍球員在 X 上公開表態不滿。',
+        points: [
+            '補水暫停本為保護球員，但現場廣告播出引發「商業化過度」質疑。',
+            '球員、教練、球迷罕見地站在同一立場批評此安排。',
+            'FIFA 尚未宣布是否會調整後續賽事做法。',
+        ],
+        source: 'Al Jazeera',
+    },
+    {
+        id: 'portugal-training',
+        priority: 7,
+        relatedTeams: ['Portugal'],
+        tags: [{ text: '葡萄牙', cls: 'text-red-400 bg-red-950' }],
+        border: 'border-red-500/30',
+        meta: '葡萄牙 · 訓練營',
+        title: 'C 羅領銜葡萄牙隊休息日加練， Ronaldo 話題再掀熱潮',
+        summary: '葡萄牙今日無賽事，C 羅被拍攝在訓練結束後加練任意球，41 歲的敬業精神再次成為 X 全球趨勢。',
+        points: [
+            '葡萄牙小組賽開局穩健，C 羅仍是球隊精神象徵。',
+            '年輕隊友 B 費、萊奧等也在社交媒體曬訓練照。',
+            '#Ronaldo 標籤在休息日出現異常高流量。',
+        ],
+        source: 'Record · ESPN',
+    },
+    {
+        id: 'colombia-fans',
+        priority: 8,
+        relatedTeams: ['Colombia'],
+        tags: [{ text: '哥倫比亞', cls: 'text-yellow-400 bg-yellow-950' }],
+        border: 'border-yellow-500/30',
+        meta: '哥倫比亞 · 球迷',
+        title: '哥倫比亞球迷美國各地集結，黃色浪潮成世足風景',
+        summary: '哥倫比亞今日無賽事，但大批球迷仍在美國各主辦城市舉行集會與街頭慶祝，展現南美球迷文化。',
+        points: [
+            '哥倫比亞社群動員能力強，為下一戰營造聲勢。',
+            'X 上哥倫比亞球迷影片轉發量居南美球隊之首。',
+            '球隊利用休息日進行戰術會議，專注下一對手。',
+        ],
+        source: 'Fox Sports',
+    },
+    {
+        id: 'fifa-standings-rule',
+        priority: 9,
+        relatedTeams: ['Mexico', 'South Korea', 'Canada', 'Germany'],
+        tags: [{ text: '規則', cls: 'text-purple-400 bg-purple-950' }],
+        border: 'border-purple-500/30',
+        meta: '48 隊新制 · 積分規則',
+        title: 'FIFA 調整積分榜計算方式，晉級數學題變得更複雜',
+        summary: '本屆 48 隊、12 組、取前二加 8 個最佳第三名的新制，讓積分榜計算與晉級情境比以往更複雜，多支今日無賽事的球隊教練組忙於推演。',
+        points: [
+            '教練必須同時關注自身小組與其他小組第三名積分。',
+            'BBC 製作影片解釋新制，在 X 上廣泛轉發。',
+            '每支隊伍的休息日都在進行「晉級計算機」推演。',
+        ],
+        source: 'BBC',
+    },
+    {
+        id: 'canada-rest',
+        priority: 10,
+        relatedTeams: ['Canada'],
+        tags: [{ text: '加拿大', cls: 'text-red-400 bg-red-950' }],
+        border: 'border-red-500/30',
+        meta: '加拿大 · 東道主之一',
+        title: '加拿大隊休息日：主場壓力下的戰術調整',
+        summary: '身為東道主之一，加拿大今日無賽事，全隊進行封閉訓練，主教練 Jesse Marsch 強調下一場必須改善進攻效率。',
+        points: [
+            '加拿大開局表現起伏，球迷期待主場反彈。',
+            'Marsch 在記者會提到球隊需要更果斷的進攻決策。',
+            'X 上 #CANMNT 討論集中在陣容與戰術調整。',
+        ],
+        source: 'TSN · ESPN',
+    },
+];
+
+const TEAM_ZH = {
+    'Mexico': '墨西哥', 'South Africa': '南非', 'South Korea': '南韓', 'Czech Republic': '捷克',
+    'Canada': '加拿大', 'Bosnia and Herzegovina': '波士尼亞', 'United States': '美國', 'Paraguay': '巴拉圭',
+    'Haiti': '海地', 'Scotland': '蘇格蘭', 'Brazil': '巴西', 'Morocco': '摩洛哥',
+    'Australia': '澳洲', 'Turkey': '土耳其', 'Germany': '德國', 'Ivory Coast': '象牙海岸',
+    'Ecuador': '厄瓜多', 'Curaçao': '古拉索', 'Netherlands': '荷蘭', 'Sweden': '瑞典',
+    'Tunisia': '突尼西亞', 'Japan': '日本', 'Argentina': '阿根廷', 'France': '法國',
+    'England': '英格蘭', 'Spain': '西班牙', 'Portugal': '葡萄牙', 'Belgium': '比利時',
+    'Croatia': '克羅埃西亞', 'Switzerland': '瑞士', 'Italy': '義大利', 'Uruguay': '烏拉圭',
+    'Colombia': '哥倫比亞', 'Chile': '智利', 'Peru': '秘魯', 'Egypt': '埃及',
+    'Senegal': '塞內加爾', 'Nigeria': '奈及利亞', 'Ghana': '迦納', 'Cameroon': '喀麥隆',
+    'Iran': '伊朗', 'Saudi Arabia': '沙烏地阿拉伯', 'Qatar': '卡達', 'Costa Rica': '哥斯大黎加',
+    'Jamaica': '牙買加', 'Panama': '巴拿馬', 'New Zealand': '紐西蘭', 'Ukraine': '烏克蘭',
+    'Poland': '波蘭', 'Austria': '奧地利', 'Denmark': '丹麥', 'Serbia': '塞爾維亞',
+    'Wales': '威爾斯', 'Norway': '挪威', 'Algeria': '阿爾及利亞', 'Jordan': '約旦',
+};
+
+let state = { teams: {}, groups: [], games: [], loading: false };
+let autoTimer = null;
+
+const $ = id => document.getElementById(id);
+
+function teamZh(name) { return TEAM_ZH[name] || name; }
+
+function parseScorers(raw) {
+    if (!raw || raw === 'null') return [];
+    try {
+        const fixed = raw.replace(/'/g, '"').replace(/\\"/g, "'");
+        const arr = JSON.parse(fixed.startsWith('[') ? fixed : `[${fixed}]`);
+        return Array.isArray(arr) ? arr : [raw];
+    } catch {
+        return raw.split(',').map(s => s.trim()).filter(Boolean);
+    }
+}
+
+function gameToTaipeiDate(localDate) {
+    const [datePart, timePart] = localDate.split(' ');
+    const [mm, dd, yyyy] = datePart.split('/');
+    const [hh, min] = timePart.split(':');
+    const utcMs = Date.UTC(+yyyy, +mm - 1, +dd, +hh + 4, +min);
+    return new Date(utcMs + 8 * 3600000);
+}
+
+function getTaipeiToday() {
+    const now = new Date();
+    const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+    return parts;
+}
+
+function isTodayInTaipei(game) {
+    const taipei = gameToTaipeiDate(game.local_date);
+    const tp = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(taipei);
+    return tp === getTaipeiToday();
+}
+
+function isLive(game) {
+    return game.finished !== 'TRUE' && game.time_elapsed && game.time_elapsed !== 'finished' && game.time_elapsed !== 'notstarted';
+}
+
+function isFinished(game) {
+    return game.finished === 'TRUE' || game.time_elapsed === 'finished';
+}
+
+/** 只顯示已完賽或進行中，排除尚未開踢的賽事 */
+function isPlayedOrLive(game) {
+    return isFinished(game) || isLive(game);
+}
+
+function matchStatus(game) {
+    if (isLive(game)) return { label: '進行中', cls: 'text-amber-400', badge: 'bg-amber-950 text-amber-400' };
+    if (game.finished === 'TRUE') return { label: '已結束', cls: 'text-zinc-400', badge: 'bg-zinc-800 text-zinc-400' };
+    return { label: '即將開賽', cls: 'text-blue-400', badge: 'bg-blue-950 text-blue-400' };
+}
+
+function winnerLabel(home, away, hs, as) {
+    const hi = +hs, ai = +as;
+    if (isNaN(hi) || isNaN(ai)) return '';
+    if (hi > ai) return `${teamZh(home)}勝`;
+    if (ai > hi) return `${teamZh(away)}勝`;
+    return '和局';
+}
+
+function highlightScorerNote(game) {
+    const homeS = parseScorers(game.home_scorers);
+    const awayS = parseScorers(game.away_scorers);
+    const all = [...homeS, ...awayS];
+    if (!all.length) return '';
+    const first = all[0].replace(/"/g, '');
+    const hatTrick = all.filter(s => s.includes("'")).length >= 3;
+    if (hatTrick) return '精彩進球大戰';
+    if (first.includes('(OG)')) return '烏龍球影響戰局';
+    if (first.includes("'")) return first;
+    return first.slice(0, 30);
+}
+
+function renderMatches() {
+    const grid = $('matches-grid');
+    const todayAll = state.games.filter(isTodayInTaipei);
+    const todayGames = todayAll.filter(isPlayedOrLive).sort((a, b) => gameToTaipeiDate(a.local_date) - gameToTaipeiDate(b.local_date));
+    const upcoming = todayAll.filter(g => !isPlayedOrLive(g)).length;
+    $('match-count').textContent = todayGames.length ? `（${todayGames.length} 場）` : '';
+
+    if (!todayGames.length) {
+        grid.innerHTML = '';
+        $('no-matches').classList.remove('hidden');
+        $('no-matches').textContent = upcoming
+            ? `今日尚有 ${upcoming} 場比賽尚未開踢，完賽後將自動顯示於此。`
+            : '今日尚無已完賽或進行中的比賽。';
+        return;
+    }
+    $('no-matches').classList.add('hidden');
+
+    grid.innerHTML = todayGames.map(g => {
+        const home = g.home_team_name_en || 'TBD';
+        const away = g.away_team_name_en || 'TBD';
+        const hs = g.home_score ?? '-';
+        const as = g.away_score ?? '-';
+        const st = matchStatus(g);
+        const note = highlightScorerNote(g);
+        const win = winnerLabel(home, away, hs, as);
+        const live = isLive(g);
+        const homeTeam = state.teams[g.home_team_id];
+        const awayTeam = state.teams[g.away_team_id];
+
+        return `
+        <div class="match-card fade-in bg-zinc-900 border ${live ? 'border-amber-500/50' : 'border-zinc-700'} rounded-3xl p-5">
+            <div class="flex justify-between items-start gap-3">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xs px-2.5 py-0.5 rounded-xl ${st.badge}">${st.label}</span>
+                        ${live ? '<span class="live-dot w-2 h-2 rounded-full bg-amber-400"></span>' : ''}
+                        <span class="text-xs text-zinc-500">${g.group}組</span>
+                    </div>
+                    <div class="flex items-center gap-3 font-semibold text-lg">
+                        ${homeTeam?.flag ? `<img src="${homeTeam.flag}" class="w-6 h-4 object-cover rounded-sm" alt="">` : ''}
+                        <span>${teamZh(home)}</span>
+                        <span class="text-emerald-400 tabular-nums">${hs}</span>
+                        <span class="text-zinc-500">-</span>
+                        <span class="text-red-400 tabular-nums">${as}</span>
+                        <span>${teamZh(away)}</span>
+                        ${awayTeam?.flag ? `<img src="${awayTeam.flag}" class="w-6 h-4 object-cover rounded-sm" alt="">` : ''}
+                    </div>
+                    ${note ? `<div class="text-xs text-zinc-400 mt-2 truncate">${note}</div>` : ''}
+                </div>
+                <div class="text-right text-sm shrink-0">
+                    ${win ? `<div class="text-emerald-400 font-medium">${win}</div>` : ''}
+                    ${live && g.time_elapsed ? `<div class="text-amber-400 text-xs mt-1">${g.time_elapsed}</div>` : ''}
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function renderStandings() {
+    const container = $('standings-container');
+    const focus = state.groups.filter(g => FOCUS_GROUPS.includes(g.name));
+
+    container.innerHTML = focus.map(g => {
+        const rows = [...g.teams]
+            .sort((a, b) => +b.pts - +a.pts || +b.gd - +a.gd || +b.gf - +a.gf)
+            .map((t, i) => {
+                const team = state.teams[t.team_id];
+                const name = team ? teamZh(team.name_en) : `隊伍 ${t.team_id}`;
+                const eliminated = +t.mp >= 2 && +t.pts === 0;
+                const leader = i === 0;
+                return `
+                <tr class="border-b border-zinc-800 ${eliminated ? 'text-red-400' : ''}">
+                    <td class="py-2.5 font-medium">
+                        <span class="inline-flex items-center gap-2">
+                            ${team?.flag ? `<img src="${team.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
+                            ${name}${eliminated ? '（岌岌可危）' : ''}
+                        </span>
+                    </td>
+                    <td class="text-center">${t.mp}</td>
+                    <td class="text-center">${t.w}</td>
+                    <td class="text-center">${t.d}</td>
+                    <td class="text-center">${t.l}</td>
+                    <td class="text-center ${leader ? 'font-bold text-emerald-400' : ''}">${t.pts}</td>
+                </tr>`;
+            }).join('');
+
+        const hasToday = state.games.some(m => m.group === g.name && isTodayInTaipei(m));
+
+        return `
+        <div class="fade-in">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="font-bold text-lg">${g.name}組</span>
+                ${hasToday ? '<span class="text-xs px-3 py-1 bg-emerald-950 text-emerald-400 rounded-2xl">今日賽事</span>' : ''}
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-zinc-400 border-b border-zinc-700">
+                            <th class="text-left py-2">隊伍</th>
+                            <th class="text-center">賽</th>
+                            <th class="text-center">勝</th>
+                            <th class="text-center">和</th>
+                            <th class="text-center">負</th>
+                            <th class="text-center">積分</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function matchKey(home, away) {
+    return [home, away].sort().join('|');
+}
+
+function getTodayFinishedKeys() {
+    return new Set(
+        state.games
+            .filter(g => isTodayInTaipei(g) && isFinished(g))
+            .map(g => matchKey(g.home_team_name_en, g.away_team_name_en))
+    );
+}
+
+function getTeamsPlayingToday() {
+    const set = new Set();
+    state.games.filter(isTodayInTaipei).forEach(g => {
+        if (g.home_team_name_en) set.add(g.home_team_name_en);
+        if (g.away_team_name_en) set.add(g.away_team_name_en);
+    });
+    return set;
+}
+
+function getIdleTeams() {
+    const playing = getTeamsPlayingToday();
+    return Object.values(state.teams)
+        .filter(t => t.name_en && !playing.has(t.name_en))
+        .sort((a, b) => (a.groups || '').localeCompare(b.groups || '') || a.name_en.localeCompare(b.name_en));
+}
+
+function generateNews() {
+    const todayKeys = getTodayFinishedKeys();
+    const hasApi = state.games.length > 0;
+
+    const items = TODAY_TOP10_NEWS
+        .filter(item => {
+            if (!hasApi) return true;
+            const key = matchKey(item.match.home, item.match.away);
+            return todayKeys.has(key);
+        })
+        .sort((a, b) => a.priority - b.priority)
+        .slice(0, 10);
+
+    if (items.length) return items;
+
+    return [{
+        id: 'fallback',
+        tags: [{ text: '等待賽果', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-zinc-700',
+        meta: '',
+        title: '今日比賽結束後將顯示 X 熱議 Top 10',
+        summary: '新聞將在今日比賽完賽後自動載入。',
+        points: [],
+        source: '',
+    }];
+}
+
+function generateIdleNews() {
+    const playing = getTeamsPlayingToday();
+    const hasApi = state.games.length > 0;
+
+    return IDLE_TEAM_NEWS
+        .filter(item => {
+            if (!hasApi) return true;
+            return item.relatedTeams.every(t => !playing.has(t));
+        })
+        .sort((a, b) => a.priority - b.priority);
+}
+
+function renderNewsCard(n, i) {
+    return `
+        <article class="news-card fade-in bg-zinc-900 border ${n.border} rounded-3xl p-6 md:p-7">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="text-xs font-bold text-zinc-500 tabular-nums">#${i + 1}</span>
+                ${(n.tags || []).map(t => `
+                    <span class="text-xs font-bold px-3 py-1 rounded-2xl ${t.cls}">${t.text}</span>
+                `).join('')}
+                ${n.meta ? `<span class="text-xs text-zinc-500 ml-auto">${n.meta}</span>` : ''}
+            </div>
+            <h3 class="font-bold text-lg md:text-xl leading-snug">${n.title}</h3>
+            <p class="text-sm md:text-base text-zinc-300 mt-3 leading-relaxed">${n.summary}</p>
+            ${n.points?.length ? `
+                <ul class="news-points mt-4 space-y-2 text-sm text-zinc-400 pl-5">
+                    ${n.points.map(p => `<li class="leading-relaxed">${p}</li>`).join('')}
+                </ul>
+            ` : ''}
+            ${n.source ? `
+                <p class="text-xs text-zinc-600 mt-4 pt-3 border-t border-zinc-800">
+                    <i class="fa-brands fa-x-twitter mr-1"></i>參考來源：${n.source}
+                </p>
+            ` : ''}
+        </article>`;
+}
+
+function renderNews() {
+    const news = generateNews();
+    $('news-list').innerHTML = news.map((n, i) => renderNewsCard(n, i)).join('');
+}
+
+function renderIdleTeams() {
+    const idle = getIdleTeams();
+    const grid = $('idle-teams-grid');
+    $('idle-team-count').textContent = idle.length ? `（${idle.length} 隊）` : '';
+
+    if (!idle.length) {
+        grid.innerHTML = '<p class="text-sm text-zinc-500">載入隊伍資料中…</p>';
+        return;
+    }
+
+    grid.innerHTML = idle.map(t => `
+        <span class="team-chip inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 border border-zinc-700 rounded-2xl text-xs text-zinc-300">
+            ${t.flag ? `<img src="${t.flag}" class="w-4 h-3 object-cover rounded-sm" alt="">` : ''}
+            <span>${teamZh(t.name_en)}</span>
+            <span class="text-zinc-600">${t.groups}組</span>
+        </span>
+    `).join('');
+}
+
+function renderIdleNews() {
+    const news = generateIdleNews();
+    const list = $('idle-news-list');
+
+    if (!news.length) {
+        list.innerHTML = '';
+        $('no-idle-news').classList.remove('hidden');
+        return;
+    }
+    $('no-idle-news').classList.add('hidden');
+    list.innerHTML = news.map((n, i) => renderNewsCard(n, i)).join('');
+}
+
+function updateTabBadges() {
+    const todayGames = state.games.filter(g => isTodayInTaipei(g) && isPlayedOrLive(g)).length;
+    const idleNews = generateIdleNews().length;
+    $('tab-results-badge').textContent = todayGames ? `${todayGames} 場` : '—';
+    $('tab-idle-badge').textContent = idleNews ? `${idleNews} 則` : '—';
+}
+
+function switchTab(tab) {
+    const isResults = tab === 'results';
+    $('tab-results').classList.toggle('active', isResults);
+    $('tab-idle').classList.toggle('active', !isResults);
+    $('panel-results').classList.toggle('active', isResults);
+    $('panel-idle').classList.toggle('active', !isResults);
+}
+
+function setupTabs() {
+    $('tab-results').addEventListener('click', () => switchTab('results'));
+    $('tab-idle').addEventListener('click', () => switchTab('idle'));
+}
+
+function renderAll() {
+    const tp = getTaipeiToday().replace(/-/g, '/');
+    $('date-label').textContent = `${tp} 台灣時間`;
+    renderMatches();
+    renderStandings();
+    renderNews();
+    renderIdleTeams();
+    renderIdleNews();
+    updateTabBadges();
+}
+
+function showToast(msg, ok = true) {
+    const t = $('toast');
+    $('toast-msg').textContent = msg;
+    $('toast-icon').className = ok ? 'fa-solid fa-check text-emerald-400' : 'fa-solid fa-xmark text-red-400';
+    t.classList.remove('hidden');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => t.classList.add('hidden'), 2800);
+}
+
+function setLoading(on) {
+    state.loading = on;
+    const btn = $('btn-refresh');
+    const icon = $('refresh-icon');
+    btn.disabled = on;
+    if (on) {
+        icon.className = 'fa-solid fa-sync-alt spin';
+        $('refresh-text').textContent = '更新中…';
+    } else {
+        icon.className = 'fa-solid fa-bolt';
+        $('refresh-text').textContent = '一鍵即時更新';
+    }
+}
+
+function showError(title, detail) {
+    $('error-banner').classList.remove('hidden');
+    $('error-title').textContent = title;
+    $('error-detail').textContent = detail;
+}
+
+function hideError() {
+    $('error-banner').classList.add('hidden');
+}
+
+function saveCache(data) {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ...data, savedAt: Date.now() })); } catch {}
+}
+
+function loadCache() {
+    try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+    } catch { return null; }
+}
+
+async function fetchJSON(url) {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+}
+
+async function refreshData(manual = true) {
+    if (state.loading) return;
+    setLoading(true);
+    hideError();
+
+    try {
+        const [gamesRes, groupsRes, teamsRes] = await Promise.all([
+            fetchJSON(API.games),
+            fetchJSON(API.groups),
+            fetchJSON(API.teams),
+        ]);
+
+        state.games = gamesRes.games || [];
+        state.groups = groupsRes.groups || [];
+        state.teams = {};
+        (teamsRes.teams || []).forEach(t => { state.teams[t.id] = t; });
+
+        saveCache({ games: state.games, groups: state.groups, teams: state.teams });
+        renderAll();
+
+        const now = new Date().toLocaleTimeString('zh-TW', { timeZone: 'Asia/Taipei', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        $('last-updated').textContent = `最後更新：${now}`;
+        if (manual) showToast('已同步最新賽果與積分');
+    } catch (err) {
+        const cached = loadCache();
+        if (cached) {
+            state.games = cached.games;
+            state.groups = cached.groups;
+            state.teams = cached.teams;
+            renderAll();
+            showError('連線失敗，顯示快取資料', `${err.message}。請檢查網路後再試。`);
+            showToast('使用離線快取', false);
+        } else {
+            showError('無法取得資料', `${err.message}。請確認網路連線正常。`);
+            showToast('更新失敗', false);
+        }
+    } finally {
+        setLoading(false);
+    }
+}
+
+function setupAutoRefresh() {
+    const cb = $('auto-refresh');
+    const dot = $('live-indicator');
+
+    function toggle() {
+        clearInterval(autoTimer);
+        if (cb.checked) {
+            dot.className = 'live-dot w-2 h-2 rounded-full bg-emerald-400';
+            autoTimer = setInterval(() => refreshData(false), AUTO_REFRESH_SEC * 1000);
+        } else {
+            dot.className = 'w-2 h-2 rounded-full bg-zinc-600';
+        }
+    }
+
+    cb.addEventListener('change', toggle);
+    toggle();
+}
+
+$('btn-refresh').addEventListener('click', () => refreshData(true));
+setupAutoRefresh();
+setupTabs();
+
+function applyData(data) {
+    state.games = data.games || [];
+    state.groups = data.groups || [];
+    state.teams = data.teams || {};
+    renderAll();
+}
+
+const cached = loadCache();
+if (cached?.games?.length) {
+    applyData(cached);
+} else {
+    $('date-label').textContent = new Date().toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' }) + ' 台灣時間';
+}
+refreshData(false);
+</script>
+</body>
+</html>

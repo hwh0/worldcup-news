@@ -1,0 +1,6 @@
+# 只部署世界盃新聞頁，排除其他檔案
+*.xlsx
+*.json
+hemodialysis-dashboard_1.html
+worldcup-news.html
+terminals/
