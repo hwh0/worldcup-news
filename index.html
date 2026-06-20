@@ -121,7 +121,7 @@
             <section class="mb-10">
                 <h2 class="section-title flex items-center gap-3">
                     <i class="fa-solid fa-table text-blue-500"></i>
-                    各組目前積分排序（重點小組）
+                    各組目前積分排序（今日賽程）
                 </h2>
                 <div id="standings-container" class="space-y-6">
                     <div class="skeleton h-40 rounded-3xl"></div>
@@ -201,12 +201,183 @@ const API = {
     teams: 'https://worldcup26.ir/get/teams',
 };
 
-const FOCUS_GROUPS = ['E', 'F'];
 const AUTO_REFRESH_SEC = 60;
 const CACHE_KEY = 'wc_news_cache_v1';
 
-/** 今日四場比賽 X 熱議 Top 10（固定 10 則，均衡覆蓋 E/F 組） */
+/** 賽事新聞池（依台灣時間「今日」賽程自動篩選，每日更新內容） */
 const TODAY_TOP10_NEWS = [
+    /* ── C/D 組（台灣 6/20） ── */
+    {
+        id: 'galarza-fastest',
+        priority: 1,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '巴拉圭', cls: 'text-red-400 bg-red-950' }],
+        border: 'border-rose-500/40',
+        match: { home: 'Turkey', away: 'Paraguay' },
+        meta: 'D 組 · 土耳其 0-1 巴拉圭 · 開賽 64 秒',
+        title: 'Galarza 開賽 64 秒遠射破門，暫登本屆世足最快進球',
+        summary: '巴拉圭中場 Matías Galarza 在舊金山灣區球場開賽僅 64 秒就轟入 25 米低平球，這粒世界波成為全場唯一進球，也讓土耳其再度吞下苦果。',
+        points: [
+            '此球一度超越摩洛哥 Saibari 的 71 秒閃擊，成為本屆賽事最快進球。',
+            'Galarza 賽後形容這是「人生最好的一天之一」，並感謝上帝眷顧巴拉圭。',
+            '巴拉圭在首戰 1-4 慘敗美國後強勢反彈，展現「La Albirroja」的鬥志。',
+            'X 上 #Galarza、#Paraguay 標籤迅速登上世足趨勢榜。',
+        ],
+        source: 'Al Jazeera · Reuters · ESPN',
+    },
+    {
+        id: 'almiron-mouth-red',
+        priority: 2,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '首例紅牌', cls: 'text-red-400 bg-red-950' }],
+        border: 'border-red-500/40',
+        match: { home: 'Turkey', away: 'Paraguay' },
+        meta: 'D 組 · 土耳其 0-1 巴拉圭 · 上半場補時',
+        title: 'Almirón 成世足首位「掩嘴」紅牌，巴拉圭 10 人守住勝果',
+        summary: 'Miguel Almirón 與 Mert Müldür 口角時以手掩嘴說話，主裁 Ivan Barton 經 VAR 確認後直接紅牌——這是 IFAB 新規在本屆世足的首度執行，X 上引發巨大爭論。',
+        points: [
+            '新規源於 Prestianni 掩嘴歧視 Vinícius 事件，旨在杜絕隱藏言論的歧視行為。',
+            '友好交談可掩嘴；一旦形成對峙，即可能構成紅牌。',
+            '巴拉圭在 1-0 領先下以 10 人守完全場，這是隊史世足第三張紅牌。',
+            '本屆已出現 7 張紅牌，為 2014 年以來單屆最多。',
+        ],
+        source: 'ESPN · Al Jazeera',
+    },
+    {
+        id: 'turkey-shots',
+        priority: 3,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '土耳其', cls: 'text-red-400 bg-red-950' }],
+        border: 'border-red-500/40',
+        match: { home: 'Turkey', away: 'Paraguay' },
+        meta: 'D 組 · 土耳其 0-1 巴拉圭',
+        title: '土耳其兩戰 62 射門 0 進球出局，Montella：已拼盡全力',
+        summary: '土耳其全場控球率高達 79%、射門 32 次卻顆粒無收，兩場小組賽合計 62 腳射門 0 進球，成為 X 上最被嘲諷的數據之一。',
+        points: [
+            'Kenan Yıldız、Arda Güler 等人屢次錯失良機，進攻效率慘不忍睹。',
+            '教練 Montella 賽後表示球員已拼盡全力，但足球就是這樣殘酷。',
+            '土耳其兩連敗積分掛零，小組出局幾成定局。',
+            '網友製作迷因圖調侃「射門機器、進球絕緣」，#Turkey 趨勢爆發。',
+        ],
+        source: 'Al Jazeera · BBC',
+    },
+    {
+        id: 'saibari-early',
+        priority: 4,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '摩洛哥', cls: 'text-green-400 bg-green-950' }],
+        border: 'border-green-500/40',
+        match: { home: 'Scotland', away: 'Morocco' },
+        meta: 'C 組 · 蘇格蘭 0-1 摩洛哥 · 開賽 70 秒',
+        title: 'Saibari 開賽 70 秒閃擊破門，摩洛哥逆轉 C 組榜首',
+        summary: 'Brahim Díaz 直塞，PSV 中場 Ismael Saibari 停球後遠角低射破網，開賽僅 70 秒就取得領先，最終 1-0 帶走三分。',
+        points: [
+            '摩洛哥賽後幾乎鎖定十六強席位，末輪對海地形勢有利。',
+            '蘇格蘭原本位居小組第一，此敗讓 C 組陷入三隊混戰。',
+            '波士頓球場的 Tartan Army 聲勢浩大，但早失球打亂全場節奏。',
+            'X 上摩洛哥球迷與 Saibari 剪輯影片大量轉發。',
+        ],
+        source: 'ESPN · BBC',
+    },
+    {
+        id: 'scotland-penalties',
+        priority: 5,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '蘇格蘭', cls: 'text-blue-400 bg-blue-950' }],
+        border: 'border-blue-500/40',
+        match: { home: 'Scotland', away: 'Morocco' },
+        meta: 'C 組 · 蘇格蘭 0-1 摩洛哥 · 波士頓',
+        title: '蘇格蘭兩次點球漏判？McGinn、McTominay 倒地引裁判風暴',
+        summary: '蘇格蘭下半場兩度在禁區倒地索求點球均被烏茲別克主裁 Tantashev 拒絕，賽後 Keane、McGinn、Clarke 各執一詞，X 上 #ScotlandRef 吵翻。',
+        points: [
+            'ITV 裁判專家 Unkel 認為 McTominay 被絆倒應判點球；Keane 則持相反意見。',
+            'McGinn 直言「摩洛哥僥倖逃過一劫」，但強調不能依賴裁判。',
+            '上半場 Issa Diop 絆倒 Che Adams 僅吃黃牌，蘇格蘭名宿認為應為紅牌。',
+            '蘇格蘭仍保有晉級希望，末輪對巴西前必須拿出更好表現。',
+        ],
+        source: 'BBC · ESPN',
+    },
+    {
+        id: 'raphinha-injury',
+        priority: 6,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }],
+        border: 'border-yellow-500/40',
+        match: { home: 'Brazil', away: 'Haiti' },
+        meta: 'C 組 · 巴西 3-0 海地 · 費城 · 上半場',
+        title: 'Raphinha 無碰撞傷退，巴西攻擊線拉響警報',
+        summary: '巴西 3-0 大勝海地，但 Raphinha 在上半場無明顯對抗下突然倒地，疑似右腿後肌拉傷，Vinícius Júnior 緊急替補，#Raphinha 登上巴西趨勢第一。',
+        points: [
+            'Raphinha 倒地後無法繼續，隊醫迅速入場，全場巴西球迷陷入沉默。',
+            '賽後將接受 MRI 檢查，能否趕上淘汰賽是巴西媒體最關心話題。',
+            'Dorival Júnior 表示傷勢令人擔憂，但會等待醫療報告。',
+            '球迷擔心重演 2022 傷病潮，X 上「沒有 Raphinha 的巴西能走多遠」引發熱議。',
+        ],
+        source: 'USA Today · ESPN · BBC',
+    },
+    {
+        id: 'cunha-brace',
+        priority: 7,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }],
+        border: 'border-yellow-500/30',
+        match: { home: 'Brazil', away: 'Haiti' },
+        meta: 'C 組 · 巴西 3-0 海地 · 費城',
+        title: 'Matheus Cunha 梅開二度，巴西終取本屆首勝',
+        summary: '曼聯前鋒 Matheus Cunha 本場獨進兩球，帶領巴西 3-0 擊敗海地。BBC 評論「真正的巴西尚未現身」，但 Cunha 的表現已在 X 上獲得大量稱讚。',
+        points: [
+            '巴西首戰僅 1-1 戰平摩洛哥，本場勝利壓力巨大。',
+            'Cunha 禁區內嗅覺敏銳，被視為取代 Raphinha 傷退後的進攻核心。',
+            '費城街頭巴西球迷狂歡影片在 X 瘋傳，#Brazil 標籤熱度飆升。',
+            '海地兩連敗積分掛零，但球迷仍展現感人支持。',
+        ],
+        source: 'Al Jazeera · BBC',
+    },
+    {
+        id: 'usa-var-freeman',
+        priority: 8,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: 'VAR', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-amber-500/40',
+        match: { home: 'United States', away: 'Australia' },
+        meta: 'D 組 · 美國 2-0 澳洲 · 西雅圖 · 第 43 分鐘',
+        title: 'Freeman 頭槌進球 VAR 覆核：為何不算越位？',
+        summary: 'Alex Freeman 頭槌破網後邊裁舉旗，VAR Bastian Dankert 覆核後改判進球有效。這是今日 D 組最大 VAR 爭議，#USAvAUS 在 X 上討論量破百萬。',
+        points: [
+            'Dest 射門被擋後皮球彈高，Freeman 搶先 Balogun 頭槌得分。',
+            '越位以 Dest 出腳瞬間判定；Freeman 當時在防線內，半自動系統確認 on side。',
+            'Balogun 雖越位但未觸球，不影響判決；澳洲質疑其干擾門將，專家認為不成立。',
+            '前英超裁判 Andy Davies 稱 VAR 介入正確，但驚訝邊裁最初舉旗。',
+        ],
+        source: 'ESPN · Yahoo Sports',
+    },
+    {
+        id: 'zwayer-cramp',
+        priority: 9,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '場邊花絮', cls: 'text-cyan-400 bg-cyan-950' }],
+        border: 'border-cyan-500/40',
+        match: { home: 'United States', away: 'Australia' },
+        meta: 'D 組 · 美國 2-0 澳洲 · 補時 · 西雅圖',
+        title: '主裁 Zwayer 補時抽筋，Balogun 幫忙拉筋成 viral 影片',
+        summary: '德國主裁 Felix Zwayer 在炎熱天氣下補時抽筋倒地，美國 Balogun 與澳洲 O\'Neill 雙雙上前協助伸展，醫療人員送上 pickle juice，成為 X 本日最瘋傳片段之一。',
+        points: [
+            'Zwayer 拉筋後恢復執法，比賽僅短暫中斷。',
+            '職業裁判單場跑動可達 10-12 公里，體能要求不亞於球員。',
+            '諷刺的是，Zwayer 本場 VAR 判決已讓澳洲不滿，Irankunda 批其「表現失常」。',
+            'The Guardian 稱澳洲對裁判「stinker（糟透了）」表現感到憤怒。',
+        ],
+        source: 'Fox Sports · The Guardian · The Sun',
+    },
+    {
+        id: 'usa-knockout',
+        priority: 10,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '美國', cls: 'text-blue-400 bg-blue-950' }],
+        border: 'border-blue-500/30',
+        match: { home: 'United States', away: 'Australia' },
+        meta: 'D 組 · 美國 2-0 澳洲 · 西雅圖',
+        title: '東道主美國兩戰全勝晉級，Freeman 世界盃首球寫歷史',
+        summary: '美國在 Pulisic 缺陣下靠 Freeman 頭槌與 Burgess 烏龍 2-0 勝澳洲，確定晉級十六強並暫列 D 組第一。Super Bowl 冠軍之子 Freeman 的世界盃首球成為美國媒體頭條。',
+        points: [
+            '美國三個半場攻入 6 球，進攻火力為本屆東道主之最。',
+            '澳洲仍有望以第二名晉級，末輪對巴拉圭不容有失。',
+            '巴拉圭擊敗土耳其後，美國正式鎖定小組第一。',
+            '西雅圖 6.8 萬球迷見證歷史，#USMNT 趨勢霸榜美國區。',
+        ],
+        source: 'Yahoo Sports · BBC · The Guardian',
+    },
+    /* ── E/F 組（台灣 6/21） ── */
     {
         id: 'isak-vandijk',
         priority: 1,
@@ -839,7 +1010,8 @@ function renderMatches() {
 
 function renderStandings() {
     const container = $('standings-container');
-    const focus = state.groups.filter(g => FOCUS_GROUPS.includes(g.name));
+    const focusGroups = getFocusGroups();
+    const focus = state.groups.filter(g => focusGroups.includes(g.name));
 
     container.innerHTML = focus.map(g => {
         const rows = [...g.teams]
@@ -896,12 +1068,27 @@ function matchKey(home, away) {
     return [home, away].sort().join('|');
 }
 
+/** 台灣時間今日所有賽程（含未開踢） */
+function getTodayMatchKeys() {
+    return new Set(
+        state.games
+            .filter(isTodayInTaipei)
+            .map(g => matchKey(g.home_team_name_en, g.away_team_name_en))
+    );
+}
+
 function getTodayFinishedKeys() {
     return new Set(
         state.games
             .filter(g => isTodayInTaipei(g) && isFinished(g))
             .map(g => matchKey(g.home_team_name_en, g.away_team_name_en))
     );
+}
+
+/** 依台灣時間今日賽程自動決定積分榜重點小組 */
+function getFocusGroups() {
+    const groups = [...new Set(state.games.filter(isTodayInTaipei).map(g => g.group))].sort();
+    return groups.length ? groups : ['C', 'D'];
 }
 
 function getTeamsPlayingToday() {
@@ -921,27 +1108,34 @@ function getIdleTeams() {
 }
 
 function generateNews() {
-    const todayKeys = getTodayFinishedKeys();
+    const todayKeys = getTodayMatchKeys();
+    const finishedKeys = getTodayFinishedKeys();
     const hasApi = state.games.length > 0;
 
-    const items = TODAY_TOP10_NEWS
+    let items = TODAY_TOP10_NEWS
         .filter(item => {
             if (!hasApi) return true;
             const key = matchKey(item.match.home, item.match.away);
             return todayKeys.has(key);
         })
-        .sort((a, b) => a.priority - b.priority)
-        .slice(0, 10);
+        .sort((a, b) => a.priority - b.priority);
 
+    // 優先顯示已完賽場次的新聞；若尚未完賽則顯示全部今日賽程新聞
+    const finishedItems = items.filter(item => finishedKeys.has(matchKey(item.match.home, item.match.away)));
+    if (finishedItems.length) items = finishedItems;
+
+    items = items.slice(0, 10);
     if (items.length) return items;
 
     return [{
         id: 'fallback',
-        tags: [{ text: '等待賽果', cls: 'text-zinc-400 bg-zinc-800' }],
+        tags: [{ text: '等待賽程', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-zinc-700',
         meta: '',
-        title: '今日比賽結束後將顯示 X 熱議 Top 10',
-        summary: '新聞將在今日比賽完賽後自動載入。',
+        title: '今日暫無對應賽事新聞',
+        summary: hasApi
+            ? '新聞會依台灣時間今日賽程自動配對；請確認已同步最新賽程資料。'
+            : '新聞將在載入賽程後自動顯示。',
         points: [],
         source: '',
     }];
