@@ -31,13 +31,6 @@
         .tab-panel.active { display: block; }
         .team-chip { transition: transform 0.15s; }
         .team-chip:hover { transform: scale(1.03); }
-        .trend-card { transition: border-color 0.2s; }
-        .trend-card:hover { border-color: rgba(255,255,255,0.15); }
-        .reaction-quote { border-left: 3px solid; padding-left: 12px; }
-        .reaction-positive { border-color: #34d399; }
-        .reaction-negative { border-color: #f87171; }
-        .reaction-neutral { border-color: #71717a; }
-        .reaction-funny { border-color: #fbbf24; }
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-200 min-h-screen">
@@ -96,11 +89,6 @@
                 無賽事球隊動態
                 <span id="tab-idle-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400"></span>
             </button>
-            <button id="tab-trending" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
-                <i class="fa-brands fa-x-twitter"></i>
-                X 熱議話題
-                <span id="tab-trending-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400">10 則</span>
-            </button>
         </div>
 
         <!-- 分頁一：今日賽果 -->
@@ -121,7 +109,7 @@
             <section class="mb-10">
                 <h2 class="section-title flex items-center gap-3">
                     <i class="fa-solid fa-table text-blue-500"></i>
-                    各組目前積分排序（今日賽程）
+                    各組目前積分排序（重點小組）
                 </h2>
                 <div id="standings-container" class="space-y-6">
                     <div class="skeleton h-40 rounded-3xl"></div>
@@ -166,26 +154,6 @@
                 <p id="no-idle-news" class="hidden text-zinc-500 text-sm mt-3">今日暫無其他隊伍的重要新聞。</p>
             </section>
         </div>
-
-        <!-- 分頁三：X 熱議話題 -->
-        <div id="panel-trending" class="tab-panel">
-            <section class="mb-6">
-                <p class="text-sm text-zinc-400 leading-relaxed">
-                    彙整本日 X（Twitter）上討論量最高的世足話題，並摘要網友主要觀點與情緒走向。
-                </p>
-            </section>
-            <section>
-                <h2 class="section-title flex items-center gap-3 mb-5">
-                    <i class="fa-brands fa-x-twitter text-zinc-200"></i>
-                    本日 X 熱議 Top 10
-                    <span class="text-xs font-normal text-zinc-500">網友評論摘要</span>
-                </h2>
-                <div id="trending-list" class="space-y-4">
-                    <div class="skeleton h-36 rounded-3xl"></div>
-                    <div class="skeleton h-36 rounded-3xl"></div>
-                </div>
-            </section>
-        </div>
     </main>
 
     <!-- Toast -->
@@ -201,498 +169,347 @@ const API = {
     teams: 'https://worldcup26.ir/get/teams',
 };
 
+const FOCUS_GROUPS = ['E', 'F'];
 const AUTO_REFRESH_SEC = 60;
 const CACHE_KEY = 'wc_news_cache_v1';
 
-/** 賽事新聞池（依台灣時間「今日」賽程自動篩選，每日更新內容） */
+/** 今日四場比賽 X 熱議 Top 10（固定 10 則，均衡覆蓋 E/F 組） */
 const TODAY_TOP10_NEWS = [
-    /* ── E/F 組（台灣 6/21） ── */
     {
-        id: 'brobbey-gakpo-rout',
+        id: 'brobbey-gakpo-braces',
         priority: 1,
         tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '荷蘭', cls: 'text-orange-400 bg-orange-950' }],
         border: 'border-orange-500/40',
         match: { home: 'Netherlands', away: 'Sweden' },
         meta: 'F 組 · 荷蘭 5-1 瑞典 · 休士頓',
-        title: 'Brobbey 梅開二度、Gakpo 兩球一助攻，荷蘭 5-1 橫掃瑞典',
-        summary: 'Koeman 將 Brobbey 推上九號位收到奇效：開賽 5 與 17 分鐘連進兩球，Gakpo 同樣梅開二度並助攻，Summerville 補刀 89 分鐘，荷蘭以低平傳中戰術徹底撕裂瑞典防線。',
+        title: 'Brobbey、Gakpo 各梅開二度，荷蘭 17 分鐘內橫掃瑞典',
+        summary: '荷蘭開賽 5 分鐘由 Brobbey 破門，17 分鐘即完成個人梅開二度，成為自 1986 年以來世足開局第四快雙響。Gakpo 同樣梅開二度，Summerville 替補第 89 分鐘錦上添花，#Oranje 在 X 上全面洗版。',
         points: [
-            'Brobbey 兩球皆來自禁區低傳，The Athletic 稱荷蘭「同一招進三次」。',
-            'Gakpo 罕見走邊路傳中而非內切，狀態遠勝利物浦球季後段。',
-            '瑞典僅 Elanga 59 分鐘扳回一城，Isak 與 Gyökeres 完全啞火。',
-            'X 上 #Oranje、#Brobbey 趨勢霸榜，荷蘭被視為冠軍黑馬。',
+            'Brobbey 取代首戰進球者 Summerville 先發，立刻證明 Koeman 決策正確。',
+            'Dumfries 兩度助攻，加盟皇馬後狀態火熱。',
+            'Elanga 替補為瑞典破門，但無法扭轉戰局。',
+            '荷蘭積分與淨勝球均領先 F 組，末輪對突尼西亞有望鎖定第一。',
         ],
-        source: 'The Athletic · Yahoo Sports · ESPN',
+        source: 'Yahoo Sports · Opta · The Athletic',
     },
     {
-        id: 'koeman-brobbey-tactics',
+        id: 'undav-germany-knockout',
         priority: 2,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '戰術', cls: 'text-purple-400 bg-purple-950' }],
-        border: 'border-purple-500/40',
-        match: { home: 'Netherlands', away: 'Sweden' },
-        meta: 'F 組 · 荷蘭 5-1 瑞典 · 上半場',
-        title: 'Koeman 變陣奏效：Malen 拉邊、Brobbey 撞擊 Hien 防線',
-        summary: 'Koeman 大膽將 Serie A 狀態火熱的 Malen 從中路改到右邊，Brobbey 取代 Summerville 先發，專門針對瑞典後衛 Hien 的對抗弱點，補水暫停前瑞典已崩盤。',
-        points: [
-            'Potter 補水後改四後衛，但四球已丟，戰術調整為時已晚。',
-            '荷蘭 PPDA 壓迫強度為本屆最高之一，開賽即展現侵略性。',
-            '媒體質疑：這支荷蘭能否維持水準，已具冠軍相？',
-            'X 戰術帳號瘋傳 Brobbey 對 Hien 身體對抗剪輯。',
-        ],
-        source: 'The Athletic · BBC',
-    },
-    {
-        id: 'sweden-potter-crisis',
-        priority: 3,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '瑞典', cls: 'text-yellow-400 bg-yellow-950' }],
-        border: 'border-yellow-500/40',
-        match: { home: 'Netherlands', away: 'Sweden' },
-        meta: 'F 組 · 荷蘭 5-1 瑞典',
-        title: '瑞典首戰 5-1 勝突尼西亞、次戰 1-5 慘敗，防線隱憂浮現',
-        summary: 'Graham Potter 的瑞典缺少傳統北歐鐵壁後防，Isak 與 Gyökeres 雙前鋒無法彌補禁區漏洞。若日本今晚取勝，瑞典晉級算盤將變得極度被動。',
-        points: [
-            '瑞典兩個半場各丟四球以上，溝通與盯人屢屢失誤。',
-            'Ayari 中場表現仍亮眼，但後防成為 X 上 #Sweden 主要嘲諷點。',
-            '末輪對突尼西亞仍有望以第二名晉級，但士氣受創。',
-            'Potter 賽後承認荷蘭強度超出預期，需迅速重整。',
-        ],
-        source: 'The Athletic · Fox Sports',
-    },
-    {
-        id: 'undav-late-winner',
-        priority: 4,
         tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '德國', cls: 'text-zinc-300 bg-zinc-800' }],
         border: 'border-zinc-500/40',
         match: { home: 'Germany', away: 'Ivory Coast' },
-        meta: 'E 組 · 德國 2-1 象牙海岸 · 多倫多 · 補時',
-        title: 'Undav 補時絕殺，德國 2-1 險勝象牙海岸鎖定十六強',
-        summary: 'Kessié 30 分鐘破門讓象牙海岸領先，Undav 第 68 分鐘替補登場扳平後，第 94 分鐘接 Nmecha 傳球轉身轟入致勝球。德國兩連勝積 6 分，幾乎確定 E 組第一。',
+        meta: 'E 組 · 德國 2-1 象牙海岸 · 多倫多',
+        title: 'Undav 替補雙響逆轉，德國暌違 12 年重返淘汰賽',
+        summary: 'Kessié 第 30 分鐘先開紀錄，但替補登場的 Undav 第 68、補時階段連進兩球，帶領德國 2-1 勝出並與美國、墨西哥一同晉級十六強。這是德國自 2014 冠軍年後首次闖過小組賽，#DieMannschaft 歡呼與釋懷並存。',
         points: [
-            'Undav 本屆 56 分鐘內 5 次參與進球，超級替補身價暴漲。',
-            'Havertz、Musiala 屢次得分遭 VAR 以犯規為由取消。',
-            'Nagelsmann 三換一在第 60 分鐘改寫戰局，戰術調整受讚。',
-            'X 德語區 #Undav、#DieMannschaft 深夜洗版。',
+            'Undav 成為世足史上第四位替補同場攻入扳平與絕殺球的球員。',
+            'Amiri 長傳策動第一球，替補組合 8 分鐘內改寫戰局。',
+            'Klinsmann 賽後坦言德國「踢得很掙扎」，但展現了韌性。',
+            '末輪對厄瓜多將決定 E 組頭名歸屬。',
         ],
-        source: 'ESPN · Fox Sports',
+        source: 'ESPN · AP · Yahoo Sports',
     },
     {
-        id: 'fae-fair-play-row',
+        id: 'eloy-room-hero',
+        priority: 3,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '傳奇撲救', cls: 'text-cyan-400 bg-cyan-950' }],
+        border: 'border-cyan-500/40',
+        match: { home: 'Ecuador', away: 'Curaçao' },
+        meta: 'E 組 · 厄瓜多 0-0 古拉索 · 堪薩斯城',
+        title: 'Eloy Room 15 次撲救創紀錄，古拉索史詩級逼和厄瓜多',
+        summary: '37 歲門將 Eloy Room 完成 15 次撲救，差 1 次追平 Howard 2014 世足紀錄，帶領人口僅 16 萬的古拉索拿下隊史首個世足積分。荷蘭國王與王后親臨觀戰並在賽後更衣室獻吻致意，#EloyRoom 全球瘋傳。',
+        points: [
+            '厄瓜多全場 27 次射門卻零進球，Valencia 與 Plata 屢次徒勞。',
+            'Advocaat 賽後落淚：「他們像獅子一樣戰鬥。」',
+            'Tahith Chong 與 Juninho Bacuna 帶動反擊，古拉索並非陪跑。',
+            '厄瓜多球迷賽後噓聲離場，末輪必須擊敗德國才有一線生機。',
+        ],
+        source: 'The Guardian · ESPN · FIFA',
+    },
+    {
+        id: 'japan-4-tunisia',
+        priority: 4,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '日本', cls: 'text-blue-400 bg-blue-950' }],
+        border: 'border-blue-500/40',
+        match: { home: 'Tunisia', away: 'Japan' },
+        meta: 'F 組 · 日本 4-0 突尼西亞 · 蒙特雷',
+        title: '日本 4-0 大勝，亞洲球隊世足單場進球新紀錄',
+        summary: 'Kamada 第 4 分鐘後跟進破門，Ueda 梅開二度，Ito 第 69 分鐘世界波，日本在缺陣 Mitoma、Endo、久保建英下仍大勝。這是本屆世足第 1000 場比賽，#SamuraiBlue 一腳踏進十六強門檻。',
+        points: [
+            'Nakamura 助攻 Kamada，延續對荷蘭一役的好狀態。',
+            '四球為亞洲球隊世足單場進球歷史新高。',
+            '日本與荷蘭同積 4 分、淨勝球 +4，F 組榜首之爭白熱化。',
+            'Moriyasu 稱球隊已找到無明星時的進攻節奏。',
+        ],
+        source: 'The Athletic · FIFA · ESPN',
+    },
+    {
+        id: 'renard-failure',
         priority: 5,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '場外風波', cls: 'text-amber-400 bg-amber-950' }],
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '換帥', cls: 'text-red-400 bg-red-950' }],
+        border: 'border-red-500/40',
+        match: { home: 'Tunisia', away: 'Japan' },
+        meta: 'F 組 · 突尼西亞 · 蒙特雷',
+        title: 'Renard 換帥實驗徹底失敗，突尼西亞成首支出局隊伍',
+        summary: '突尼西亞在解雇 Lamouchi、任命 Renard 僅四天後再吞 4-0，成為本屆首支無法晉級的球隊。Renard 賽前揚言「復仇精神」卻換來防線崩潰，X 上 #Renard 與 #Tunisia 充滿嘲諷與無奈。',
+        points: [
+            '突尼西亞成為世足史上首支開賽一場後換帥的球隊，結果更糟。',
+            'Kamada 開局 4 分鐘進球，Renard 場邊表情成迷因素材。',
+            'Ueda 兩球展現法甲射手本色，突尼西亞防線毫無組織。',
+            '足協面臨「問題是否在教練席之外」的靈魂拷問。',
+        ],
+        source: 'The Athletic · The Guardian',
+    },
+    {
+        id: 'neuer-schlotterbeck',
+        priority: 6,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '德國', cls: 'text-zinc-300 bg-zinc-800' }],
+        border: 'border-zinc-500/40',
+        match: { home: 'Germany', away: 'Ivory Coast' },
+        meta: 'E 組 · 德國 · 多倫多',
+        title: 'Neuer 21 場破門將紀錄，Schlotterbeck 半場傷退蒙陰影',
+        summary: 'Neuer 以第 21 場世足超越 Lloris，成為歷史出賽最多門將。但中衛 Schlotterbeck 上半場傷退，Nagelsmann 稱「看起來不妙」，德國晉級喜悅被防線隱憂沖淡。',
+        points: [
+            'Neuer 自 2014 冠軍年堅守國家隊大門，傳奇延續。',
+            'Schlotterbeck 堅持踢完上半場，等待 MRI 掃描結果。',
+            '德國晉級後 Klinsmann 與 Nagelsmann 世代話題再起。',
+            '淘汰賽對手未定，防線深度成最大變數。',
+        ],
+        source: 'ESPN · AP',
+    },
+    {
+        id: 'germany-var-disallowed',
+        priority: 7,
+        tags: [{ text: 'VAR', cls: 'text-amber-400 bg-amber-950' }, { text: '德國', cls: 'text-zinc-300 bg-zinc-800' }],
         border: 'border-amber-500/40',
         match: { home: 'Germany', away: 'Ivory Coast' },
-        meta: 'E 組 · 德國 2-1 象牙海岸 · 賽後',
-        title: '象牙海岸教練 Faé 批德國「缺乏公平競賽精神」',
-        summary: 'Emerse Faé 賽後指責德國球員在 Brown 阻擋 Diallo 射門等爭議動作上缺乏公平競賽精神，並質疑 Undav 絕殺前是否越位——X 上 #FairPlay 與 #Germany 引發跨洲論戰。',
+        meta: 'E 組 · 德國 2-1 象牙海岸 · 多倫多',
+        title: '德國上半場兩球被判無效，Havertz 與 Musiala 空歡喜',
+        summary: '德國上半場兩度破門均被吹掉：第 21 分鐘 Fofana 烏龍因 Pavlović 犯規取消，第 38 分鐘 Havertz 進球因 Musiala 犯規無效。X 上 #VAR 與德國球迷怒批裁判尺度，但 Undav 替補最終救場。',
         points: [
-            'Faé 強調象牙海岸本可拿 4 分，現在必須末輪死磕。',
-            'ESPN 回放顯示 Undav 絕殺明顯在越位線內。',
-            '德國媒體反擊稱象牙海岸犯規戰術同樣激烈。',
-            'Wahi 涉賭風波後首發亮相，場外話題持續發酵。',
+            'Kessié 搶先破門前，德國其實有機會早早領先。',
+            'Wahi 涉賭調查最終未出賽，象牙海岸進攻火力受限。',
+            'Diomande 與 Diallo 助攻建樹，象牙海岸仍有晉級機會。',
+            '末輪對古拉索需全取三分並祈禱淨勝球。',
         ],
-        source: 'ESPN · The Athletic · NYT',
+        source: 'ESPN · The Athletic',
     },
     {
-        id: 'ecuador-curacao-stalemate',
-        priority: 6,
+        id: 'netherlands-100-goals',
+        priority: 8,
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '里程碑', cls: 'text-sky-400 bg-sky-950' }],
+        border: 'border-sky-500/40',
+        match: { home: 'Netherlands', away: 'Sweden' },
+        meta: 'F 組 · 荷蘭 5-1 瑞典 · 休士頓',
+        title: '荷蘭躋身世足百球俱樂部，卻是唯一未奪冠成員',
+        summary: '上半場兩球讓荷蘭累計世足進球突破 100 粒，與巴西、德國、阿根廷等傳奇隊伍並列。然而荷蘭是三奮力追逐冠軍卻三次決賽落敗的「無冕之王」，這層歷史包袱在 X 上引發感性討論。',
+        points: [
+            'Brobbey 與 Gakpo 上半場四球寫下新頁。',
+            '國王威廉亚历山大與王后 Maxima 同日先後觀戰荷蘭與古拉索。',
+            'Koeman 稱球隊終於展現首戰對日本欠缺的侵略性。',
+            '荷蘭 1974、1978、2010 三次亞軍的宿命會否改寫？',
+        ],
+        source: 'Yahoo Sports · Opta',
+    },
+    {
+        id: 'japan-goalline-tech',
+        priority: 9,
+        tags: [{ text: 'VAR', cls: 'text-amber-400 bg-amber-950' }, { text: '日本', cls: 'text-blue-400 bg-blue-950' }],
+        border: 'border-amber-500/40',
+        match: { home: 'Tunisia', away: 'Japan' },
+        meta: 'F 組 · 日本 4-0 突尼西亞 · 蒙特雷',
+        title: '門線技術顯示差一毫米，日本險成 5-0 再掀 VAR 討論',
+        summary: '日本第 10 分鐘角球混戰疑似破門，Tomiyasu 射門被 Dahmen 撈出，日本球迷以為 2-0 領先。門線技術顯示球體仍有極微小部分未越線，裁判 Kovacs 維持原判。這讓人想起 2022 日本對西班牙的「1 毫米」傳奇。',
+        points: [
+            '本屆世足新增底線觸球偵測技術，本場首度成焦點。',
+            '日本球迷在蒙特雷球場經歷數分鐘煎熬等待判決。',
+            '最終 4-0 大勝沖淡爭議，但規則討論持續發酵。',
+            'The Athletic 專文解析本屆世足科技改革全貌。',
+        ],
+        source: 'The Athletic · FIFA',
+    },
+    {
+        id: 'ecuador-must-beat-germany',
+        priority: 10,
         tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '厄瓜多', cls: 'text-yellow-400 bg-yellow-950' }],
         border: 'border-yellow-500/40',
         match: { home: 'Ecuador', away: 'Curaçao' },
         meta: 'E 組 · 厄瓜多 0-0 古拉索 · 堪薩斯城',
-        title: '厄瓜多 0-0 悶平古拉索，Valencia 錯失良機淨勝球告急',
-        summary: '厄瓜多全場圍攻卻無法破門，Enner Valencia 與 Páez 屢次浪費機會。在德國已 6 分情況下，這 1 分遠不足以拉開淨勝球，#Ecuador 社群充滿焦慮。',
+        title: '厄瓜多連兩場不進球，末輪對德國成生死戰',
+        summary: '厄瓜多首戰 0-1 象牙海岸、本場 0-0 古拉索，兩場一球未進積分僅 1 分。教練 Beccacece 稱「足球有時無法解釋」，但現實是末輪必須在紐澤西擊敗已晉級的德國才可能存活，#Ecuador 絕望與不甘並存。',
         points: [
-            '厄瓜多兩戰僅 1 分、淨勝球 -1，晉級形勢極度被動。',
-            '古拉索守平後積分仍為 1，但淨勝球劣勢巨大。',
-            '教練 Alfaro 賽後稱「足球就是這樣殘酷」，承認進攻效率不足。',
-            '費城與堪薩斯城兩場厄瓜多球迷沉默離場畫面在 X 瘋傳。',
+            'Hincapié、Pacho、Caicedo 等歐洲主力悉數上陣卻徒勞。',
+            '19 場不敗紀錄在費城被終結後，進攻持續啞火。',
+            '48 隊制下第三名仍有機會，但淨勝球 -1 極度被動。',
+            'Beccacece：「痛苦正常，但我們還有機會改正。」',
         ],
-        source: 'Fox Sports · ESPN',
-    },
-    {
-        id: 'ecuador-must-win',
-        priority: 7,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '晉級算盤', cls: 'text-red-400 bg-red-950' }],
-        border: 'border-red-500/40',
-        match: { home: 'Ecuador', away: 'Curaçao' },
-        meta: 'E 組 · 厄瓜多 · 48 隊新制',
-        title: '48 隊新制下第三名淨勝球可能決定命運，厄瓜多時間不多',
-        summary: '本屆 48 隊擴編後，小組第三名晉級門檻取決於淨勝球。厄瓜多世預賽 18 場僅失 5 球的防守口碑，在世足卻連續兩場進攻啞火，算盤已崩。',
-        points: [
-            '末輪對德國幾乎必須搶分，同時祈禱其他組第三名失分。',
-            'Valencia 國家隊第 49 球紀錄再度延期。',
-            'X 上厄瓜多球迷發起「最後一戰全押」標籤運動。',
-            '象牙海岸若末輪取勝，E 組將形成三隊混戰。',
-        ],
-        source: 'Fox Sports · The Athletic',
-    },
-    {
-        id: 'japan-4-0-rout',
-        priority: 8,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '日本', cls: 'text-blue-400 bg-blue-950' }],
-        border: 'border-blue-500/40',
-        match: { home: 'Tunisia', away: 'Japan' },
-        meta: 'F 組 · 日本 4-0 突尼西亞 · 蒙特雷 · 世足第 1000 場',
-        title: 'Ueda 梅開二度，日本 4-0 橫掃突尼西亞鎖定晉級',
-        summary: 'Kamada 開賽 3 分 27 秒閃擊，Ueda 上半場遠射、下半場頭槌梅開二度，Ito 補刀。日本無久保、Mitoma 仍繳出亞洲球隊世足單場最多進球紀錄，突尼西亞成第三支出局隊。',
-        points: [
-            'Kamada 延續對荷蘭 89 分鐘扳平後的火熱狀態。',
-            '突尼西亞兩戰 1-9 慘敗，Renard 救火實驗五天即宣告失敗。',
-            '日本與荷蘭同積同淨勝球，F 組頭名末輪待定。',
-            'X 日語區 #SamuraiBlue、#Ueda 趨勢霸榜。',
-        ],
-        source: 'The Athletic · ESPN · FOX Sports',
-    },
-    {
-        id: 'tunisia-eliminated',
-        priority: 9,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '出局', cls: 'text-red-400 bg-red-950' }],
-        border: 'border-red-500/40',
-        match: { home: 'Tunisia', away: 'Japan' },
-        meta: 'F 組 · 突尼西亞 · 出局',
-        title: '突尼西亞連兩場慘敗出局，世預賽 22 球 0 失球成笑話',
-        summary: '突尼西亞世預賽 10 戰 9 勝 1 和、22 球零失球，世足卻 1-5 輸瑞典、0-4 輸日本，成為繼海地、土耳其後第三支淘汰隊伍。',
-        points: [
-            '隊史首度單屆世足連兩場丟四球以上。',
-            'Renard 賽後面無表情，五天備戰無法扭轉防線崩潰。',
-            '全場 xG 僅 0.05，20 場世足仍未進球。',
-            'X 迷因區「世預賽魔王、世足慘案」洗版。',
-        ],
-        source: 'The Athletic · BBC',
-    },
-    {
-        id: 'f-group-after-japan',
-        priority: 10,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: 'F 組', cls: 'text-cyan-400 bg-cyan-950' }],
-        border: 'border-cyan-500/40',
-        match: { home: 'Tunisia', away: 'Japan' },
-        meta: 'F 組 · 積分戰 · 台灣 6/21',
-        title: 'F 組三隊爭兩席：荷蘭日本並列領跑，瑞典命運看末輪',
-        summary: '荷蘭 5-1 瑞典、日本 4-0 突尼西亞後，兩隊同積同淨勝球並列榜首。瑞典淨勝球歸零，末輪對已出局突尼西亞仍需搶分。',
-        points: [
-            '荷蘭淨勝球 +4，日本 +3，同分時比較對戰（首戰 2-2）。',
-            '瑞典若末輪大勝仍有機會以第二名晉級。',
-            '48 隊制下 F 組第三名亦可能參與晉級比較。',
-            'X 算盤圖與晉級模擬器再度瘋傳。',
-        ],
-        source: 'Fox Sports · BBC · ESPN',
+        source: 'The Guardian · ESPN',
     },
 ];
 
 /** 今日無賽事隊伍的場外新聞（relatedTeams 全部不在今日賽程才顯示） */
 const IDLE_TEAM_NEWS = [
     {
-        id: 'gh-four-matches-preview',
+        id: 'yamal-spain-preview',
         priority: 1,
-        relatedTeams: ['Belgium', 'Iran', 'Spain', 'Saudi Arabia', 'New Zealand', 'Egypt', 'Uruguay', 'Cape Verde'],
-        tags: [{ text: 'G/H 組', cls: 'text-emerald-400 bg-emerald-950' }, { text: '明日', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-emerald-500/30',
-        meta: '台灣 6/22 開踢 · G/H 組四連戰',
-        title: '明日 G/H 組四場同積 1 分死組，比利時、西班牙無退路',
-        summary: '台灣 6/22 凌晨起 G/H 組四連戰。比利時對伊朗、西班牙對沙烏地、紐西蘭對埃及、烏拉圭對維德角——八隊皆僅 1 分，任何和局都可能讓晉級算盤崩盤。',
+        relatedTeams: ['Spain'],
+        tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '明日焦點', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-red-500/30',
+        meta: '西班牙 · 明日賽事',
+        title: 'Lamine Yamal 蓄勢待發，西班牙明日迎戰沙烏地',
+        summary: '西班牙今日休息，明日凌晨對沙烏地阿拉伯被視為 H 組關鍵戰。Yamal 首戰對維德角表現亮眼，X 上 #Yamal 剪輯持續霸榜，球迷期待西班牙延續 4-0 氣勢。',
         points: [
-            '比利時 Doku 呼吸道疑傷，De Bruyne 與 Lukaku 黃金世代背水一戰。',
-            '西班牙 0-0 平維德角後壓力山大，Yamal 出賽成疑。',
-            '沙烏地與烏拉圭首戰和局，次戰必須搶分。',
-            'X 賽前預測與晉級模擬帖文瀏覽破百萬。',
+            '西班牙首戰 0-0 維德角後需用勝利穩固榜首。',
+            '沙烏地首戰 1-1 烏拉圭，仍有晉級機會。',
+            'De la Fuente 可能維持年輕化陣容，Pedri 中場調度是關鍵。',
         ],
-        source: 'Sports Illustrated · CBS Sports · ESPN',
+        source: 'The Athletic · ESPN',
     },
     {
-        id: 'raphinha-thigh-injury',
+        id: 'raphinha-injury-follow',
         priority: 2,
         relatedTeams: ['Brazil'],
         tags: [{ text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }, { text: '傷病', cls: 'text-red-400 bg-red-950' }],
         border: 'border-yellow-500/30',
-        meta: '巴西 · 6/21 休息日',
-        title: 'Raphinha 大腿傷勢確認，巴塞與巴西雙線焦慮',
-        summary: 'Raphinha 對海地無碰撞傷退，MRI 顯示大腿問題，世足出賽成疑。Dorival Júnior 今日安排恢復訓練，#Raphinha 仍霸佔巴西區 X 趨勢。',
+        meta: '巴西 · 傷病追蹤',
+        title: 'Raphinha MRI 結果仍未公布，巴西末輪對蘇格蘭前壓力山大',
+        summary: '巴西昨日 3-0 勝海地後今日無賽，但 Raphinha 無碰撞傷退仍是頭條。Dorival 等待 MRI 報告，末輪對蘇格蘭將決定 C 組頭名，#Raphinha 討論量仍居巴西趨勢榜首。',
         points: [
-            'Cunha 梅開二度證明板凳深度，但右路創造力銳減。',
-            '巴西 3-0 勝海地後與摩洛哥同積，末輪對摩洛哥成關鍵。',
-            '巴塞球迷擔心新賽季開局前主力長期缺陣。',
-            'ESPN 稱這是巴西本屆最大隱憂之一。',
+            'Cunha 梅開二度、Vinícius 替補出場扛起進攻。',
+            '巴西 6 分領先 C 組，但傷病陰影籠罩淘汰賽。',
+            '若 Raphinha 長期缺陣，右側進攻將大幅削弱。',
         ],
-        source: 'ESPN · Goal · Yahoo Sports',
+        source: 'ESPN · BBC · USA Today',
     },
     {
-        id: 'usa-knockout-rest',
+        id: 'usa-knockout',
         priority: 3,
         relatedTeams: ['United States'],
         tags: [{ text: '美國', cls: 'text-blue-400 bg-blue-950' }, { text: '晉級', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-blue-500/30',
-        meta: '美國 · D 組 · 休息日',
-        title: '美國成首支晉級東道主，Pulisic 恢復訓練振奮士氣',
-        summary: '美國 2-0 勝澳洲後確定十六強，今日休息日 Pulisic 已參與部分合練。Freeman 首球與 Zwayer 抽筋梗仍在 X 瘋傳，#USMNT 霸榜美國區。',
+        meta: '美國 · D 組出線',
+        title: '美國成第三支晉級隊，與德國、墨西哥並列十六強',
+        summary: '美國昨日 2-0 勝澳洲後今日休息，已與德國、墨西哥一同鎖定十六強席位。Pulisic 能否趕上週四對土耳其成為 X 熱議，#USMNT 持續霸榜美國區趨勢。',
         points: [
-            '美國兩戰全勝、6 球 0 失，暫列 D 組第一。',
-            '末輪對巴拉圭將決定小組頭名與十六強對手。',
-            'Berhalter 強調「晉級只是開始，淘汰賽才是考驗」。',
-            '東道主效應帶動全美收視創紀錄。',
+            '美國兩戰全勝積 6 分，暫列 D 組第一。',
+            'Freeman 世界盃首球展現新生代活力。',
+            '末輪對土耳其將決定小組頭名與淘汰賽對手。',
         ],
-        source: 'Yahoo Sports · ESPN · CBS',
+        source: 'Yahoo Sports · ESPN',
     },
     {
-        id: 'argentina-austria-preview',
+        id: 'mexico-group-winner',
         priority: 4,
-        relatedTeams: ['Argentina'],
-        tags: [{ text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }, { text: '明日', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-sky-500/30',
-        meta: '阿根廷 · 台灣 6/22 備戰',
-        title: 'Messi 備戰奧地利，16 球追平 Klose 後再求破紀錄',
-        summary: '阿根廷今日無賽事，Messi 家族昨日發聲明澄清父親健康並呼籲尊重隱私。台灣 6/22 對奧地利一戰，Messi 能否成為世足歷史射手王成為焦點。',
+        relatedTeams: ['Mexico'],
+        tags: [{ text: '墨西哥', cls: 'text-green-400 bg-green-950' }],
+        border: 'border-green-500/30',
+        meta: '墨西哥 · A 組第一',
+        title: '墨西哥 6 分鎖定 A 組第一，主辦國氣勢持續高漲',
+        summary: '墨西哥兩連勝積 6 分確定 A 組第一，今日無賽事全力備戰末輪對捷克。瓜達拉哈拉與阿茲特克球場的球迷文化成為 X 熱門話題，#Mexico 再度登上全球趨勢。',
         points: [
-            '阿根廷 J 組領跑，奧地利 3-1 勝約旦後緊追在後。',
-            'Scaloni 暗示可能輪休部分主力為末輪蓄力。',
-            'Messi 落淚慶祝影片在 X 引發全球共鳴。',
-            '奧地利 Ashmid 雙響顯示黑馬潛力不可小覷。',
+            'Romo 對南韓凌空抽射成為本屆經典進球之一。',
+            '墨西哥兩戰全勝且零失球，防守穩固。',
+            '末輪對捷克在阿茲特克球場，晉級已無懸念。',
+        ],
+        source: 'SBS · Reuters',
+    },
+    {
+        id: 'messi-father-health',
+        priority: 5,
+        relatedTeams: ['Argentina'],
+        tags: [{ text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }, { text: '場外', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-sky-500/30',
+        meta: '阿根廷 · 備戰',
+        title: 'Messi 家族聲明後沉靜備戰，週一對奧地利成焦點',
+        summary: '阿根廷今日休息，Messi 父親健康風波後家族發聲明呼籲尊重隱私。Messi 對阿爾及利亞帽子戲法後落淚的畫面仍在 X 瘋傳，週一對奧地利的強強對話備受期待。',
+        points: [
+            'Messi 世足 16 球追平 Klose 紀錄。',
+            '阿根廷 3 分領先 J 組，但奧地利同積不容輕敵。',
+            'Scaloni 稱球隊專注足球，不受場外干擾。',
         ],
         source: 'SBS · Reuters · ESPN',
     },
     {
-        id: 'mexico-host-rest',
-        priority: 5,
-        relatedTeams: ['Mexico'],
-        tags: [{ text: '墨西哥', cls: 'text-green-400 bg-green-950' }],
-        border: 'border-green-500/30',
-        meta: '墨西哥 · A 組第一 · 休息日',
-        title: '墨西哥鎖定 A 組第一後休整，阿茲特克末輪迎捷克',
-        summary: '主辦國墨西哥 1-0 勝南韓後積 6 分、零失球確定小組第一，今日全隊恢復訓練。末輪在阿茲特克對捷克，#Mexico 標籤仍居全球趨勢前列。',
-        points: [
-            'Romo 遠射進球成國民英雄，瓜達拉哈拉球場萬人合唱。',
-            '兩連勝零失球，Lozano 領銜防線穩如磐石。',
-            '末輪可實驗陣容，為十六強儲備體能。',
-            '南韓門將失誤送禮仍被 X 迷因反覆播放。',
-        ],
-        source: 'SBS · Reuters · Fox Sports',
-    },
-    {
-        id: 'france-norway-i-group',
+        id: 'canada-6-0',
         priority: 6,
-        relatedTeams: ['France', 'Norway'],
-        tags: [{ text: 'I 組', cls: 'text-blue-400 bg-blue-950' }, { text: '明日', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-blue-500/30',
-        meta: '法國 · 挪威 · 台灣 6/22',
-        title: 'Mbappé vs Haaland 明日間接對決，I 組最強小組戰火將起',
-        summary: '法國與挪威今日休息，台灣 6/22 分別對伊拉克、塞內加爾。Mbappé 梅開二度與 Haaland 雙響後，兩隊若皆取勝將並列榜首，間接對決話題引爆 X。',
+        relatedTeams: ['Canada'],
+        tags: [{ text: '加拿大', cls: 'text-red-400 bg-red-950' }],
+        border: 'border-red-500/30',
+        meta: '加拿大 · B 組領先',
+        title: '加拿大 6-0 大勝後蓄力，Kone 傷勢牽動人心',
+        summary: '加拿大昨日無賽、前日 6-0 橫掃卡達後積分並列 B 組榜首。Jonathan David 帽子戲法寫入隊史，但 Kone 疑似斷腿傷退為勝利蒙上陰影，#CANMNT 歡呼與擔憂並存。',
         points: [
-            'I 組被評為本屆最強小組，四隊皆有淘汰賽實力。',
-            '德尚稱 Mbappé「身體與心理皆處巔峰」。',
-            '挪威 Østigård 頭槌與 Haaland 雙響展現北歐火力。',
-            '紐約時代廣場挪威球迷「維京陣」影片破千萬觀看。',
+            '加拿大淨勝球 +6 領先 B 組。',
+            'Marsch 稱對瑞士是「真正考驗」。',
+            '東道主加拿大晉級形勢樂觀。',
         ],
-        source: 'L\'Équipe · ESPN · The Athletic',
+        source: 'SBS · ESPN',
     },
     {
-        id: 'england-ghana-preview',
+        id: 'almiron-var-debate',
         priority: 7,
+        relatedTeams: ['Paraguay', 'Turkey'],
+        tags: [{ text: 'VAR', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-amber-500/30',
+        meta: '巴拉圭 · 規則爭議',
+        title: 'Almirón「掩嘴」紅牌餘波未平，巴拉圭晉級希望大增',
+        summary: '巴拉圭昨日 1-0 勝土耳其後今日休息，Almirón 掩嘴紅牌仍是 X 最熱規則討論。巴拉圭 3 分緊追美國，末輪對澳洲將決定 D 組第三名歸屬。',
+        points: [
+            '本屆已 7 張紅牌，為 2014 年以來單屆最多。',
+            '新規首例引發球員、名宿、球迷激烈辯論。',
+            '巴拉圭若搶分仍有機會以第三名晉級。',
+        ],
+        source: 'ESPN · Andy Davies · Al Jazeera',
+    },
+    {
+        id: 'england-tuchel',
+        priority: 8,
         relatedTeams: ['England'],
         tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }],
         border: 'border-blue-500/30',
-        meta: '英格蘭 · 台灣 6/23 備戰',
-        title: 'Tuchel 推演對迦納陣容，Rashford 回升成甜蜜煩惱',
-        summary: '英格蘭今日無賽事，Tuchel 面對 Rashford 85 分鐘替補進球後是否扶正的先發難題。台灣 6/23 對迦納，英媒稱這是「stick or twist」時刻。',
+        meta: '英格蘭 · 備戰',
+        title: 'Tuchel 推演對迦納陣容，英格蘭進攻火力本屆最猛',
+        summary: '英格蘭今日無賽，Tuchel 在記者會面對 Rashford 狀態回升與 Guehi 後防穩定性的抉擇。首戰 4-2 勝克羅埃西亞展現本屆最兇猛進攻之一，#England 粉絲樂觀情緒升溫。',
         points: [
-            '英格蘭 4-2 勝克羅埃西亞，Kane 與 Bellingham 火力兇猛。',
-            'L 組積分領跑，有本錢在末輪前調整陣容。',
-            'Guehi 後防穩定性 vs Rashford 進攻火花成辯論焦點。',
-            'X 英格蘭球迷分裂為保守派與進攻派。',
+            'L 組積分領先，週二對迦納前有空間實驗陣容。',
+            'Bellingham 與 Foden 連線成戰術分析焦點。',
+            '英媒稱這是「stick or twist」時刻。',
         ],
-        source: 'BBC · ESPN · The Standard',
+        source: 'BBC · ESPN',
     },
     {
-        id: 'canada-switzerland-clash',
-        priority: 8,
-        relatedTeams: ['Canada', 'Switzerland'],
-        tags: [{ text: 'B 組', cls: 'text-red-400 bg-red-950' }, { text: '末輪', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-red-500/30',
-        meta: '加拿大 · 瑞士 · B 組生死戰預告',
-        title: '加拿大 6-0 大勝後迎瑞士考驗，B 組頭名一戰定江山',
-        summary: '加拿大 David 帽子戲法 6-0 橫掃卡達創隊史紀錄，與瑞士同積 4 分、以淨勝球領先。末輪直接對話將決定 B 組第一與十六強對手。',
-        points: [
-            'Marsch 稱「對瑞士才是真正世界盃考驗」。',
-            'Kone 疑似斷腿傷退為狂勝蒙上陰影。',
-            '瑞士 4-1 勝波士尼亞展現反擊效率。',
-            '#CANMNT 歡呼與擔憂在 X 並存。',
-        ],
-        source: 'SBS · ESPN · The Athletic',
-    },
-    {
-        id: 'morocco-scotland-c-group',
+        id: 'belgium-iran-preview',
         priority: 9,
-        relatedTeams: ['Morocco', 'Scotland', 'Brazil'],
-        tags: [{ text: 'C 組', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-emerald-500/30',
-        meta: '摩洛哥 · 蘇格蘭 · C 組',
-        title: '摩洛哥 1-0 勝蘇格蘭後休息，C 組三隊同積 4 分混戰',
-        summary: 'Saibari 閃擊助摩洛哥 1-0 勝蘇格蘭，C 組巴西、摩洛哥、蘇格蘭三隊同積 4 分。末輪巴西對摩洛哥將成晉級關鍵戰，Raphinha 傷情增添變數。',
+        relatedTeams: ['Belgium', 'Iran'],
+        tags: [{ text: 'G 組', cls: 'text-purple-400 bg-purple-950' }, { text: '明日焦點', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-purple-500/30',
+        meta: '比利時 · 伊朗 · 明日賽事',
+        title: '比利時對伊朗明日開踢，G 組四隊同積 1 分混戰',
+        summary: 'G 組四隊首戰全數和局，積分均為 1 分，是本屆最膠著小組。比利時明日對伊朗、紐西蘭對埃及同時開踢，任何一場勝利都可能改寫整組排名。',
         points: [
-            '摩洛哥防守反擊效率為本屆最高之一。',
-            '蘇格蘭兩戰 1 勝 1 負，McGinn 進球無法掩蓋進攻乏力。',
-            '巴西 3-0 勝海地後淨勝球領先，但 Raphinha 缺陣影響戰術。',
-            'C 組被評為本屆最難預測小組之一。',
+            '比利時 1-1 埃及、伊朗 2-2 紐西蘭，防守漏洞明顯。',
+            'De Bruyne 狀態成比利時命運關鍵。',
+            'X 上 #GroupG 被稱「死亡之組」候選。',
         ],
-        source: 'ESPN · BBC · Fox Sports',
+        source: 'ESPN · The Athletic',
     },
     {
-        id: 'almiron-red-card-ripple',
+        id: 'france-norway-rest',
         priority: 10,
-        relatedTeams: ['Paraguay'],
-        tags: [{ text: 'VAR', cls: 'text-amber-400 bg-amber-950' }, { text: '規則', cls: 'text-purple-400 bg-purple-950' }],
-        border: 'border-amber-500/30',
-        meta: '巴拉圭 · 場外餘波',
-        title: 'Almirón 掩嘴紅牌餘波：Irvine 呼籲規則界線，全球論戰未歇',
-        summary: '巴拉圭今日無賽事，但 Almirón 成為 IFAB 掩嘴新規世足首例紅牌受害者後，Jackson Irvine 等球員公開呼籲「規則界線必須更清楚」，#Almiron 討論持續升溫。',
+        relatedTeams: ['France', 'Norway'],
+        tags: [{ text: 'I 組', cls: 'text-blue-400 bg-blue-950' }],
+        border: 'border-blue-500/30',
+        meta: '法國 · 挪威 · 休息日',
+        title: 'Mbappé 與 Haaland 蓄勢待發，I 組夢幻對決週五上演',
+        summary: '法國與挪威今日均無賽事，兩隊分別以 3-1 勝塞內加爾、4-1 勝伊拉克開局。Mbappé 梅開二度與 Haaland 雙響的對決預告成為 X 熱議，#Mbappé 與 #Haaland 標籤並列趨勢。',
         points: [
-            '本屆已 7 張紅牌，為 2014 年以來單屆最多。',
-            '巴拉圭 1-0 勝土耳其後晉級希望大增。',
-            '裁判一致性爭議：Ream 類似動作未受罰引發質疑。',
-            '全球足球社群分裂為「反歧視」與「語言警察」兩派。',
+            'I 組被視為本屆最強小組之一，法國、挪威同積 3 分。',
+            '德尚稱 Mbappé 身體狀況理想。',
+            '挪威 Haaland 世足首戰即展現射手本色。',
         ],
-        source: 'ESPN · The Athletic · Al Jazeera',
+        source: 'L\'Équipe · ESPN',
     },
 ];
-
-/** 本日 X 全平台熱議 Top 10（含網友評論摘要，每日更新） */
-const X_TRENDING_TOP10 = [
-    {
-        id: 'ueda-samurai-blue',
-        priority: 1,
-        hashtag: '#SamuraiBlue',
-        heat: '🔥 極熱',
-        topic: '日本 4-0 橫掃突尼西亞',
-        summary: 'Ueda 梅開二度、Kamada 開賽閃擊，日本無久保 Mitoma 仍創亞洲球隊世足單場進球紀錄。世足第 1000 場成藍武士慶典，#Ueda 與 #SamuraiBlue 霸榜全球趨勢。',
-        reactions: [
-            { tone: 'positive', text: '「沒有明星靠團隊照樣大勝——這才是日本足球！」' },
-            { tone: 'positive', text: '「Ueda 兩球一助攻級表現，八強不是夢。」' },
-            { tone: 'neutral', text: '「對手太弱，真正的考驗還在後面。」' },
-        ],
-    },
-    {
-        id: 'brobbey-oranje',
-        priority: 2,
-        hashtag: '#Oranje',
-        heat: '🔥 極熱',
-        topic: '荷蘭 5-1 橫掃瑞典',
-        summary: 'Brobbey 與 Gakpo 各進兩球，荷蘭低平傳中戰術碾壓瑞典防線。#Oranje 與 #Brobbey 霸佔歐洲區趨勢，冠軍相討論持續發酵。',
-        reactions: [
-            { tone: 'positive', text: '「這才是傳統荷蘭足球——寬度、速度、禁區混戰！」' },
-            { tone: 'neutral', text: '「能維持這水準嗎？防線還是五連場失球。」' },
-            { tone: 'funny', text: '「Brobbey 比 Gyökeres 還像 Gyökeres。」——迷因對比圖洗版。' },
-        ],
-    },
-    {
-        id: 'tunisia-woeful',
-        priority: 3,
-        hashtag: '#Tunisia',
-        heat: '🔥 極熱',
-        topic: '突尼西亞兩戰 1-9 慘敗出局',
-        summary: '世預賽 22 球 0 失球的非洲勁旅，世足卻連兩場丟四球以上。Renard 五天救火失敗，突尼西亞成第三支出局隊，#Tunisia 淪為迷因素材。',
-        reactions: [
-            { tone: 'negative', text: '「世預賽魔王、世足笑話——這落差太離譜。」' },
-            { tone: 'neutral', text: '「Renard 也救不了，問題在於整個體系。」' },
-            { tone: 'funny', text: '「20 場世足 0 進球，可以申請吉尼斯了。」' },
-        ],
-    },
-    {
-        id: 'undav-late',
-        priority: 4,
-        hashtag: '#Undav',
-        heat: '🔥 高熱',
-        topic: 'Undav 補時絕殺德國',
-        summary: '替補 Undav 第 68 分鐘入場、第 94 分鐘絕殺，德國 2-1 險勝象牙海岸鎖定十六強。超級替補敘事在德語區 X 持續洗版。',
-        reactions: [
-            { tone: 'positive', text: '「Nagelsmann 的換人神蹟！Undav 就是為大場面而生。」' },
-            { tone: 'negative', text: '「Ivory Coast 被絕殺太殘忍，Faé 的憤怒可以理解。」' },
-            { tone: 'neutral', text: '「Havertz 兩球被取消，運氣確實站在德國這邊。」' },
-        ],
-    },
-    {
-        id: 'fae-fairplay',
-        priority: 5,
-        hashtag: '#FairPlay',
-        heat: '🔥 高熱',
-        topic: '象牙海岸批德國缺乏公平競賽',
-        summary: '教練 Faé 賽後炮轟德國公平競賽精神，Undav 絕殺越位爭議與 Brown 阻擋射門成為焦點，跨洲論戰餘溫未散。',
-        reactions: [
-            { tone: 'negative', text: '「輸不起就輸不起，回放顯示越位沒問題。」' },
-            { tone: 'positive', text: '「Faé 為球員發聲值得尊敬，世界盃需要火藥味。」' },
-            { tone: 'neutral', text: '「公平競賽本來就難定義，這場雙方動作都很大。」' },
-        ],
-    },
-    {
-        id: 'ecuador-despair',
-        priority: 6,
-        hashtag: '#Ecuador',
-        heat: '🔥 高熱',
-        topic: '厄瓜多 0-0 悶平絕望',
-        summary: '厄瓜多對古拉索全場圍攻卻無法破門，淨勝球危機迫在眉睫。南美球迷焦慮與憤怒在 X 持續交織。',
-        reactions: [
-            { tone: 'negative', text: '「世預賽鐵防在世足變紙糊，進攻更是災難。」' },
-            { tone: 'neutral', text: '「還有一輪，但德國擋在前面，數學上幾乎不可能了。」' },
-            { tone: 'funny', text: '「Valencia 第 49 球等到地球滅絕可能還沒進。」' },
-        ],
-    },
-    {
-        id: 'renard-failed',
-        priority: 7,
-        hashtag: '#Renard',
-        heat: '📈 升溫',
-        topic: 'Renard 傳奇也救不了突尼西亞',
-        summary: '曾帶沙烏地擊敗阿根廷的 Renard 臨危受命，五天備戰後突尼西亞 0-4 慘敗。白衫教練面無表情離場，#Renard 從英雄變無奈背景。',
-        reactions: [
-            { tone: 'positive', text: '「Renard 傳奇地位不變，但這支突尼西亞真的沒救。」' },
-            { tone: 'negative', text: '「五天換帥本來就是笑話，FIFA 應檢討解僱規則。」' },
-            { tone: 'funny', text: '「Renard 白衫照片 vs 0-4 比分——最佳反差梗。」' },
-        ],
-    },
-    {
-        id: 'usmnt-knockout',
-        priority: 8,
-        hashtag: '#USMNT',
-        heat: '📈 升溫',
-        topic: '美國兩連勝晉級十六強',
-        summary: '東道主美國確定晉級，Freeman 首球與 Zwayer 抽筋梗餘溫猶存。Pulisic 恢復訓練振奮士氣，#USMNT 霸榜美國區。',
-        reactions: [
-            { tone: 'positive', text: '「東道主 + 進攻火力 = 近年最強美國隊。」' },
-            { tone: 'funny', text: '「Zwayer 抽筋比球員還多跑，該給裁判補水暫停。」' },
-            { tone: 'neutral', text: '「十六強對手才是試金石，現在慶祝還太早。」' },
-        ],
-    },
-    {
-        id: 'raphinha-injury-x',
-        priority: 9,
-        hashtag: '#Raphinha',
-        heat: '📈 升溫',
-        topic: 'Raphinha 大腿傷勢引發雙線焦慮',
-        summary: '巴西邊鋒對海地無碰撞傷退，MRI 確認大腿問題。巴塞與巴西球迷在 X 同步擔憂，#Raphinha 討論量居巴西趨勢榜首。',
-        reactions: [
-            { tone: 'negative', text: '「2022 傷病潮重演？巴西最強武器可能沒了。」' },
-            { tone: 'neutral', text: '「Cunha 能頂上，但右路創造力會大減。」' },
-            { tone: 'positive', text: '「寧可現在養傷，也不想十六強才倒下。」' },
-        ],
-    },
-    {
-        id: 'gh-preview',
-        priority: 10,
-        hashtag: '#WorldCup',
-        heat: '💬 討論',
-        topic: 'G/H 組明日四場同積 1 分死組',
-        summary: '比利時、伊朗、西班牙、沙烏地、紐西蘭、埃及、烏拉圭、維德角台灣 6/22 開戰，四場結果可能讓兩組同時大洗牌。',
-        reactions: [
-            { tone: 'positive', text: '「48 隊制最好看的就是這種小組沒有弱旅。」' },
-            { tone: 'neutral', text: '「西班牙必須贏，否則 0-0 開局的陰影會跟著走。」' },
-            { tone: 'funny', text: '「比利時黃金世代：再輸就真變黃銅世代了。」' },
-        ],
-    },
-];
-
-const REACTION_TONE = {
-    positive: { label: '支持', cls: 'text-emerald-400 bg-emerald-950', quote: 'reaction-positive' },
-    negative: { label: '質疑', cls: 'text-red-400 bg-red-950', quote: 'reaction-negative' },
-    neutral:  { label: '中立', cls: 'text-zinc-400 bg-zinc-800', quote: 'reaction-neutral' },
-    funny:    { label: '迷因', cls: 'text-amber-400 bg-amber-950', quote: 'reaction-funny' },
-};
 
 const TEAM_ZH = {
     'Mexico': '墨西哥', 'South Africa': '南非', 'South Korea': '南韓', 'Czech Republic': '捷克',
@@ -703,7 +520,7 @@ const TEAM_ZH = {
     'Tunisia': '突尼西亞', 'Japan': '日本', 'Argentina': '阿根廷', 'France': '法國',
     'England': '英格蘭', 'Spain': '西班牙', 'Portugal': '葡萄牙', 'Belgium': '比利時',
     'Croatia': '克羅埃西亞', 'Switzerland': '瑞士', 'Italy': '義大利', 'Uruguay': '烏拉圭',
-    'Cape Verde': '維德角', 'Colombia': '哥倫比亞', 'Chile': '智利', 'Peru': '秘魯', 'Egypt': '埃及',
+    'Colombia': '哥倫比亞', 'Chile': '智利', 'Peru': '秘魯', 'Egypt': '埃及',
     'Senegal': '塞內加爾', 'Nigeria': '奈及利亞', 'Ghana': '迦納', 'Cameroon': '喀麥隆',
     'Iran': '伊朗', 'Saudi Arabia': '沙烏地阿拉伯', 'Qatar': '卡達', 'Costa Rica': '哥斯大黎加',
     'Jamaica': '牙買加', 'Panama': '巴拿馬', 'New Zealand': '紐西蘭', 'Ukraine': '烏克蘭',
@@ -849,8 +666,7 @@ function renderMatches() {
 
 function renderStandings() {
     const container = $('standings-container');
-    const focusGroups = getFocusGroups();
-    const focus = state.groups.filter(g => focusGroups.includes(g.name));
+    const focus = state.groups.filter(g => FOCUS_GROUPS.includes(g.name));
 
     container.innerHTML = focus.map(g => {
         const rows = [...g.teams]
@@ -907,27 +723,12 @@ function matchKey(home, away) {
     return [home, away].sort().join('|');
 }
 
-/** 台灣時間今日所有賽程（含未開踢） */
-function getTodayMatchKeys() {
-    return new Set(
-        state.games
-            .filter(isTodayInTaipei)
-            .map(g => matchKey(g.home_team_name_en, g.away_team_name_en))
-    );
-}
-
 function getTodayFinishedKeys() {
     return new Set(
         state.games
             .filter(g => isTodayInTaipei(g) && isFinished(g))
             .map(g => matchKey(g.home_team_name_en, g.away_team_name_en))
     );
-}
-
-/** 依台灣時間今日賽程自動決定積分榜重點小組 */
-function getFocusGroups() {
-    const groups = [...new Set(state.games.filter(isTodayInTaipei).map(g => g.group))].sort();
-    return groups.length ? groups : ['C', 'D'];
 }
 
 function getTeamsPlayingToday() {
@@ -947,34 +748,27 @@ function getIdleTeams() {
 }
 
 function generateNews() {
-    const todayKeys = getTodayMatchKeys();
-    const finishedKeys = getTodayFinishedKeys();
+    const todayKeys = getTodayFinishedKeys();
     const hasApi = state.games.length > 0;
 
-    let items = TODAY_TOP10_NEWS
+    const items = TODAY_TOP10_NEWS
         .filter(item => {
             if (!hasApi) return true;
             const key = matchKey(item.match.home, item.match.away);
             return todayKeys.has(key);
         })
-        .sort((a, b) => a.priority - b.priority);
+        .sort((a, b) => a.priority - b.priority)
+        .slice(0, 10);
 
-    // 優先顯示已完賽場次的新聞；若尚未完賽則顯示全部今日賽程新聞
-    const finishedItems = items.filter(item => finishedKeys.has(matchKey(item.match.home, item.match.away)));
-    if (finishedItems.length) items = finishedItems;
-
-    items = items.slice(0, 10);
     if (items.length) return items;
 
     return [{
         id: 'fallback',
-        tags: [{ text: '等待賽程', cls: 'text-zinc-400 bg-zinc-800' }],
+        tags: [{ text: '等待賽果', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-zinc-700',
         meta: '',
-        title: '今日暫無對應賽事新聞',
-        summary: hasApi
-            ? '新聞會依台灣時間今日賽程自動配對；請確認已同步最新賽程資料。'
-            : '新聞將在載入賽程後自動顯示。',
+        title: '今日比賽結束後將顯示 X 熱議 Top 10',
+        summary: '新聞將在今日比賽完賽後自動載入。',
         points: [],
         source: '',
     }];
@@ -1022,41 +816,6 @@ function renderNews() {
     $('news-list').innerHTML = news.map((n, i) => renderNewsCard(n, i)).join('');
 }
 
-function renderTrendingCard(t, i) {
-    const reactions = (t.reactions || []).map(r => {
-        const tone = REACTION_TONE[r.tone] || REACTION_TONE.neutral;
-        return `
-            <div class="reaction-quote ${tone.quote} py-2">
-                <span class="text-xs font-bold px-2 py-0.5 rounded-lg ${tone.cls} mr-2">${tone.label}</span>
-                <span class="text-sm text-zinc-400 leading-relaxed">${r.text}</span>
-            </div>`;
-    }).join('');
-
-    return `
-        <article class="trend-card fade-in bg-zinc-900 border border-zinc-700 rounded-3xl p-6 md:p-7">
-            <div class="flex flex-wrap items-center gap-2 mb-3">
-                <span class="text-xs font-bold text-zinc-500 tabular-nums">#${i + 1}</span>
-                <span class="text-sm font-bold text-zinc-200">${t.hashtag}</span>
-                <span class="text-xs font-bold px-3 py-1 rounded-2xl text-rose-400 bg-rose-950">${t.heat}</span>
-            </div>
-            <h3 class="font-bold text-lg md:text-xl leading-snug">${t.topic}</h3>
-            <p class="text-sm md:text-base text-zinc-300 mt-3 leading-relaxed">${t.summary}</p>
-            ${reactions ? `
-                <div class="mt-4 pt-4 border-t border-zinc-800 space-y-1">
-                    <p class="text-xs font-semibold text-zinc-500 mb-3 flex items-center gap-1.5">
-                        <i class="fa-solid fa-comments text-zinc-600"></i>網友評論摘要
-                    </p>
-                    ${reactions}
-                </div>
-            ` : ''}
-        </article>`;
-}
-
-function renderTrending() {
-    const items = [...X_TRENDING_TOP10].sort((a, b) => a.priority - b.priority);
-    $('trending-list').innerHTML = items.map((t, i) => renderTrendingCard(t, i)).join('');
-}
-
 function renderIdleTeams() {
     const idle = getIdleTeams();
     const grid = $('idle-teams-grid');
@@ -1097,17 +856,16 @@ function updateTabBadges() {
 }
 
 function switchTab(tab) {
-    const tabs = ['results', 'idle', 'trending'];
-    tabs.forEach(t => {
-        $(`tab-${t}`).classList.toggle('active', t === tab);
-        $(`panel-${t}`).classList.toggle('active', t === tab);
-    });
+    const isResults = tab === 'results';
+    $('tab-results').classList.toggle('active', isResults);
+    $('tab-idle').classList.toggle('active', !isResults);
+    $('panel-results').classList.toggle('active', isResults);
+    $('panel-idle').classList.toggle('active', !isResults);
 }
 
 function setupTabs() {
     $('tab-results').addEventListener('click', () => switchTab('results'));
     $('tab-idle').addEventListener('click', () => switchTab('idle'));
-    $('tab-trending').addEventListener('click', () => switchTab('trending'));
 }
 
 function renderAll() {
@@ -1118,7 +876,6 @@ function renderAll() {
     renderNews();
     renderIdleTeams();
     renderIdleNews();
-    renderTrending();
     updateTabBadges();
 }
 
