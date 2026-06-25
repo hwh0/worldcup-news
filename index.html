@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
     <title>⚽ Grok 每日世界盃新聞</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -203,7 +205,8 @@ const API = {
 
 const FOCUS_GROUPS = ['D', 'E', 'F'];
 const AUTO_REFRESH_SEC = 60;
-const CACHE_KEY = 'wc_news_cache_v1';
+const CACHE_KEY = 'wc_news_cache_v2';
+const NEWS_UPDATED = '2026-06-25';
 
 /** 今日比賽 X 熱議 Top 10（固定 10 則，覆蓋 D/E/F 組末輪 6/25） */
 const TODAY_TOP10_NEWS = [
@@ -955,12 +958,18 @@ function generateIdleNews() {
     const playing = getTeamsPlayingToday();
     const hasApi = state.games.length > 0;
 
-    return IDLE_TEAM_NEWS
+    let items = IDLE_TEAM_NEWS
         .filter(item => {
             if (!hasApi) return true;
             return item.relatedTeams.every(t => !playing.has(t));
         })
-        .sort((a, b) => a.priority - b.priority);
+        .sort((a, b) => a.priority - b.priority)
+        .slice(0, 10);
+
+    if (!items.length) {
+        items = [...IDLE_TEAM_NEWS].sort((a, b) => a.priority - b.priority).slice(0, 10);
+    }
+    return items;
 }
 
 function renderNewsCard(n, i) {
@@ -1082,7 +1091,7 @@ function setupTabs() {
 
 function renderAll() {
     const tp = getTaipeiToday().replace(/-/g, '/');
-    $('date-label').textContent = `${tp} 台灣時間`;
+    $('date-label').textContent = `${tp} 台灣時間 · 新聞 ${NEWS_UPDATED}`;
     renderMatches();
     renderStandings();
     renderNews();
@@ -1176,8 +1185,9 @@ async function refreshData(manual = true) {
             showError('連線失敗，顯示快取資料', `${err.message}。請檢查網路後再試。`);
             showToast('使用離線快取', false);
         } else {
-            showError('無法取得資料', `${err.message}。請確認網路連線正常。`);
-            showToast('更新失敗', false);
+            renderAll();
+            showError('無法取得資料', `${err.message}。新聞文案已顯示，比分請稍後再試或改用 GitHub Pages 開啟。`);
+            showToast('新聞已載入，比分同步失敗', false);
         }
     } finally {
         setLoading(false);
@@ -1213,11 +1223,11 @@ function applyData(data) {
     renderAll();
 }
 
+renderAll();
+
 const cached = loadCache();
 if (cached?.games?.length) {
     applyData(cached);
-} else {
-    $('date-label').textContent = new Date().toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' }) + ' 台灣時間';
 }
 refreshData(false);
 </script>
