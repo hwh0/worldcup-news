@@ -139,7 +139,7 @@
             <button id="tab-trending" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
                 <i class="fa-brands fa-x-twitter"></i>
                 X 網路熱議
-                <span id="tab-trending-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400">10 則</span>
+                <span id="tab-trending-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400">20 則</span>
             </button>
         </div>
 
@@ -193,7 +193,7 @@
                     今日無賽事的隊伍
                     <span id="idle-team-count" class="text-xs font-normal text-zinc-500"></span>
                 </h2>
-                <p class="text-sm text-zinc-400 mb-4">以下隊伍今日沒有比賽，但仍可能有訓練、記者會、傷病或場外新聞值得關注。</p>
+                <p class="text-sm text-zinc-400 mb-4">以下隊伍今日沒有比賽，重點整理已淘汰球隊的賽後動態、記者會與場外新聞。</p>
                 <div id="idle-teams-grid" class="flex flex-wrap gap-2"></div>
             </section>
 
@@ -220,7 +220,7 @@
             <section>
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-brands fa-x-twitter text-zinc-200"></i>
-                    今日 X 熱議 Top 10
+                    今日 X 熱議 Top 20
                     <span class="text-xs font-normal text-zinc-500">網友評論摘要</span>
                 </h2>
                 <div id="trending-list" class="space-y-4">
@@ -246,367 +246,374 @@ const API = {
 
 const AUTO_REFRESH_SEC = 60;
 const CACHE_KEY = 'wc_news_cache_v4';
-const NEWS_UPDATED = '2026-06-27';
+const NEWS_UPDATED = '2026-06-28';
 
-/** 今日比賽 X 熱議 Top 10（6/26 G/H/I 末輪賽後 + 6/27 J/K/L 預告） */
+/** 分頁一：今日賽事新聞（僅比賽戰報，不含淘汰隊深度報導） */
 const TODAY_TOP10_NEWS = [
-    /* ── J/K/L 組末輪（台灣 6/28） ── */
     {
-        id: 'messi-jordan-freekick',
+        id: 'results-messi-jordan',
         priority: 1,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }],
-        border: 'border-sky-500/40',
         match: { home: 'Jordan', away: 'Argentina' },
-        meta: 'J 組 · 阿根廷 3-1 約旦 · Messi 任意球',
-        title: 'Messi 替補登場任意球破網，阿根廷 3-1 輕取約旦',
-        summary: '阿根廷靠點球與兩度任意球取勝，Messi 第 60 分鐘替補登場後轟入直接任意球，本屆 6 球領跑射手榜並連續 7 場世足進球。約旦一度扳回一球但難擋藍白軍團。',
+        tags: [{ text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }, { text: 'J 組', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-sky-500/40',
+        meta: 'J 組 · 阿根廷 3-1 約旦',
+        title: 'Messi 替補任意球破網，阿根廷 3-1 輕取約旦',
+        summary: '阿根廷靠點球與兩度任意球取勝，Messi 第 60 分鐘替補登場後轟入直接任意球，本屆 6 球領跑射手榜。',
         points: [
             'Messi 從 Otamendi 手中接過隊長臂章，半小時改寫戰局。',
-            '阿根廷 J 組全勝晉級，十六強對維德角。',
-            '連續任意球進球刷新個人世足紀錄節奏。',
-            'X 上 #Messi、#Argentina 再度霸榜全球趨勢。',
+            '阿根廷 J 組三連勝，以小組第一晉級。',
+            '約旦末輪出局，但展現足夠競爭力。',
         ],
         source: 'ESPN · SMH · Reuters',
     },
     {
-        id: 'algeria-austria-96',
+        id: 'results-algeria-austria',
         priority: 2,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '戲劇性', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-amber-500/40',
         match: { home: 'Algeria', away: 'Austria' },
-        meta: 'J 組 · 阿爾及利亞 3-3 奧地利 · 補時',
-        title: 'Kalajdzic 第 96 分鐘絕平，伊朗夢碎出局',
-        summary: 'Mahrez 第 93 分鐘破門讓阿爾及利亞 3-2 領先，外界一度以為伊朗將以第三名晉級。替補 Kalajdzic 首觸即進頭槌絕平，奧地利驚險過關，伊朗僅差一名出局。',
+        tags: [{ text: '戲劇性', cls: 'text-amber-400 bg-amber-950' }, { text: 'J 組', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-amber-500/40',
+        meta: 'J 組 · 阿爾及利亞 3-3 奧地利',
+        title: 'Mahrez 93 分鐘破門、Kalajdzic 96 分鐘絕平，J 組最瘋狂末輪',
+        summary: '阿爾及利亞一度 3-2 領先，奧地利替補 Kalajdzic 首觸頭槌絕平。奧地利驚險晉級，阿爾及利亞以第三名闖入 32 強。',
         points: [
-            '伊朗 G 組 3 分、淨勝球不敵，政治場外話題與賽場同樣沉重。',
-            '奧地利十六強將對西班牙，阿爾及利亞對瑞士。',
-            'SMH 稱「本屆最瘋狂幾分鐘之一」。',
-            'X 上 #Iran、#Austria 趨勢瞬間爆炸。',
+            'SMH 稱「本屆小組賽最瘋狂幾分鐘之一」。',
+            '奧地利十六強將對西班牙。',
+            '阿爾及利亞 32 強對瑞士。',
         ],
         source: 'SMH · ESPN · BBC',
     },
     {
-        id: 'england-panama-2-0',
+        id: 'results-england-panama',
         priority: 3,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }],
-        border: 'border-blue-500/40',
         match: { home: 'Panama', away: 'England' },
-        meta: 'L 組 · 英格蘭 2-0 巴拿馬 · 小組第一',
+        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: 'L 組', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-blue-500/40',
+        meta: 'L 組 · 英格蘭 2-0 巴拿馬',
         title: '英格蘭 2-0 勝巴拿馬，Tuchel 鎖定 L 組頭名',
-        summary: '英格蘭已提前晉級仍全取 3 分，2-0 擊敗巴拿馬穩居 L 組第一。十六強將對民主剛果，若路徑不變可能提前避開部分強隊。',
+        summary: '英格蘭已提前晉級仍全取 3 分，2-0 擊敗巴拿馬穩居 L 組第一，十六強將對民主剛果。',
         points: [
-            '巴拿馬兩連敗出局，積分停留 0 分。',
-            '英格蘭 4 分與迦納同分，以淨勝球奪冠。',
-            '英媒分析「拿下小組第一」對淘汰賽路徑至關重要。',
+            '巴拿馬兩連敗出局。',
+            '英格蘭 4 分、以淨勝球力壓迦納奪冠。',
             'Kane 與後防線延續穩健表現。',
         ],
         source: 'ESPN · BBC · Fox Sports',
     },
     {
-        id: 'colombia-portugal-0-0',
+        id: 'results-colombia-portugal',
         priority: 4,
+        match: { home: 'Colombia', away: 'Portugal' },
         tags: [{ text: 'K 組', cls: 'text-green-400 bg-green-950' }],
         border: 'border-green-500/40',
-        match: { home: 'Colombia', away: 'Portugal' },
         meta: 'K 組 · 哥倫比亞 0-0 葡萄牙',
         title: '哥倫比亞 0-0 葡萄牙，C 羅與 Diaz 均無建樹',
         summary: 'K 組末輪悶和，葡萄牙 4 分、哥倫比亞 3 分雙雙晉級。葡萄牙十六強對克羅埃西亞，哥倫比亞將對迦納。',
         points: [
             '兩隊皆已確保晉級，和局符合雙方算盤。',
-            '民主剛果 3-1 勝烏茲別克後以第三名晉級。',
-            '烏茲別克兩戰慘敗出局。',
-            '南美與歐洲強隊淘汰賽首輪即可能碰撞。',
+            'C 羅本屆進球數仍受關注。',
+            '歐洲強隊首輪即可能內戰。',
         ],
         source: 'ESPN · Yahoo Sports',
     },
     {
-        id: 'drc-uzbekistan-3-1',
+        id: 'results-drc-uzbekistan',
         priority: 5,
-        tags: [{ text: '非洲', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-emerald-500/40',
         match: { home: 'Democratic Republic of the Congo', away: 'Uzbekistan' },
+        tags: [{ text: '非洲', cls: 'text-emerald-400 bg-emerald-950' }, { text: 'K 組', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-emerald-500/40',
         meta: 'K 組 · 民主剛果 3-1 烏茲別克',
-        title: '民主剛果 3-1 勝烏茲別克，非洲球隊創歷史晉級潮',
-        summary: '民主剛果大勝後以第三名晉級，與埃及、塞內加爾、維德角等一同寫下非洲球隊本屆強勢紀錄。烏茲別克兩戰 0 分出局。',
+        title: '民主剛果 3-1 勝烏茲別克，以小組第三晉級',
+        summary: '民主剛果大勝後以第三名闖入 32 強，英格蘭十六強對手確定。烏茲別克兩戰 0 分出局。',
         points: [
-            '英格蘭十六強對手確定為民主剛果。',
-            '烏茲別克本屆首次參賽但未能取分。',
-            '非洲五隊晉級創世足新紀錄之一。',
-            'X 非洲區慶祝帖文破百萬瀏覽。',
+            '非洲球隊本屆晉級潮持續。',
+            '烏茲別克首屆參賽未能取分。',
+            '民主剛果士氣高昂進入淘汰賽。',
         ],
         source: 'SMH · ESPN',
     },
     {
-        id: 'croatia-ghana-2-1',
+        id: 'results-croatia-ghana',
         priority: 6,
-        tags: [{ text: '克羅埃西亞', cls: 'text-red-400 bg-red-950' }],
-        border: 'border-red-500/40',
         match: { home: 'Croatia', away: 'Ghana' },
+        tags: [{ text: '克羅埃西亞', cls: 'text-red-400 bg-red-950' }, { text: 'L 組', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-red-500/40',
         meta: 'L 組 · 克羅埃西亞 2-1 迦納',
-        title: '克羅埃西亞 2-1 險勝迦納，Modrić 領銜驚險晉級',
+        title: '克羅埃西亞 2-1 險勝迦納，Modrić 領銜晉級',
         summary: '克羅埃西亞末輪取勝後晉級十六強，將對葡萄牙。迦納 4 分仍晉級但以小組第二身份，十六強對哥倫比亞。',
         points: [
             '2018 亞軍克羅埃西亞再度展現大賽經驗。',
             'L 組四隊僅巴拿馬出局。',
-            '迦納非洲球隊晉級再添一員。',
-            '葡萄牙 vs 克羅埃西亞成首輪焦點大戰。',
+            '葡萄牙 vs 克羅埃西亞成首輪焦點。',
         ],
         source: 'ESPN · DraftKings Network',
     },
     {
-        id: 'group-stage-wrap',
+        id: 'results-sa-canada',
         priority: 7,
-        tags: [{ text: '32 強', cls: 'text-cyan-400 bg-cyan-950' }],
+        match: { home: 'South Africa', away: 'Canada' },
+        tags: [{ text: '32 強', cls: 'text-cyan-400 bg-cyan-950' }, { text: '首戰', cls: 'text-amber-400 bg-amber-950' }],
         border: 'border-cyan-500/40',
-        match: { home: 'Jordan', away: 'Argentina' },
-        meta: '世足 · 小組賽收官',
-        title: '48 隊小組賽全部結束，32 強對戰表出爐',
-        summary: '小組賽 72 場打完，32 強席位塵埃落定。維德角、埃及等隊史首次晉級，伊朗、烏茲別克等遺憾出局，淘汰賽即將開踢。',
+        meta: '32 強 · 南非 vs 加拿大',
+        title: '淘汰賽開鑼！南非 vs 加拿大史上首次雙雙晉級後立即對決',
+        summary: '32 強首戰在洛杉磯 SoFi 球場上演，南非與加拿大皆隊史首次闖入淘汰賽卻馬上互碰，勝者將對德國或巴拉圭。',
         points: [
-            '首場淘汰賽：南非 vs 加拿大（歷史性首次雙雙晉級）。',
-            '巴西 vs 日本、德國 vs 巴拉圭、荷蘭 vs 摩洛哥等重磅對決。',
-            '阿根廷 vs 維德角、Messi 再成焦點。',
-            'X 對戰表模擬器被瘋狂轉發。',
-        ],
-        source: 'SMH · FIFA · Fox Sports',
-    },
-    {
-        id: 'iran-heartbreak',
-        priority: 8,
-        tags: [{ text: '伊朗', cls: 'text-red-400 bg-red-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-red-500/40',
-        match: { home: 'Algeria', away: 'Austria' },
-        meta: 'G 組 · 伊朗 · 第三名出局',
-        title: '伊朗差一名晉級，Khalilzadeh 進球被 VAR 取消後夢碎',
-        summary: '伊朗對埃及一度以為絕殺晉級，Khalilzadeh 第 93 分鐘進球卻被 VAR 判越位。最終 3 分仍不足以擠進最佳第三名，政治與競技雙重壓力下遺憾出局。',
-        points: [
-            '伊朗三場 3 分、對比利時、紐西蘭、埃及皆和局。',
-            '奧地利 96 分鐘絕平成最後一根稻草。',
-            '本屆場外限制與場內表現同受關注。',
-            '伊朗球迷賽後沉默離場畫面在 X 瘋傳。',
-        ],
-        source: 'ESPN · SMH · Al Jazeera',
-    },
-    {
-        id: 'england-knockout-path',
-        priority: 9,
-        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '晉級路徑', cls: 'text-purple-400 bg-purple-950' }],
-        border: 'border-purple-500/40',
-        match: { home: 'Panama', away: 'England' },
-        meta: '英格蘭 · 淘汰賽路徑',
-        title: '英格蘭 L 組第一後，半區路徑避開部分強隊',
-        summary: 'ESPN 分析英格蘭若拿下小組第一，淘汰賽半區可能避開巴西、阿根廷等強隊至四強前。Tuchel 末輪全勝策略收到回報。',
-        points: [
-            '十六強對民主剛果，八強可能遇埃及或維德角。',
-            '英格蘭 19 射 0 進悶平迦納後迅速調整。',
-            'Kane 進球狀態仍受關注。',
-            '三獅軍團被視為冠軍熱門之一。',
-        ],
-        source: 'ESPN · BBC',
-    },
-    {
-        id: 'argentina-cape-verde-next',
-        priority: 10,
-        tags: [{ text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }, { text: '32 強', cls: 'text-cyan-400 bg-cyan-950' }],
-        border: 'border-sky-500/40',
-        match: { home: 'Jordan', away: 'Argentina' },
-        meta: '阿根廷 · 十六強預告',
-        title: '阿根廷十六強對維德角，Messi 能否延續進球紀錄？',
-        summary: '維德角歷史性晉級後將在十六強對衛冕熱門阿根廷。Messi 本屆 6 球領跑，替補出戰約旦仍轟入任意球，狀態火熱。',
-        points: [
-            '維德角小組賽逼平西班牙、沙特後史詩晉級。',
-            'Scaloni 可能輪休部分主力備戰後段。',
-            '非洲黑馬 vs 南美冠軍成最大反差對決之一。',
-            '冠軍賠率阿根廷仍居前列。',
-        ],
-        source: 'SMH · ESPN · Reuters',
-    },
-];
-
-/** 今日無賽事隊伍的場外新聞（relatedTeams 全部不在今日賽程才顯示） */
-const IDLE_TEAM_NEWS = [
-    {
-        id: 'cape-verde-history',
-        priority: 1,
-        relatedTeams: ['Cape Verde', 'Spain', 'Saudi Arabia', 'Uruguay'],
-        tags: [{ text: '維德角', cls: 'text-emerald-400 bg-emerald-950' }, { text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }],
-        border: 'border-emerald-500/30',
-        meta: '維德角 · 史詩晉級',
-        title: '維德角 0-0 沙特晉級，隊史首次闖入淘汰賽',
-        summary: '維德角末輪和局即鎖定 H 組第二，烏拉圭 0-1 輸西班牙後出局。這支非洲小國將在十六強對阿根廷，全隊與球迷賽後狂歡影片在 X 洗版。',
-        points: [
-            'Bielsa 的烏拉圭兩連和後意外出局。',
-            '西班牙 1-0 勝烏拉圭穩固榜首。',
-            '維德角成本屆最大黑馬之一。',
-            'ESPN 短片「球迷瘋狂」破千萬觀看。',
-        ],
-        source: 'ESPN · SMH · BBC',
-    },
-    {
-        id: 'belgium-5-1-nz',
-        priority: 2,
-        relatedTeams: ['Belgium', 'New Zealand', 'Egypt', 'Iran'],
-        tags: [{ text: '比利時', cls: 'text-yellow-400 bg-yellow-950' }],
-        border: 'border-yellow-500/30',
-        meta: '比利時 · G 組第一',
-        title: 'Trossard 梅開二度，比利時 5-1 大勝紐西蘭奪組冠',
-        summary: 'De Bruyne、Lukaku、Trossard 與 Saelemaekers 進球，比利時終於甦醒以 5 分奪 G 組第一。十六強對塞內加爾，黃金世代最後機會仍在。',
-        points: [
-            '此前 0-0 伊朗讓球迷絕望，末輪大勝完成救贖。',
-            '紐西蘭 1-5 慘敗出局。',
-            '埃及 1-1 伊朗後歷史性晉級。',
-            '比利時被視為黑馬翻盤典範。',
-        ],
-        source: 'ESPN · Yahoo Sports',
-    },
-    {
-        id: 'france-dembele-hat-trick',
-        priority: 3,
-        relatedTeams: ['France', 'Norway', 'Senegal', 'Iraq'],
-        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }],
-        border: 'border-blue-500/30',
-        meta: '法國 · I 組第一',
-        title: 'Dembélé 上半場帽子戲法，法國 4-1 勝挪威',
-        summary: 'Haaland 輪休下挪威 1-4 落敗，Dembélé 上半場三球、Doué 補刀助法國奪 I 組第一。十六強對瑞典，八強可能遇挪威或強隊。',
-        points: [
-            'Mbappé 本場未進球但球隊火力仍兇猛。',
-            '塞內加爾 5-0 橫掃伊拉克同組另一場。',
-            '法國被評為半區最強種子之一。',
-            'Dembélé 狀態回勇成 X 熱議。',
-        ],
-        source: 'ESPN · L\'Équipe · Fox Sports',
-    },
-    {
-        id: 'ecuador-beat-germany',
-        priority: 4,
-        relatedTeams: ['Ecuador', 'Germany', 'Ivory Coast', 'Curaçao'],
-        tags: [{ text: '厄瓜多', cls: 'text-yellow-400 bg-yellow-950' }, { text: '冷門', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-amber-500/30',
-        meta: 'E 組 · 厄瓜多 2-1 德國',
-        title: '厄瓜多 2-1 擊敗德國，衛冕熱門以小組第二晉級',
-        summary: '厄瓜多末輪逆轉德國震驚全球，德國仍以 6 分晉級但失去小組第一。十六強德國對巴拉圭，厄瓜多對墨西哥。',
-        points: [
-            '德國兩連勝後末輪失手，Faé 爭議後仍晉級。',
-            '象牙海岸 2-0 勝古拉索同組另一場。',
-            '南美球隊再證明可撼動歐洲強權。',
-            'X 上 #Germany、#Ecuador 論戰激烈。',
-        ],
-        source: 'ESPN · Fox Sports · The Athletic',
-    },
-    {
-        id: 'usa-turkey-upset',
-        priority: 5,
-        relatedTeams: ['United States', 'Turkey', 'Paraguay', 'Australia'],
-        tags: [{ text: '美國', cls: 'text-blue-400 bg-blue-950' }],
-        border: 'border-blue-500/30',
-        meta: '美國 · D 組',
-        title: '美國 2-3 輸土耳其，以小組第一晉級仍遭噓聲',
-        summary: '東道主美國已提前晉級卻 2-3 敗給土耳其，仍奪 D 組第一。十六強對波士尼亞，表現起伏讓球迷擔憂淘汰賽。',
-        points: [
-            '土耳其 3-2 勝後積分仍不足晉級，62 射門 0 進球魔咒終於破除。',
-            '巴拉圭 0-0 澳洲後雙雙晉級。',
-            'Pulisic 表現不穩成美國媒體焦點。',
-            '東道主壓力與期待並存。',
-        ],
-        source: 'ESPN · CBS · Yahoo Sports',
-    },
-    {
-        id: 'brazil-scotland-canada-swiss',
-        priority: 6,
-        relatedTeams: ['Brazil', 'Scotland', 'Canada', 'Switzerland', 'Morocco', 'Haiti'],
-        tags: [{ text: '多組', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-zinc-500/30',
-        meta: '6/24 賽果回顧',
-        title: '巴西 3-0 蘇格蘭、瑞士 2-1 加拿大，多組末輪塵埃落定',
-        summary: '巴西末輪 3-0 勝蘇格蘭奪 C 組第一，十六強對日本。瑞士 2-1 勝加拿大搶 B 組第一，摩洛哥 4-2 勝海地，墨西哥 3-0 捷克鎖定 A 組第一。',
-        points: [
-            'Raphinha 傷疑下巴西仍展現深度。',
-            '加拿大以小組第二晉級，將對南非。',
-            '南非 1-0 勝南韓後同樣晉級。',
-            '多支主辦國球隊闖入 32 強。',
-        ],
-        source: 'ESPN · SBS · Fox Sports',
-    },
-    {
-        id: 'netherlands-japan-f',
-        priority: 7,
-        relatedTeams: ['Netherlands', 'Japan', 'Sweden', 'Tunisia'],
-        tags: [{ text: 'F 組', cls: 'text-orange-400 bg-orange-950' }],
-        border: 'border-orange-500/30',
-        meta: 'F 組 · 荷蘭日本',
-        title: '荷蘭 3-1 突尼西亞、日本 1-1 瑞典，雙雙晉級',
-        summary: '荷蘭末輪勝突尼西亞奪 F 組第一，十六強對摩洛哥。日本 1-1 瑞典後以第二名晉級，將對巴西——亞洲對南美強權的夢幻對決。',
-        points: [
-            '日本 Ueda 本屆表現亮眼。',
-            '荷蘭 Brobbey、Gakpo 狀態仍佳。',
-            '瑞典出局，突尼西亞兩戰慘敗。',
-            '巴西 vs 日本成 32 強首輪最吸睛之一。',
-        ],
-        source: 'The Athletic · BBC · ESPN',
-    },
-    {
-        id: 'r32-south-africa-canada',
-        priority: 8,
-        relatedTeams: ['South Africa', 'Canada'],
-        tags: [{ text: '32 強', cls: 'text-cyan-400 bg-cyan-950' }, { text: '明日', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-cyan-500/30',
-        meta: '台灣 6/29 · 首場淘汰賽',
-        title: '明日南非 vs 加拿大，史上首次雙雙晉級後立即對決',
-        summary: '32 強首戰在洛杉磯 SoFi 球場上演，南非與加拿大皆隊史首次闖入淘汰賽卻馬上互碰。南非 1-0 勝南韓、加拿大 B 組第二晉級。',
-        points: [
-            '兩隊小組皆 4 分晉級，實力接近。',
+            '南非 1-0 勝南韓、加拿大 B 組第二晉級。',
             '主辦國加拿大士氣正旺，David 本屆 3 球。',
-            '勝者將對德國或巴拉圭勝者。',
-            'X 北美區與非洲區同時熱議。',
+            '淘汰賽正式取代小組賽成為焦點。',
         ],
         source: 'SMH · ESPN · Fox Sports',
     },
     {
-        id: 'r32-heavyweights',
-        priority: 9,
-        relatedTeams: ['Germany', 'Netherlands', 'Brazil', 'France', 'Spain', 'Portugal'],
-        tags: [{ text: '32 強', cls: 'text-purple-400 bg-purple-950' }],
-        border: 'border-purple-500/30',
-        meta: '淘汰賽 · 對戰表',
-        title: '32 強重磅對決：德國對巴拉圭、荷蘭對摩洛哥、西班牙對奧地利',
-        summary: '小組賽結束後淘汰賽對戰表公布。葡萄牙對克羅埃西亞、巴西對日本、法國對瑞典、比利時對塞內加爾等場次同樣吸睛。',
+        id: 'results-group-wrap',
+        priority: 8,
+        match: { home: 'Jordan', away: 'Argentina' },
+        tags: [{ text: '小組收官', cls: 'text-purple-400 bg-purple-950' }],
+        border: 'border-purple-500/40',
+        meta: '世足 · 小組賽落幕',
+        title: '48 隊小組賽全部結束，32 強對戰表塵埃落定',
+        summary: '小組賽 72 場打完，32 強席位確定。維德角、埃及等隊史首次晉級，多支傳統強隊順利過關，淘汰賽即將全面開打。',
         points: [
-            '阿根廷對維德角成反差最大對決。',
-            '英格蘭對民主剛果。',
-            '墨西哥對厄瓜多、瑞士對阿爾及利亞。',
-            '冠軍熱門多數順利晉級。',
+            '巴西 vs 日本、德國 vs 巴拉圭、荷蘭 vs 摩洛哥等重磅對決。',
+            '阿根廷 vs 維德角成反差最大對決之一。',
+            '英格蘭 vs 民主剛果、西班牙 vs 奧地利同樣吸睛。',
         ],
         source: 'SMH · FIFA · Fox Sports',
     },
     {
-        id: 'egypt-first-knockout',
-        priority: 10,
-        relatedTeams: ['Egypt', 'Australia'],
-        tags: [{ text: '埃及', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-amber-500/30',
-        meta: '埃及 · 歷史首次',
-        title: '埃及歷史首次晉級淘汰賽，十六強對澳洲',
-        summary: '埃及 1-1 伊朗後以 G 組第二名闖入 32 強，隊史世足首次突破小組賽。Saber 進球後全隊慶祝成為非洲足球里程碑。',
+        id: 'results-brazil-japan-preview',
+        priority: 9,
+        match: { home: 'Brazil', away: 'Japan' },
+        tags: [{ text: '32 強預告', cls: 'text-yellow-400 bg-yellow-950' }],
+        border: 'border-yellow-500/40',
+        meta: '32 強 · 巴西 vs 日本',
+        title: '巴西 32 強對日本，亞洲挑戰南美強權的夢幻對決',
+        summary: '日本 1-1 瑞典後以 F 組第二晉級，將對 C 組第一巴西。Ueda 本屆表現亮眼，森保一能否再創奇蹟？',
         points: [
-            '埃及與伊朗、比利時、紐西蘭同組突圍。',
-            '十六強對澳洲，勝者可能遇英格蘭。',
-            'Salah 領銜的埃及被視為黑馬。',
-            '非洲五隊晉級創紀錄。',
+            '巴西末輪 3-0 勝蘇格蘭奪組冠。',
+            '日本上屆 16 強敗克羅埃西亞，本屆再進一步？',
+            'Raphinha 傷疑下巴西仍展現深度。',
         ],
-        source: 'ESPN · SMH · BBC',
+        source: 'The Athletic · ESPN · BBC',
+    },
+    {
+        id: 'results-germany-paraguay-preview',
+        priority: 10,
+        match: { home: 'Germany', away: 'Paraguay' },
+        tags: [{ text: '32 強預告', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-zinc-500/40',
+        meta: '32 強 · 德國 vs 巴拉圭',
+        title: '德國以小組第二晉級，32 強對巴拉圭求反彈',
+        summary: '德國末輪 1-2 不敵厄瓜多，仍以 6 分晉級但失去小組第一。淘汰賽首戰對巴拉圭，Faé 壓力不小。',
+        points: [
+            '厄瓜多 2-1 擊敗德國震驚全球。',
+            '巴拉圭 0-0 澳洲後同樣晉級。',
+            '德國球迷期待淘汰賽找回統治力。',
+        ],
+        source: 'ESPN · Fox Sports · The Athletic',
     },
 ];
 
-
-/** 今日 X 網路熱議 Top 10（含網友評論摘要，每日更新） */
-const X_TRENDING_TOP10 = [
+/** 分頁二：已淘汰／今日無賽事球隊新聞（與分頁一、三不重複） */
+const IDLE_TEAM_NEWS = [
     {
-        id: 'messi-freekick-6',
+        id: 'idle-iran-out',
         priority: 1,
+        relatedTeams: ['Iran', 'Belgium', 'New Zealand', 'Egypt'],
+        tags: [{ text: '伊朗', cls: 'text-red-400 bg-red-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-red-500/30',
+        meta: '伊朗 · 第三名出局',
+        title: '伊朗差一名晉級，Khalilzadeh 進球被 VAR 取消後夢碎',
+        summary: '伊朗對埃及一度以為絕殺晉級，Khalilzadeh 第 93 分鐘進球卻被 VAR 判越位。最終 3 分仍不足以擠進最佳第三名，奧地利 96 分鐘絕平成最後打擊。',
+        points: [
+            '伊朗三場 3 分、對比利時、紐西蘭、埃及皆和局。',
+            '總教練賽後稱「足球很殘酷，但隊員可以抬頭離開」。',
+            '球隊已返回訓練基地，未安排額外記者會。',
+            '國內媒體聚焦 VAR 判決與出局時刻。',
+        ],
+        source: 'ESPN · SMH · Al Jazeera',
+    },
+    {
+        id: 'idle-korea-out',
+        priority: 2,
+        relatedTeams: ['South Korea', 'South Africa', 'Mexico', 'Czech Republic'],
+        tags: [{ text: '南韓', cls: 'text-blue-400 bg-blue-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-blue-500/30',
+        meta: '南韓 · A 組出局',
+        title: '南韓 0-1 不敵南非後出局，孫興慜賽後致歉落淚',
+        summary: '南韓末輪必須取勝卻 0-1 敗給南非，以小組第三身份無緣晉級。孫興慜賽後向球迷鞠躬致歉，韓國媒體感嘆「亞洲最後希望之一熄滅」。',
+        points: [
+            '南韓三場僅 1 勝，進球數不足以爭取最佳第三名。',
+            '總教練稱「責任在我，年輕球員不該被網暴」。',
+            'KFA 宣布回國後將檢討戰術與體能調配。',
+            '首爾廣場觀賽人潮賽後沉默散去。',
+        ],
+        source: 'ESPN · BBC · Korea Herald',
+    },
+    {
+        id: 'idle-uruguay-out',
+        priority: 3,
+        relatedTeams: ['Uruguay', 'Spain', 'Saudi Arabia', 'Cape Verde'],
+        tags: [{ text: '烏拉圭', cls: 'text-sky-400 bg-sky-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-sky-500/30',
+        meta: '烏拉圭 · H 組出局',
+        title: '烏拉圭 0-1 輸西班牙後出局，Bielsa 遭母國媒體質疑',
+        summary: '烏拉圭末輪不敵西班牙，兩連和後意外出局。Bielsa 賽後堅持戰術選擇，但國內輿論要求解釋為何對弱隊未能取勝。',
+        points: [
+            '烏拉圭積分被維德角超越。',
+            'Núñez 與 Valverde 賽後神情失落。',
+            '南美足壇再少一支傳統強隊。',
+            '教頭去留成 X 南美區熱議。',
+        ],
+        source: 'ESPN · SMH · BBC',
+    },
+    {
+        id: 'idle-uzbekistan-out',
+        priority: 4,
+        relatedTeams: ['Uzbekistan', 'Colombia', 'Portugal', 'Democratic Republic of the Congo'],
+        tags: [{ text: '烏茲別克', cls: 'text-emerald-400 bg-emerald-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-emerald-500/30',
+        meta: '烏茲別克 · 首屆出局',
+        title: '烏茲別克兩戰 0 分出局，隊史首屆世足以遺憾收場',
+        summary: '烏茲別克末輪 1-3 不敵民主剛果，三場僅 1 分且未能展現中亞足球崛起氣勢。總教練稱「經驗寶貴，四年後再來」。',
+        points: [
+            '烏茲別克球迷仍感謝球隊首次站上世界舞台。',
+            '年輕中場表現獲歐洲球探關注。',
+            '國內開始討論青訓與聯賽水平差距。',
+        ],
+        source: 'ESPN · SMH',
+    },
+    {
+        id: 'idle-newzealand-out',
+        priority: 5,
+        relatedTeams: ['New Zealand', 'Belgium', 'Iran', 'Egypt'],
+        tags: [{ text: '紐西蘭', cls: 'text-zinc-400 bg-zinc-800' }, { text: '出局', cls: 'text-zinc-500 bg-zinc-900' }],
+        border: 'border-zinc-500/30',
+        meta: '紐西蘭 · G 組出局',
+        title: '紐西蘭 1-5 慘敗比利時後出局，大洋洲再度無緣晉級',
+        summary: '紐西蘭末輪被比利時痛擊，三場僅 1 分。球隊賽後強調「與世界強隊差距仍大」，但 Wood 進球仍是亮點。',
+        points: [
+            '紐西蘭球迷肯定球隊拼搏精神。',
+            '教練團將投入大洋洲區資格賽準備。',
+            '與強隊交手經驗對年輕球員有幫助。',
+        ],
+        source: 'ESPN · Yahoo Sports',
+    },
+    {
+        id: 'idle-sweden-out',
+        priority: 6,
+        relatedTeams: ['Sweden', 'Netherlands', 'Japan', 'Tunisia'],
+        tags: [{ text: '瑞典', cls: 'text-yellow-400 bg-yellow-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-yellow-500/30',
+        meta: '瑞典 · F 組出局',
+        title: '瑞典 1-1 日本後出局，Haaland 隊友們無緣晉級',
+        summary: '瑞典末輪與日本悶和，積分不足以晉級。Haaland 本屆世足缺席後，瑞典攻擊火力明顯不足，北歐球迷失望離場。',
+        points: [
+            '瑞典三場僅 1 分。',
+            '總教練稱「缺少終結者是我們的硬傷」。',
+            '瑞典媒體開始討論下一代重建。',
+        ],
+        source: 'ESPN · BBC',
+    },
+    {
+        id: 'idle-turkey-out',
+        priority: 7,
+        relatedTeams: ['Turkey', 'United States', 'Paraguay', 'Australia'],
+        tags: [{ text: '土耳其', cls: 'text-red-400 bg-red-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-red-500/30',
+        meta: '土耳其 · D 組出局',
+        title: '土耳其 3-2 勝美國仍出局，62 射門魔咒終破卻來不及',
+        summary: '土耳其末輪擊敗已晉級的美國，終於打破本屆 62 射門 0 進球尷尬紀錄，但積分仍不足以晉級。球員賽後表示「我們太晚醒來」。',
+        points: [
+            '土耳其球迷既欣慰又遺憾。',
+            'Calhanoglu 與 Arda Güler 成少數亮點。',
+            '教練團面臨是否重建的討論。',
+        ],
+        source: 'ESPN · CBS',
+    },
+    {
+        id: 'idle-panama-out',
+        priority: 8,
+        relatedTeams: ['Panama', 'England', 'Croatia', 'Ghana'],
+        tags: [{ text: '巴拿馬', cls: 'text-amber-400 bg-amber-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-amber-500/30',
+        meta: '巴拿馬 · L 組出局',
+        title: '巴拿馬三戰皆敗積分歸零，中北美代表遺憾打包回家',
+        summary: '巴拿馬末輪 0-2 不敵英格蘭，小組賽三連敗出局。球隊仍獲國內肯定，認為與歐洲強隊交手是寶貴經驗。',
+        points: [
+            '巴拿馬球迷感謝球隊時隔多年重返世足。',
+            '後防線面對英格蘭壓力巨大。',
+            '教練稱「我們需要更多與強隊熱身」。',
+        ],
+        source: 'ESPN · Fox Sports',
+    },
+    {
+        id: 'idle-scotland-out',
+        priority: 9,
+        relatedTeams: ['Scotland', 'Brazil', 'Morocco', 'Haiti'],
+        tags: [{ text: '蘇格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-blue-500/30',
+        meta: '蘇格蘭 · C 組出局',
+        title: '蘇格蘭 0-3 不敵巴西後出局，Tartan Army 仍高歌離場',
+        summary: '蘇格蘭末輪不敵巴西，無緣晉級。雖然比分難看，蘇格蘭球迷賽後仍高唱隊歌，展現「輸了比賽沒輸氣勢」的傳統。',
+        points: [
+            '蘇格蘭與巴西實力差距明顯。',
+            'McTominay 是少數獲讚球員。',
+            '蘇格蘭足總將檢討青訓與聯賽改革。',
+        ],
+        source: 'ESPN · BBC',
+    },
+    {
+        id: 'idle-tunisia-out',
+        priority: 10,
+        relatedTeams: ['Tunisia', 'Netherlands', 'Japan', 'Sweden'],
+        tags: [{ text: '突尼西亞', cls: 'text-red-400 bg-red-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-red-500/30',
+        meta: '突尼西亞 · F 組出局',
+        title: '突尼西亞兩連敗出局，北非代表未能延續上屆驚喜',
+        summary: '突尼西亞末輪 1-3 不敵荷蘭，小組賽僅 1 分出局。球隊防守漏洞頻現，非洲球迷感嘆「北非表現不如西非同儕」。',
+        points: [
+            '突尼西亞與強隊差距被放大。',
+            'Khazri 進球是少數亮點。',
+            '國內輿論要求聯賽與國家隊改革。',
+        ],
+        source: 'ESPN · BBC',
+    },
+];
+
+/** 分頁三：X 網路熱議 Top 20（社群評論，與分頁一、二不重複） */
+const X_TRENDING_TOP20 = [
+    {
+        id: 'x-iran-var-rage',
+        priority: 1,
+        hashtag: '#Iran',
+        heat: '🔥 極熱',
+        topic: '伊朗球迷：VAR 與 96 分鐘雙重夢碎',
+        summary: 'Khalilzadeh 進球被 VAR 取消後，奧地利又 96 分鐘絕平。伊朗社群同時洗版「#Iran」與「#VAR」，批評、不捨與無奈交織。',
+        reactions: [
+            { tone: 'negative', text: '「進球慶祝完被告知越位，這誰受得了？」' },
+            { tone: 'negative', text: '「不是輸在實力，是輸在命運和判決。」' },
+            { tone: 'neutral', text: '「球隊三場沒輸卻回家，規則就是這麼殘酷。」' },
+        ],
+    },
+    {
+        id: 'x-korea-son-apology',
+        priority: 2,
+        hashtag: '#SonHeungMin',
+        heat: '🔥 極熱',
+        topic: '南韓出局，孫興慜落淚致歉引韓網兩極',
+        summary: '南韓 0-1 敗南非後出局，孫興慜賽後鞠躬落淚。韓國 X 一面不捨隊長，一面質疑戰術與體能調度。',
+        reactions: [
+            { tone: 'positive', text: '「孫哥不用道歉，你已經付出一切。」' },
+            { tone: 'negative', text: '「亞洲最後幾支球隊全滅，太失望了。」' },
+            { tone: 'neutral', text: '「別網暴球員，問題在整體準備。」' },
+        ],
+    },
+    {
+        id: 'x-messi-freekick',
+        priority: 3,
         hashtag: '#Messi',
         heat: '🔥 極熱',
-        topic: 'Messi 任意球 6 球領跑',
-        summary: '替補登場後轟入任意球，本屆 6 球並連續 7 場世足進球。阿根廷 3-1 約旦後全組全勝，#Messi 再度洗版。',
+        topic: 'Messi 替補任意球，6 球領跑射手榜',
+        summary: '替補十分鐘轟入任意球，#Messi 再度霸榜。網友爭論：這是 GOAT 時刻，還是淘汰賽才見真章？',
         reactions: [
             { tone: 'positive', text: '「GOAT 不需要先發，十分鐘就夠。」' },
             { tone: 'positive', text: '「任意球死角，門將只能目送。」' },
@@ -614,77 +621,64 @@ const X_TRENDING_TOP10 = [
         ],
     },
     {
-        id: 'austria-96-iran-out',
-        priority: 2,
-        hashtag: '#WorldCup2026',
-        heat: '🔥 極熱',
-        topic: '奧地利 96 分鐘絕平伊朗出局',
-        summary: 'Mahrez 93 分鐘破門後 Iran 將晉級，Kalajdzic 首觸頭槌絕平。伊朗差一名出局，本屆最戲劇性結局之一。',
-        reactions: [
-            { tone: 'negative', text: '「伊朗太殘忍了，VAR 和 96 分鐘雙重打擊。」' },
-            { tone: 'positive', text: '「足球就是足球，最後一秒都不能放棄。」' },
-            { tone: 'funny', text: '「替補剛上場就進球——劇本都不敢這樣寫。」' },
-        ],
-    },
-    {
-        id: 'cape-verde-fairytale',
-        priority: 3,
+        id: 'x-cape-verde-party',
+        priority: 4,
         hashtag: '#CapeVerde',
         heat: '🔥 極熱',
-        topic: '維德角史詩晉級',
-        summary: '逼平沙特後隊史首次晉級，將在十六強對阿根廷。球迷狂歡影片破千萬觀看，本屆最動人故事之一。',
+        topic: '維德角球迷街頭狂歡洗版',
+        summary: '隊史首次晉級後，維德角球迷慶祝影片破千萬觀看。網友稱「這才是世界盃最美好的故事」。',
         reactions: [
-            { tone: 'positive', text: '「這就是世界盃的魅力——小國也能創造歷史！」' },
-            { tone: 'neutral', text: '「對阿根廷怎麼贏？但已經足夠偉大。」' },
+            { tone: 'positive', text: '「小國也能創造歷史，看得我雞皮疙瘩。」' },
+            { tone: 'funny', text: '「十六強對阿根廷？先慶祝再說！」' },
             { tone: 'positive', text: '「烏拉圭出局、維德角晉級——足球無常。」' },
         ],
     },
     {
-        id: 'knockout-bracket',
-        priority: 4,
+        id: 'x-bracket-meme',
+        priority: 5,
         hashtag: '#WorldCup',
         heat: '🔥 極熱',
-        topic: '32 強對戰表出爐',
-        summary: '小組賽收官後巴西對日本、德國對巴拉圭、荷蘭對摩洛哥、葡萄牙對克羅埃西亞等重磅對決確定，對戰圖瘋傳。',
+        topic: '32 強對戰圖迷因滿天飛',
+        summary: '巴西對日本、葡萄牙對克羅埃西亞等對戰圖被瘋傳。網友製作預測表、梗圖與「死亡半區」分析。',
         reactions: [
             { tone: 'positive', text: '「淘汰賽才是真正的世界盃！」' },
+            { tone: 'funny', text: '「我預測表填好了——反正會全錯。」' },
             { tone: 'neutral', text: '「上半區下半區強度差很大。」' },
-            { tone: 'funny', text: '「我已經填好預測表——反正會全錯。」' },
         ],
     },
     {
-        id: 'england-top-group',
-        priority: 5,
+        id: 'x-england-path',
+        priority: 6,
         hashtag: '#ThreeLions',
         heat: '🔥 高熱',
-        topic: '英格蘭 2-0 巴拿馬奪組冠',
-        summary: 'Tuchel 鎖定 L 組第一，十六強對民主剛果。英媒分析半區路徑對冠軍爭奪至關重要。',
+        topic: '英格蘭奪組冠後，網友熱議半區路徑',
+        summary: '英格蘭 2-0 巴拿馬鎖定 L 組第一，X 上 #ThreeLions 討論是否因此避開強敵至四強。',
         reactions: [
             { tone: 'positive', text: '「拿下小組第一比進球更重要！」' },
             { tone: 'neutral', text: '「對迦納 19 射 0 進的陰影還在。」' },
-            { tone: 'positive', text: '「這次三獅真的不一樣？」' },
+            { tone: 'funny', text: '「英格蘭奪冠？先過心理關卡。」' },
         ],
     },
     {
-        id: 'dembele-hattrick',
-        priority: 6,
+        id: 'x-dembele-hat',
+        priority: 7,
         hashtag: '#France',
         heat: '🔥 高熱',
-        topic: 'Dembélé 帽子戲法法國 4-1',
-        summary: '上半場三球助法國奪 I 組第一，Haaland 輪休下挪威落敗。法國火力全開進入淘汰賽。',
+        topic: 'Dembélé 帽子戲法，法國火力嚇人',
+        summary: '法國 4-1 挪威，Dembélé 上半場三球。法國球迷：「Mbappé 沒進球？沒關係，我們有深度。」',
         reactions: [
-            { tone: 'positive', text: '「Dembélé 終於在世界盃爆發了！」' },
+            { tone: 'positive', text: '「Dembélé 終於在世界盃爆發！」' },
             { tone: 'neutral', text: '「挪威沒 Haaland 差太多。」' },
             { tone: 'positive', text: '「法國半區最強種子實錘。」' },
         ],
     },
     {
-        id: 'ecuador-germany-shock',
-        priority: 7,
+        id: 'x-ecuador-shock',
+        priority: 8,
         hashtag: '#Germany',
         heat: '🔥 高熱',
-        topic: '厄瓜多 2-1 擊敗德國',
-        summary: '德國末輪失手仍以第二名晉級，南美冷門再現。德國球迷無奈，南美球迷狂歡。',
+        topic: '厄瓜多擊敗德國，德迷崩潰南美狂歡',
+        summary: '德國末輪失手仍以第二名晉級。德國 X 無奈，南美社群則慶祝「又一支歐洲強隊被拉下馬」。',
         reactions: [
             { tone: 'negative', text: '「德國又在關鍵時刻掉鏈子。」' },
             { tone: 'positive', text: '「厄瓜多配得上這場勝利！」' },
@@ -692,12 +686,12 @@ const X_TRENDING_TOP10 = [
         ],
     },
     {
-        id: 'belgium-redemption',
-        priority: 8,
+        id: 'x-belgium-5-1',
+        priority: 9,
         hashtag: '#Belgium',
         heat: '📈 升溫',
-        topic: '比利時 5-1 大勝復活',
-        summary: 'Trossard 梅開二度，De Bruyne 與 Lukaku 進球，比利時 5-1 紐西蘭奪 G 組第一。黃金世代最後救贖？',
+        topic: '比利時 5-1 大勝，黃金世代最後救贖？',
+        summary: 'Trossard 梅開二度，比利時 5-1 紐西蘭。網友梗圖：「瀕死→復活→待定」。',
         reactions: [
             { tone: 'positive', text: '「終於醒了！淘汰賽見真章。」' },
             { tone: 'funny', text: '「黃金世代：瀕死→復活→待定。」' },
@@ -705,12 +699,12 @@ const X_TRENDING_TOP10 = [
         ],
     },
     {
-        id: 'sa-canada-r32',
-        priority: 9,
+        id: 'x-sa-canada',
+        priority: 10,
         hashtag: '#CANMNT',
         heat: '📈 升溫',
-        topic: '首場淘汰賽南非對加拿大',
-        summary: '兩隊皆隊史首次晉級卻立即對決，洛杉磯 SoFi 球場明日開戰。歷史性首戰引爆北美與非洲社群。',
+        topic: '首場淘汰賽：南非 vs 加拿大',
+        summary: '兩隊皆隊史首次晉級卻立即對決。北美與非洲社群同時熱議，#CANMNT 與 #BafanaBafana 並列趨勢。',
         reactions: [
             { tone: 'positive', text: '「不管誰贏都是歷史時刻！」' },
             { tone: 'positive', text: '「加拿大主場優勢不能小看。」' },
@@ -718,16 +712,133 @@ const X_TRENDING_TOP10 = [
         ],
     },
     {
-        id: 'africa-record',
-        priority: 10,
+        id: 'x-iran-politics',
+        priority: 11,
+        hashtag: '#TeamMelli',
+        heat: '🔥 高熱',
+        topic: '伊朗出局後，海內外球迷複雜情緒',
+        summary: '伊朗球迷在 X 分享離場沉默畫面與海外支援訊息。評論從戰術、VAR 延伸到場外氛圍，聲量持續升溫。',
+        reactions: [
+            { tone: 'positive', text: '「球員已經拼到最後，尊敬他們。」' },
+            { tone: 'negative', text: '「本屆場內外都太壓抑，球迷心累。」' },
+            { tone: 'neutral', text: '「體育歸體育，別讓球員承擔太多。」' },
+        ],
+    },
+    {
+        id: 'x-korea-tactics',
+        priority: 12,
+        hashtag: '#KoreaFootball',
+        heat: '🔥 高熱',
+        topic: '韓網檢討：南韓為何押寶失效？',
+        summary: '南韓出局後，韓國足球社群瘋傳戰術板截圖與體能數據，質疑末輪進攻乏力與換人時機。',
+        reactions: [
+            { tone: 'negative', text: '「末輪必須贏卻踢得像想守和。」' },
+            { tone: 'neutral', text: '「南非準備更充分，不是運氣問題。」' },
+            { tone: 'negative', text: '「亞洲球隊整體還是差一截。」' },
+        ],
+    },
+    {
+        id: 'x-uruguay-bielsa',
+        priority: 13,
+        hashtag: '#Uruguay',
+        heat: '📈 升溫',
+        topic: '烏拉圭出局，Bielsa 成眾矢之的',
+        summary: '烏拉圭球迷在 X 洗版「#Bielsa」與「#Uruguay」，批評末輪保守、要求教頭給說法。',
+        reactions: [
+            { tone: 'negative', text: '「兩連和還能出局，教練責任最大。」' },
+            { tone: 'neutral', text: '「維德角太黑馬，烏拉圭其實不差。」' },
+            { tone: 'funny', text: '「Bielsa：我只是來看世界的。」' },
+        ],
+    },
+    {
+        id: 'x-brazil-japan',
+        priority: 14,
+        hashtag: '#BRAJPN',
+        heat: '📈 升溫',
+        topic: '巴西 vs 日本，全網等一場「異次元對決」',
+        summary: '森保一能否再創奇蹟？日本社群既期待又忐忑，巴西球迷則認為「正常發揮就夠」。',
+        reactions: [
+            { tone: 'positive', text: '「日本不怕強隊，這場有戲！」' },
+            { tone: 'neutral', text: '「巴西深度太誇張，日本要奇蹟。」' },
+            { tone: 'funny', text: '「我賭日本贏——因為我是樂觀的傻子。」' },
+        ],
+    },
+    {
+        id: 'x-portugal-croatia',
+        priority: 15,
+        hashtag: '#PORCRO',
+        heat: '📈 升溫',
+        topic: '葡萄牙對克羅埃西亞，歐洲內戰提前',
+        summary: 'C 羅與 Modrić 可能是生涯最後幾場世足。網友感嘆「黃金一代互道再見」。',
+        reactions: [
+            { tone: 'positive', text: '「兩隊我都愛，這場太殘酷。」' },
+            { tone: 'neutral', text: '「誰贏都合理，看當天狀態。」' },
+            { tone: 'positive', text: '「Modrić 最後一舞，尊重。」' },
+        ],
+    },
+    {
+        id: 'x-africa-five',
+        priority: 16,
         hashtag: '#AFCON',
         heat: '💬 討論',
-        topic: '非洲五隊晉級創紀錄',
-        summary: '埃及、塞內加爾、維德角、摩洛哥、迦納等五隊闖入 32 強，民主剛果亦晉級，非洲足球迎來黃金時刻。',
+        topic: '非洲多隊晉級，網友：「不再是配角」',
+        summary: '埃及、塞內加爾、維德角、摩洛哥、迦納、民主剛果等晉級，非洲足球話題聲量創新高。',
         reactions: [
             { tone: 'positive', text: '「非洲足球不再是配角！」' },
             { tone: 'positive', text: '「維德角和埃及的故事太美了。」' },
             { tone: 'neutral', text: '「淘汰賽對歐洲南美強隊才是試金石。」' },
+        ],
+    },
+    {
+        id: 'x-usmnt-rollercoaster',
+        priority: 17,
+        hashtag: '#USMNT',
+        heat: '💬 討論',
+        topic: '美國 2-3 輸土耳其仍奪組冠，網友又愛又恨',
+        summary: '東道主末輪輸球仍拿 D 組第一，美國社群吐槽「贏了分組輸了面子」，擔心淘汰賽不穩。',
+        reactions: [
+            { tone: 'negative', text: '「這狀態怎麼踢波士尼亞？」' },
+            { tone: 'neutral', text: '「反正第一了，末輪輪休也合理。」' },
+            { tone: 'positive', text: '「主辦國壓力大，能晉級就不錯。」' },
+        ],
+    },
+    {
+        id: 'x-turkey-late-bloom',
+        priority: 18,
+        hashtag: '#Turkey',
+        heat: '💬 討論',
+        topic: '土耳其終於進球卻出局，網友嘆「太晚醒來」',
+        summary: '土耳其 3-2 勝美國打破 62 射門 0 進魔咒，但已無法晉級。土耳其 X 充滿「如果早一點…」的假設。',
+        reactions: [
+            { tone: 'negative', text: '「早這樣踢，早就晉級了。」' },
+            { tone: 'positive', text: '「Güler 未來是土耳其的希望。」' },
+            { tone: 'funny', text: '「62 射門魔咒破了，晉級魔咒還在。」' },
+        ],
+    },
+    {
+        id: 'x-scotland-spirit',
+        priority: 19,
+        hashtag: '#TartanArmy',
+        heat: '💬 討論',
+        topic: '蘇格蘭輸了但 Tartan Army 仍高歌',
+        summary: '0-3 不敵巴西後，蘇格蘭球迷賽後合唱影片感動網友。蘇格蘭 X：「我們輸比分沒輸氣勢。」',
+        reactions: [
+            { tone: 'positive', text: '「這才是足球文化，尊重蘇格蘭球迷。」' },
+            { tone: 'neutral', text: '「球隊實力還得加強，但精神滿分。」' },
+            { tone: 'funny', text: '「輸 3 球還能唱，心臟夠大。」' },
+        ],
+    },
+    {
+        id: 'x-jordan-respect',
+        priority: 20,
+        hashtag: '#Jordan',
+        heat: '💬 討論',
+        topic: '約旦不敵阿根廷仍獲尊重',
+        summary: '約旦 1-3 不敵阿根廷，但上半場逼平、展現鬥志。中東社群稱「雖敗猶榮」，鼓勵年輕球員。',
+        reactions: [
+            { tone: 'positive', text: '「面對阿根廷能進一球，值得驕傲。」' },
+            { tone: 'neutral', text: '「亞洲球隊對強隊還是差一段。」' },
+            { tone: 'positive', text: '「約旦足球在進步，四年後再見。」' },
         ],
     },
 ];
@@ -1081,40 +1192,60 @@ function getTodayMatchKeys() {
     );
 }
 
-function generateNews() {
-    const todayKeys = getTodayMatchKeys();
-    const hasApi = state.games.length > 0;
+const TAB_LIMITS = { results: 10, idle: 10, trending: 20 };
+let tabNewsCache = null;
 
-    let items = TODAY_TOP10_NEWS
-        .filter(item => {
-            if (!hasApi || todayKeys.size === 0) return true;
-            return todayKeys.has(matchKey(item.match.home, item.match.away));
-        })
-        .sort((a, b) => a.priority - b.priority)
-        .slice(0, 10);
-
-    if (!items.length) {
-        items = [...TODAY_TOP10_NEWS].sort((a, b) => a.priority - b.priority).slice(0, 10);
+function pickUniqueNews(pool, usedIds, limit) {
+    const out = [];
+    for (const item of [...pool].sort((a, b) => a.priority - b.priority)) {
+        if (usedIds.has(item.id)) continue;
+        out.push(item);
+        usedIds.add(item.id);
+        if (out.length >= limit) break;
     }
-    return items;
+    return out;
+}
+
+function buildTabNewsBundle() {
+    const todayKeys = getTodayMatchKeys();
+    const playing = getTeamsPlayingToday();
+    const hasApi = state.games.length > 0;
+    const usedIds = new Set();
+
+    let resultsPool = TODAY_TOP10_NEWS.filter(item => {
+        if (!hasApi || todayKeys.size === 0) return true;
+        return todayKeys.has(matchKey(item.match.home, item.match.away));
+    });
+    if (!resultsPool.length) resultsPool = TODAY_TOP10_NEWS;
+
+    let idlePool = IDLE_TEAM_NEWS.filter(item => {
+        if (!hasApi) return true;
+        return item.relatedTeams.every(t => !playing.has(t));
+    });
+    if (!idlePool.length) idlePool = IDLE_TEAM_NEWS;
+
+    const results = pickUniqueNews(resultsPool, usedIds, TAB_LIMITS.results);
+    const idle = pickUniqueNews(idlePool, usedIds, TAB_LIMITS.idle);
+    const trending = pickUniqueNews(X_TRENDING_TOP20, usedIds, TAB_LIMITS.trending);
+
+    return { results, idle, trending };
+}
+
+function getTabNewsBundle() {
+    tabNewsCache = buildTabNewsBundle();
+    return tabNewsCache;
+}
+
+function generateNews() {
+    return (tabNewsCache || getTabNewsBundle()).results;
 }
 
 function generateIdleNews() {
-    const playing = getTeamsPlayingToday();
-    const hasApi = state.games.length > 0;
+    return (tabNewsCache || getTabNewsBundle()).idle;
+}
 
-    let items = IDLE_TEAM_NEWS
-        .filter(item => {
-            if (!hasApi) return true;
-            return item.relatedTeams.every(t => !playing.has(t));
-        })
-        .sort((a, b) => a.priority - b.priority)
-        .slice(0, 10);
-
-    if (!items.length) {
-        items = [...IDLE_TEAM_NEWS].sort((a, b) => a.priority - b.priority).slice(0, 10);
-    }
-    return items;
+function generateTrending() {
+    return (tabNewsCache || getTabNewsBundle()).trending;
 }
 
 function renderNewsCard(n, i) {
@@ -1178,7 +1309,7 @@ function renderTrendingCard(t, i) {
 }
 
 function renderTrending() {
-    const items = [...X_TRENDING_TOP10].sort((a, b) => a.priority - b.priority);
+    const items = generateTrending();
     $('trending-list').innerHTML = items.map((t, i) => renderTrendingCard(t, i)).join('');
 }
 
@@ -1215,10 +1346,11 @@ function renderIdleNews() {
 }
 
 function updateTabBadges() {
+    const bundle = getTabNewsBundle();
     const todayGames = state.games.filter(g => isTodayInTaipei(g) && isPlayedOrLive(g)).length;
-    const idleNews = generateIdleNews().length;
     $('tab-results-badge').textContent = todayGames ? `${todayGames} 場` : '—';
-    $('tab-idle-badge').textContent = idleNews ? `${idleNews} 則` : '—';
+    $('tab-idle-badge').textContent = bundle.idle.length ? `${bundle.idle.length} 則` : '—';
+    $('tab-trending-badge').textContent = bundle.trending.length ? `${bundle.trending.length} 則` : '20 則';
 }
 
 function switchTab(tab) {
@@ -1237,6 +1369,7 @@ function setupTabs() {
 function renderAll() {
     const tp = getTaipeiToday().replace(/-/g, '/');
     $('date-label').textContent = `${tp} 台灣時間 · 新聞 ${NEWS_UPDATED}`;
+    getTabNewsBundle();
     renderMatches();
     renderKnockoutBracket();
     renderNews();
