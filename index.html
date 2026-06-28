@@ -159,17 +159,6 @@
 
             <section class="mb-10">
                 <h2 class="section-title flex items-center gap-3">
-                    <i class="fa-solid fa-table text-blue-500"></i>
-                    各組目前積分排序（重點小組）
-                </h2>
-                <div id="standings-container" class="space-y-6">
-                    <div class="skeleton h-40 rounded-3xl"></div>
-                    <div class="skeleton h-32 rounded-3xl"></div>
-                </div>
-            </section>
-
-            <section class="mb-10">
-                <h2 class="section-title flex items-center gap-3">
                     <i class="fa-solid fa-sitemap text-cyan-500"></i>
                     淘汰賽對戰樹狀圖
                     <span class="text-xs font-normal text-zinc-500">32 強 → 決賽</span>
@@ -254,7 +243,6 @@ const API = {
     teams: 'https://worldcup26.ir/get/teams',
 };
 
-const FOCUS_GROUPS = ['J', 'K', 'L'];
 const AUTO_REFRESH_SEC = 60;
 const CACHE_KEY = 'wc_news_cache_v4';
 const NEWS_UPDATED = '2026-06-27';
@@ -771,12 +759,24 @@ const TEAM_ZH = {
 
 const KNOCKOUT_ROUND_ZH = { r32: '32 強', r16: '16 強', qf: '八強', sf: '四強', final: '決賽', third: '季軍戰' };
 
-/** API 尚未填入的對戰組合（team_id = 0） */
-const KNOCKOUT_FALLBACK_TEAMS = {
-    77: { away: 'Sweden' },
-    79: { away: 'Ecuador' },
+/** 32 強完整對戰（API team_id=0 或尚未開踢時的備援） */
+const KNOCKOUT_R32_TEAMS = {
+    73: { home: 'South Africa', away: 'Canada' },
+    74: { home: 'Germany', away: 'Paraguay' },
+    75: { home: 'Netherlands', away: 'Morocco' },
+    76: { home: 'Brazil', away: 'Japan' },
+    77: { home: 'France', away: 'Sweden' },
+    78: { home: 'Ivory Coast', away: 'Norway' },
+    79: { home: 'Mexico', away: 'Ecuador' },
+    80: { home: 'Belgium', away: 'Senegal' },
+    81: { home: 'United States', away: 'Bosnia and Herzegovina' },
     82: { home: 'England', away: 'Democratic Republic of the Congo' },
+    83: { home: 'Portugal', away: 'Croatia' },
     84: { home: 'Spain', away: 'Austria' },
+    85: { home: 'Switzerland', away: 'Algeria' },
+    86: { home: 'Argentina', away: 'Cape Verde' },
+    87: { home: 'Colombia', away: 'Ghana' },
+    88: { home: 'Australia', away: 'Egypt' },
 };
 
 /** 樹狀圖各輪對戰 ID 順序（對齊 bracket 連線） */
@@ -925,19 +925,30 @@ function renderMatches() {
     }).join('');
 }
 
+function sameGameId(a, b) {
+    return String(a) === String(b);
+}
+
 function resolveKnockoutTeam(game, side) {
-    const fb = KNOCKOUT_FALLBACK_TEAMS[game?.id] || {};
+    const gid = +game?.id;
+    const fb = KNOCKOUT_R32_TEAMS[gid] || {};
     const idKey = side === 'home' ? 'home_team_id' : 'away_team_id';
     const nameKey = side === 'home' ? 'home_team_name_en' : 'away_team_name_en';
     const teamId = game?.[idKey];
-    const fromApi = game?.[nameKey] || (teamId && state.teams[teamId]?.name_en);
+    const apiName = game?.[nameKey];
+    const fromApi = (apiName && apiName !== 'None')
+        ? apiName
+        : (teamId && teamId !== '0' && +teamId !== 0 ? state.teams[teamId]?.name_en : null);
     const fromFb = fb[side];
     const name = fromApi || fromFb || null;
-    return { name, team: teamId ? state.teams[teamId] : null };
+    const team = (teamId && teamId !== '0' && +teamId !== 0)
+        ? state.teams[teamId]
+        : (name ? Object.values(state.teams).find(t => t.name_en === name) : null);
+    return { name, team };
 }
 
 function getKnockoutGame(id) {
-    return state.games.find(g => g.id === id) || { id, type: 'r32', finished: 'FALSE' };
+    return state.games.find(g => sameGameId(g.id, id)) || { id, type: 'r32', finished: 'FALSE' };
 }
 
 function bracketTeamRow(team, score, oppScore, finished, live) {
@@ -978,10 +989,6 @@ function renderBracketMatch(game) {
 
 function renderKnockoutBracket() {
     const container = $('knockout-bracket-container');
-    if (!state.games.length) {
-        container.innerHTML = '<p class="text-sm text-zinc-500 p-6">載入對戰資料中…</p>';
-        return;
-    }
 
     const cols = KNOCKOUT_BRACKET_ROUNDS.map(round => {
         const extraCls = round.type === 'final' ? ' bracket-final-col' : round.type === 'third' ? ' bracket-third-col' : '';
@@ -1003,61 +1010,6 @@ function renderKnockoutBracket() {
     }).join('');
 
     container.innerHTML = `<div class="bracket fade-in">${cols}</div>`;
-}
-
-function renderStandings() {
-    const container = $('standings-container');
-    const focus = state.groups.filter(g => FOCUS_GROUPS.includes(g.name));
-
-    container.innerHTML = focus.map(g => {
-        const rows = [...g.teams]
-            .sort((a, b) => +b.pts - +a.pts || +b.gd - +a.gd || +b.gf - +a.gf)
-            .map((t, i) => {
-                const team = state.teams[t.team_id];
-                const name = team ? teamZh(team.name_en) : `隊伍 ${t.team_id}`;
-                const eliminated = +t.mp >= 2 && +t.pts === 0;
-                const leader = i === 0;
-                return `
-                <tr class="border-b border-zinc-800 ${eliminated ? 'text-red-400' : ''}">
-                    <td class="py-2.5 font-medium">
-                        <span class="inline-flex items-center gap-2">
-                            ${team?.flag ? `<img src="${team.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
-                            ${name}${eliminated ? '（岌岌可危）' : ''}
-                        </span>
-                    </td>
-                    <td class="text-center">${t.mp}</td>
-                    <td class="text-center">${t.w}</td>
-                    <td class="text-center">${t.d}</td>
-                    <td class="text-center">${t.l}</td>
-                    <td class="text-center ${leader ? 'font-bold text-emerald-400' : ''}">${t.pts}</td>
-                </tr>`;
-            }).join('');
-
-        const hasToday = state.games.some(m => m.group === g.name && isTodayInTaipei(m));
-
-        return `
-        <div class="fade-in">
-            <div class="flex items-center gap-2 mb-3">
-                <span class="font-bold text-lg">${g.name}組</span>
-                ${hasToday ? '<span class="text-xs px-3 py-1 bg-emerald-950 text-emerald-400 rounded-2xl">今日賽事</span>' : ''}
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="text-zinc-400 border-b border-zinc-700">
-                            <th class="text-left py-2">隊伍</th>
-                            <th class="text-center">賽</th>
-                            <th class="text-center">勝</th>
-                            <th class="text-center">和</th>
-                            <th class="text-center">負</th>
-                            <th class="text-center">積分</th>
-                        </tr>
-                    </thead>
-                    <tbody>${rows}</tbody>
-                </table>
-            </div>
-        </div>`;
-    }).join('');
 }
 
 function matchKey(home, away) {
@@ -1253,7 +1205,6 @@ function renderAll() {
     const tp = getTaipeiToday().replace(/-/g, '/');
     $('date-label').textContent = `${tp} 台灣時間 · 新聞 ${NEWS_UPDATED}`;
     renderMatches();
-    renderStandings();
     renderKnockoutBracket();
     renderNews();
     renderIdleTeams();
