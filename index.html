@@ -43,6 +43,7 @@
         .bracket-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
         .bracket { display: flex; align-items: stretch; gap: 0; min-width: 920px; padding: 8px 4px 16px; }
         .bracket-round { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .bracket-round:first-child { flex: 1.6; min-width: 152px; }
         .bracket-round-title { text-align: center; font-size: 0.7rem; font-weight: 700; color: #71717a; letter-spacing: 0.05em; margin-bottom: 10px; padding: 4px 0; }
         .bracket-slots { flex: 1; display: flex; flex-direction: column; justify-content: space-around; position: relative; }
         .bracket-slot { display: flex; align-items: center; position: relative; min-height: 44px; }
@@ -768,9 +769,9 @@ const KNOCKOUT_R32_TEAMS = {
     77: { home: 'France', away: 'Sweden' },
     78: { home: 'Ivory Coast', away: 'Norway' },
     79: { home: 'Mexico', away: 'Ecuador' },
-    80: { home: 'Belgium', away: 'Senegal' },
+    80: { home: 'England', away: 'Democratic Republic of the Congo' },
     81: { home: 'United States', away: 'Bosnia and Herzegovina' },
-    82: { home: 'England', away: 'Democratic Republic of the Congo' },
+    82: { home: 'Belgium', away: 'Senegal' },
     83: { home: 'Portugal', away: 'Croatia' },
     84: { home: 'Spain', away: 'Austria' },
     85: { home: 'Switzerland', away: 'Algeria' },
@@ -987,6 +988,38 @@ function renderBracketMatch(game) {
         </div>`;
 }
 
+function bracketDisplayName(team) {
+    const name = team?.name;
+    if (!name || name === 'None' || name === 'TBD') return 'TBD';
+    return teamZh(name);
+}
+
+function renderR32FixturesList() {
+    const ids = KNOCKOUT_BRACKET_ROUNDS[0].ids;
+    return `
+        <div class="px-4 pt-4 pb-2 border-b border-zinc-800">
+            <h3 class="text-sm font-semibold text-zinc-400 mb-3">32 強對戰一覽</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                ${ids.map((id, i) => {
+                    const game = getKnockoutGame(id);
+                    const home = resolveKnockoutTeam(game, 'home');
+                    const away = resolveKnockoutTeam(game, 'away');
+                    const finished = isFinished(game);
+                    const live = isLive(game);
+                    const hs = game.home_score, as = game.away_score;
+                    const score = finished || live
+                        ? `<span class="text-zinc-400 tabular-nums mx-1">${hs ?? 0} : ${as ?? 0}</span>`
+                        : '<span class="text-zinc-600 mx-1">vs</span>';
+                    return `
+                        <div class="flex items-center gap-2 text-sm bg-zinc-800/40 border border-zinc-800 rounded-xl px-3 py-2">
+                            <span class="text-zinc-600 text-xs tabular-nums w-4 shrink-0">${i + 1}</span>
+                            <span class="min-w-0 truncate">${bracketDisplayName(home)}${score}${bracketDisplayName(away)}</span>
+                        </div>`;
+                }).join('')}
+            </div>
+        </div>`;
+}
+
 function renderKnockoutBracket() {
     const container = $('knockout-bracket-container');
 
@@ -1009,7 +1042,7 @@ function renderKnockoutBracket() {
             </div>`;
     }).join('');
 
-    container.innerHTML = `<div class="bracket fade-in">${cols}</div>`;
+    container.innerHTML = `${renderR32FixturesList()}<div class="bracket fade-in">${cols}</div>`;
 }
 
 function matchKey(home, away) {
