@@ -126,6 +126,19 @@
                 <p id="no-matches" class="hidden text-zinc-500 text-sm mt-3">今日尚無比賽，或賽事尚未開始。</p>
             </section>
 
+            <section class="mb-10" id="knockout-section">
+                <h2 class="section-title flex items-center gap-3">
+                    <i class="fa-solid fa-sitemap text-emerald-500"></i>
+                    十六強對陣
+                    <span id="knockout-qualified-count" class="text-xs font-normal text-zinc-500"></span>
+                </h2>
+                <p class="text-sm text-zinc-400 mb-4">三十二強完賽後，晉級隊伍會自動填入下方對陣（不再顯示 TBD）。</p>
+                <div id="knockout-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="skeleton h-20 rounded-3xl"></div>
+                    <div class="skeleton h-20 rounded-3xl"></div>
+                </div>
+            </section>
+
             <section class="mb-10">
                 <h2 class="section-title flex items-center gap-3">
                     <i class="fa-solid fa-table text-blue-500"></i>
@@ -226,7 +239,7 @@ const API = {
 
 const FOCUS_GROUPS = ['J', 'K', 'L'];
 const AUTO_REFRESH_SEC = 60;
-const CACHE_KEY = 'wc_news_cache_v5';
+const CACHE_KEY = 'wc_news_cache_v6';
 const NEWS_UPDATED = '2026-06-28';
 
 /** 今日比賽 X 熱議 Top 10（6/28 十六強首戰 + 6/27 小組收官） */
@@ -238,12 +251,12 @@ const TODAY_TOP10_NEWS = [
         border: 'border-red-500/40',
         match: { home: 'South Africa', away: 'Canada' },
         meta: '十六強 · 南非 0-1 加拿大 · 洛杉磯',
-        title: 'Koné 補時絕殺，加拿大 1-0 南非晉級八強',
-        summary: '全場僵持至補時，Koné 第 90+2 分鐘一槌定音。加拿大淘汰 A 組冷門南非，#Canada 與 #CANMNT 霸榜，本屆首場十六強即上演絕殺劇本。',
+        title: 'Koné 補時絕殺，加拿大 1-0 南非晉級十六強',
+        summary: '全場僵持至補時，Koné 第 90+2 分鐘一槌定音。加拿大淘汰 A 組冷門南非，#Canada 與 #CANMNT 霸榜，本屆首場三十二強即上演絕殺劇本。',
         points: [
-            '南非隊史首次十六強夢碎於補時。',
-            '加拿大 6/28 洛杉磯主場氛圍火熱。',
-            '八強對陣待定。',
+            '南非隊史首次三十二強夢碎於補時。',
+            '加拿大 7/4 十六強對陣荷蘭／摩洛哥勝者。',
+            '網站「十六強對陣」已自動填入加拿大。',
             '非洲冷門止步，北美球隊續寫奇蹟。',
         ],
         source: 'NBC · ESPN · Yahoo Sports',
@@ -603,7 +616,7 @@ const X_TRENDING_TOP10 = [
         hashtag: '#Canada',
         heat: '🔥 爆熱',
         topic: 'Koné 補時絕殺，加拿大 1-0 淘汰南非',
-        summary: '十六強首戰即上演絕殺，加拿大晉級八強。南非冷門夢碎補時。',
+        summary: '三十二強首戰即上演絕殺，加拿大晉級十六強。南非冷門夢碎補時。',
         reactions: [
             { tone: 'positive', text: '『加拿大足球的奇蹟時刻！』' },
             { tone: 'positive', text: '『補時絕殺，世界盃就是這麼瘋狂。』' },
@@ -835,6 +848,146 @@ function highlightScorerNote(game) {
     return first.slice(0, 30);
 }
 
+function getGameById(id) {
+    return state.games.find(g => String(g.id) === String(id));
+}
+
+function getMatchWinner(game) {
+    if (!game || !isFinished(game)) return null;
+    const hs = +game.home_score, as = +game.away_score;
+    if (hs > as) return { id: game.home_team_id, name: game.home_team_name_en };
+    if (as > hs) return { id: game.away_team_id, name: game.away_team_name_en };
+    return null;
+}
+
+function humanizeKnockoutLabel(label) {
+    if (!label) return '待定';
+    return label
+        .replace(/Winner Match (\d+)/gi, (_, mid) => {
+            const src = getGameById(mid);
+            if (!src) return `第 ${mid} 場勝者`;
+            const h = teamZh(src.home_team_name_en || resolveGameTeams(src).home);
+            const a = teamZh(src.away_team_name_en || resolveGameTeams(src).away);
+            const w = getMatchWinner(src);
+            if (w) return teamZh(w.name);
+            return `${h} vs ${a} 勝者`;
+        })
+        .replace(/Runner-up Group ([A-L])/gi, '$1 組亞軍')
+        .replace(/Winner Group ([A-L])/gi, '$1 組冠軍')
+        .replace(/Third Group ([A-L])/gi, '$1 組第三名');
+}
+
+function resolveTeamFromLabel(label) {
+    if (!label) return null;
+    const wm = label.match(/Winner Match (\d+)/i);
+    if (wm) {
+        const w = getMatchWinner(getGameById(wm[1]));
+        return w ? { id: w.id, name: w.name, resolved: true } : { label, resolved: false };
+    }
+    const ru = label.match(/Runner-up Group ([A-L])/i);
+    if (ru) {
+        const grp = state.groups.find(g => g.name === ru[1]);
+        if (!grp) return { label, resolved: false };
+        const t = sortGroupTeams(grp.teams)[1];
+        const team = t && state.teams[t.team_id];
+        return team ? { id: t.team_id, name: team.name_en, resolved: true } : { label, resolved: false };
+    }
+    const wg = label.match(/Winner Group ([A-L])/i);
+    if (wg) {
+        const grp = state.groups.find(g => g.name === wg[1]);
+        if (!grp) return { label, resolved: false };
+        const t = sortGroupTeams(grp.teams)[0];
+        const team = t && state.teams[t.team_id];
+        return team ? { id: t.team_id, name: team.name_en, resolved: true } : { label, resolved: false };
+    }
+    return { label, resolved: false };
+}
+
+function resolveGameTeams(game) {
+    let homeName = game.home_team_name_en;
+    let awayName = game.away_team_name_en;
+    let homeId = game.home_team_id;
+    let awayId = game.away_team_id;
+
+    if ((!homeName || homeId === '0') && game.home_team_label) {
+        const r = resolveTeamFromLabel(game.home_team_label);
+        if (r?.resolved) { homeName = r.name; homeId = r.id; }
+    }
+    if ((!awayName || awayId === '0') && game.away_team_label) {
+        const r = resolveTeamFromLabel(game.away_team_label);
+        if (r?.resolved) { awayName = r.name; awayId = r.id; }
+    }
+
+    return {
+        home: homeName || humanizeKnockoutLabel(game.home_team_label),
+        away: awayName || humanizeKnockoutLabel(game.away_team_label),
+        homeId, awayId,
+        homeResolved: !!(homeName && homeId !== '0'),
+        awayResolved: !!(awayName && awayId !== '0'),
+    };
+}
+
+function stageLabel(game) {
+    const map = { r32: '三十二強', r16: '十六強', r8: '八強', r4: '準決賽', r2: '決賽' };
+    if (game.type && map[game.type]) return map[game.type];
+    if (game.group === 'R32') return '三十二強';
+    if (game.group === 'R16') return '十六強';
+    if (game.group === 'R8') return '八強';
+    return game.group ? `${game.group} 組` : '';
+}
+
+function renderKnockoutBracket() {
+    const container = $('knockout-container');
+    const countEl = $('knockout-qualified-count');
+    const r16 = state.games
+        .filter(g => g.type === 'r16' || g.group === 'R16')
+        .sort((a, b) => gameToTaipeiDate(a.local_date) - gameToTaipeiDate(b.local_date));
+
+    const r32Done = state.games.filter(g => (g.type === 'r32' || g.group === 'R32') && isFinished(g));
+    const qualified = r32Done.map(g => getMatchWinner(g)).filter(Boolean);
+
+    countEl.textContent = qualified.length ? `（已晉級 ${qualified.length} 隊）` : '';
+
+    if (!r16.length) {
+        container.innerHTML = '<p class="text-sm text-zinc-500 col-span-full">載入淘汰賽對陣中…</p>';
+        return;
+    }
+
+    container.innerHTML = r16.map(g => {
+        const t = resolveGameTeams(g);
+        const homeTeam = state.teams[t.homeId];
+        const awayTeam = state.teams[t.awayId];
+        const date = g.local_date ? g.local_date.split(' ')[0].replace(/\//g, '/') : '';
+        const finished = isFinished(g);
+        const hs = g.home_score ?? '-';
+        const as = g.away_score ?? '-';
+        const win = finished ? winnerLabel(t.home, t.away, hs, as) : '';
+
+        return `
+        <div class="fade-in bg-zinc-900 border border-zinc-700 rounded-3xl p-5">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="text-xs px-2.5 py-0.5 rounded-xl bg-emerald-950 text-emerald-400 font-semibold">十六強</span>
+                <span class="text-xs text-zinc-500">${date}</span>
+                ${finished ? '<span class="text-xs px-2 py-0.5 rounded-lg bg-zinc-800 text-zinc-400">已結束</span>' : ''}
+            </div>
+            <div class="flex items-center gap-2 font-semibold text-base flex-wrap">
+                <span class="inline-flex items-center gap-1.5 ${t.homeResolved ? 'text-emerald-300' : 'text-zinc-400'}">
+                    ${homeTeam?.flag ? `<img src="${homeTeam.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
+                    ${teamZh(t.home)}
+                </span>
+                ${finished
+                    ? `<span class="text-emerald-400 tabular-nums">${hs}</span><span class="text-zinc-600">-</span><span class="text-red-400 tabular-nums">${as}</span>`
+                    : '<span class="text-zinc-600 mx-1">vs</span>'}
+                <span class="inline-flex items-center gap-1.5 ${t.awayResolved ? 'text-emerald-300' : 'text-zinc-400'}">
+                    ${teamZh(t.away)}
+                    ${awayTeam?.flag ? `<img src="${awayTeam.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
+                </span>
+            </div>
+            ${win ? `<div class="text-xs text-emerald-400 mt-2">${win} · 晉級八強</div>` : ''}
+        </div>`;
+    }).join('');
+}
+
 function renderMatches() {
     const grid = $('matches-grid');
     const todayAll = state.games.filter(isTodayInTaipei);
@@ -853,16 +1006,20 @@ function renderMatches() {
     $('no-matches').classList.add('hidden');
 
     grid.innerHTML = todayGames.map(g => {
-        const home = g.home_team_name_en || 'TBD';
-        const away = g.away_team_name_en || 'TBD';
+        const t = resolveGameTeams(g);
+        const home = t.home;
+        const away = t.away;
         const hs = g.home_score ?? '-';
         const as = g.away_score ?? '-';
         const st = matchStatus(g);
         const note = highlightScorerNote(g);
         const win = winnerLabel(home, away, hs, as);
         const live = isLive(g);
-        const homeTeam = state.teams[g.home_team_id];
-        const awayTeam = state.teams[g.away_team_id];
+        const homeTeam = state.teams[t.homeId];
+        const awayTeam = state.teams[t.awayId];
+        const stage = stageLabel(g);
+        const advanceNote = isFinished(g) && (g.type === 'r32' || g.group === 'R32')
+            ? '<div class="text-xs text-emerald-400/80 mt-1">晉級十六強</div>' : '';
 
         return `
         <div class="match-card fade-in bg-zinc-900 border ${live ? 'border-amber-500/50' : 'border-zinc-700'} rounded-3xl p-5">
@@ -871,7 +1028,7 @@ function renderMatches() {
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-xs px-2.5 py-0.5 rounded-xl ${st.badge}">${st.label}</span>
                         ${live ? '<span class="live-dot w-2 h-2 rounded-full bg-amber-400"></span>' : ''}
-                        <span class="text-xs text-zinc-500">${g.group}組</span>
+                        <span class="text-xs text-zinc-500">${stage}</span>
                     </div>
                     <div class="flex items-center gap-3 font-semibold text-lg">
                         ${homeTeam?.flag ? `<img src="${homeTeam.flag}" class="w-6 h-4 object-cover rounded-sm" alt="">` : ''}
@@ -886,6 +1043,7 @@ function renderMatches() {
                 </div>
                 <div class="text-right text-sm shrink-0">
                     ${win ? `<div class="text-emerald-400 font-medium">${win}</div>` : ''}
+                    ${advanceNote}
                     ${live && g.time_elapsed ? `<div class="text-amber-400 text-xs mt-1">${g.time_elapsed}</div>` : ''}
                 </div>
             </div>
@@ -1297,6 +1455,7 @@ function renderAll() {
     const tp = getTaipeiToday().replace(/-/g, '/');
     $('date-label').textContent = `${tp} 台灣時間 · 新聞 ${NEWS_UPDATED}`;
     renderMatches();
+    renderKnockoutBracket();
     renderStandings();
     renderThirdPlaceTracker();
     renderNews();
