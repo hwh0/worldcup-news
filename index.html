@@ -40,12 +40,7 @@
         .reaction-negative { border-color: #f87171; }
         .reaction-neutral { border-color: #71717a; }
         .reaction-funny { border-color: #fbbf24; }
-        .third-advance { background: rgba(5, 150, 105, 0.07); }
-        .third-eliminated { background: rgba(239, 68, 68, 0.04); color: #a1a1aa; }
-        .third-cutoff td { border-bottom: 2px solid #059669 !important; }
-        .result-w { color: #34d399; font-weight: 600; }
-        .result-d { color: #a1a1aa; }
-        .result-l { color: #f87171; font-weight: 600; }
+
     </style>
 </head>
 <body class="bg-zinc-950 text-zinc-200 min-h-screen">
@@ -129,39 +124,12 @@
             <section class="mb-10" id="knockout-section">
                 <h2 class="section-title flex items-center gap-3">
                     <i class="fa-solid fa-sitemap text-emerald-500"></i>
-                    十六強對陣
+                    淘汰賽對陣
                     <span id="knockout-qualified-count" class="text-xs font-normal text-zinc-500"></span>
                 </h2>
-                <p class="text-sm text-zinc-400 mb-4">三十二強完賽後，晉級隊伍會自動填入下方對陣（不再顯示 TBD）。</p>
-                <div id="knockout-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p class="text-sm text-zinc-400 mb-4">小組賽已結束，以下為三十二強與十六強對戰表。完賽後自動填入晉級隊伍。</p>
+                <div id="knockout-container" class="space-y-8">
                     <div class="skeleton h-20 rounded-3xl"></div>
-                    <div class="skeleton h-20 rounded-3xl"></div>
-                </div>
-            </section>
-
-            <section class="mb-10">
-                <h2 class="section-title flex items-center gap-3">
-                    <i class="fa-solid fa-table text-blue-500"></i>
-                    各組目前積分排序（重點小組）
-                </h2>
-                <div id="standings-container" class="space-y-6">
-                    <div class="skeleton h-40 rounded-3xl"></div>
-                    <div class="skeleton h-32 rounded-3xl"></div>
-                </div>
-            </section>
-
-            <section class="mb-10">
-                <h2 class="section-title flex items-center gap-3">
-                    <i class="fa-solid fa-ranking-star text-amber-500"></i>
-                    第三名積分排名
-                    <span class="text-xs font-normal text-zinc-500">前 8 名晉級十六強</span>
-                </h2>
-                <p class="text-sm text-zinc-400 mb-4 leading-relaxed">
-                    48 隊制下，12 組第三名中取積分最高的 8 隊晉級。同分先看淨勝球，再看進球數。
-                    <span id="third-place-status" class="text-zinc-500"></span>
-                </p>
-                <div id="third-place-container" class="overflow-x-auto">
-                    <div class="skeleton h-64 rounded-3xl"></div>
                 </div>
             </section>
 
@@ -237,9 +205,8 @@ const API = {
     teams: 'https://worldcup26.ir/get/teams',
 };
 
-const FOCUS_GROUPS = ['J', 'K', 'L'];
 const AUTO_REFRESH_SEC = 60;
-const CACHE_KEY = 'wc_news_cache_v6';
+const CACHE_KEY = 'wc_news_cache_v7';
 const NEWS_UPDATED = '2026-06-28';
 
 /** 今日比賽 X 熱議 Top 10（6/28 十六強首戰 + 6/27 小組收官） */
@@ -768,8 +735,6 @@ const TEAM_ZH = {
     'Uzbekistan': '烏茲別克', 'Curaçao': '古拉索',
 };
 
-const THIRD_PLACE_ADVANCE = 8;
-
 let state = { teams: {}, groups: [], games: [], loading: false };
 let autoTimer = null;
 
@@ -936,56 +901,72 @@ function stageLabel(game) {
     return game.group ? `${game.group} 組` : '';
 }
 
+function renderKnockoutMatchCard(g, stage, advanceTo) {
+    const t = resolveGameTeams(g);
+    const homeTeam = state.teams[t.homeId];
+    const awayTeam = state.teams[t.awayId];
+    const date = g.local_date ? g.local_date.split(' ')[0] : '';
+    const finished = isFinished(g);
+    const live = isLive(g);
+    const hs = g.home_score ?? '-';
+    const as = g.away_score ?? '-';
+    const win = finished ? winnerLabel(t.home, t.away, hs, as) : '';
+
+    return `
+    <div class="fade-in bg-zinc-900 border ${live ? 'border-amber-500/50' : 'border-zinc-700'} rounded-3xl p-5">
+        <div class="flex items-center gap-2 mb-3">
+            <span class="text-xs px-2.5 py-0.5 rounded-xl bg-emerald-950 text-emerald-400 font-semibold">${stage}</span>
+            <span class="text-xs text-zinc-500">${date}</span>
+            ${live ? '<span class="live-dot w-2 h-2 rounded-full bg-amber-400"></span><span class="text-xs text-amber-400">進行中</span>' : ''}
+            ${finished ? '<span class="text-xs px-2 py-0.5 rounded-lg bg-zinc-800 text-zinc-400">已結束</span>' : ''}
+        </div>
+        <div class="flex items-center gap-2 font-semibold text-base flex-wrap">
+            <span class="inline-flex items-center gap-1.5 ${t.homeResolved ? 'text-zinc-100' : 'text-zinc-400'}">
+                ${homeTeam?.flag ? `<img src="${homeTeam.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
+                ${teamZh(t.home)}
+            </span>
+            ${finished || live
+                ? `<span class="text-emerald-400 tabular-nums">${hs}</span><span class="text-zinc-600">-</span><span class="text-red-400 tabular-nums">${as}</span>`
+                : '<span class="text-zinc-600 mx-1">vs</span>'}
+            <span class="inline-flex items-center gap-1.5 ${t.awayResolved ? 'text-zinc-100' : 'text-zinc-400'}">
+                ${teamZh(t.away)}
+                ${awayTeam?.flag ? `<img src="${awayTeam.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
+            </span>
+        </div>
+        ${win && advanceTo ? `<div class="text-xs text-emerald-400 mt-2">${win} · 晉級${advanceTo}</div>` : ''}
+    </div>`;
+}
+
 function renderKnockoutBracket() {
     const container = $('knockout-container');
     const countEl = $('knockout-qualified-count');
-    const r16 = state.games
-        .filter(g => g.type === 'r16' || g.group === 'R16')
-        .sort((a, b) => gameToTaipeiDate(a.local_date) - gameToTaipeiDate(b.local_date));
+    const byDate = (a, b) => gameToTaipeiDate(a.local_date) - gameToTaipeiDate(b.local_date);
 
-    const r32Done = state.games.filter(g => (g.type === 'r32' || g.group === 'R32') && isFinished(g));
-    const qualified = r32Done.map(g => getMatchWinner(g)).filter(Boolean);
+    const r32 = state.games.filter(g => g.type === 'r32' || g.group === 'R32').sort(byDate);
+    const r16 = state.games.filter(g => g.type === 'r16' || g.group === 'R16').sort(byDate);
+    const r32Done = r32.filter(isFinished).length;
 
-    countEl.textContent = qualified.length ? `（已晉級 ${qualified.length} 隊）` : '';
+    countEl.textContent = r32.length ? `（三十二強 ${r32Done}/${r32.length} 場完賽）` : '';
 
-    if (!r16.length) {
-        container.innerHTML = '<p class="text-sm text-zinc-500 col-span-full">載入淘汰賽對陣中…</p>';
+    if (!r32.length && !r16.length) {
+        container.innerHTML = '<p class="text-sm text-zinc-500">載入淘汰賽對陣中…</p>';
         return;
     }
 
-    container.innerHTML = r16.map(g => {
-        const t = resolveGameTeams(g);
-        const homeTeam = state.teams[t.homeId];
-        const awayTeam = state.teams[t.awayId];
-        const date = g.local_date ? g.local_date.split(' ')[0].replace(/\//g, '/') : '';
-        const finished = isFinished(g);
-        const hs = g.home_score ?? '-';
-        const as = g.away_score ?? '-';
-        const win = finished ? winnerLabel(t.home, t.away, hs, as) : '';
-
+    const block = (title, games, stage, advanceTo) => {
+        if (!games.length) return '';
         return `
-        <div class="fade-in bg-zinc-900 border border-zinc-700 rounded-3xl p-5">
-            <div class="flex items-center gap-2 mb-3">
-                <span class="text-xs px-2.5 py-0.5 rounded-xl bg-emerald-950 text-emerald-400 font-semibold">十六強</span>
-                <span class="text-xs text-zinc-500">${date}</span>
-                ${finished ? '<span class="text-xs px-2 py-0.5 rounded-lg bg-zinc-800 text-zinc-400">已結束</span>' : ''}
+        <div>
+            <h3 class="text-sm font-semibold text-zinc-400 mb-3">${title}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                ${games.map(g => renderKnockoutMatchCard(g, stage, advanceTo)).join('')}
             </div>
-            <div class="flex items-center gap-2 font-semibold text-base flex-wrap">
-                <span class="inline-flex items-center gap-1.5 ${t.homeResolved ? 'text-emerald-300' : 'text-zinc-400'}">
-                    ${homeTeam?.flag ? `<img src="${homeTeam.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
-                    ${teamZh(t.home)}
-                </span>
-                ${finished
-                    ? `<span class="text-emerald-400 tabular-nums">${hs}</span><span class="text-zinc-600">-</span><span class="text-red-400 tabular-nums">${as}</span>`
-                    : '<span class="text-zinc-600 mx-1">vs</span>'}
-                <span class="inline-flex items-center gap-1.5 ${t.awayResolved ? 'text-emerald-300' : 'text-zinc-400'}">
-                    ${teamZh(t.away)}
-                    ${awayTeam?.flag ? `<img src="${awayTeam.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
-                </span>
-            </div>
-            ${win ? `<div class="text-xs text-emerald-400 mt-2">${win} · 晉級八強</div>` : ''}
         </div>`;
-    }).join('');
+    };
+
+    container.innerHTML =
+        block('三十二強', r32, '三十二強', '十六強') +
+        block('十六強', r16, '十六強', '八強');
 }
 
 function renderMatches() {
@@ -1055,211 +1036,6 @@ function sortGroupTeams(teams) {
     return [...teams].sort((a, b) =>
         +b.pts - +a.pts || +b.gd - +a.gd || +b.gf - +a.gf || +a.ga - +b.ga
     );
-}
-
-function isGroupComplete(group) {
-    return group.teams.every(t => +t.mp >= 3);
-}
-
-function hasGroupLiveGame(groupName) {
-    return state.games.some(g => g.group === groupName && isLive(g));
-}
-
-function getTeamResultSequence(teamId, groupName) {
-    const games = state.games
-        .filter(g => g.group === groupName && isFinished(g) &&
-            (g.home_team_id === teamId || g.away_team_id === teamId))
-        .sort((a, b) => +a.matchday - +b.matchday);
-
-    return games.map(g => {
-        const isHome = g.home_team_id === teamId;
-        const hs = +g.home_score, as = +g.away_score;
-        if (hs === as) return 'D';
-        if (isHome) return hs > as ? 'W' : 'L';
-        return as > hs ? 'W' : 'L';
-    });
-}
-
-function formatResultSequence(seq) {
-    if (!seq.length) return '<span class="text-zinc-600">—</span>';
-    return seq.map(r => {
-        const cls = r === 'W' ? 'result-w' : r === 'L' ? 'result-l' : 'result-d';
-        return `<span class="${cls}">${r}</span>`;
-    }).join(' <span class="text-zinc-700">·</span> ');
-}
-
-function getThirdPlaceTeams() {
-    if (!state.groups.length) return [];
-
-    return state.groups.map(group => {
-        const sorted = sortGroupTeams(group.teams);
-        const third = sorted[2];
-        if (!third) return null;
-
-        const team = state.teams[third.team_id];
-        const complete = isGroupComplete(group);
-        const live = hasGroupLiveGame(group.name);
-        const mp = +third.mp;
-
-        return {
-            group: group.name,
-            teamId: third.team_id,
-            nameEn: team?.name_en || `隊伍 ${third.team_id}`,
-            flag: team?.flag,
-            w: +third.w, l: +third.l, d: +third.d,
-            gf: +third.gf, ga: +third.ga, gd: +third.gd, pts: +third.pts,
-            mp,
-            results: getTeamResultSequence(third.team_id, group.name),
-            provisional: !complete || live,
-            pending: mp < 2,
-        };
-    }).filter(Boolean).sort((a, b) =>
-        b.pts - a.pts || b.gd - a.gd || b.gf - a.gf || a.ga - b.ga
-    );
-}
-
-function renderThirdPlaceTracker() {
-    const container = $('third-place-container');
-    const status = $('third-place-status');
-    const teams = getThirdPlaceTeams();
-
-    if (!teams.length) {
-        container.innerHTML = '<p class="text-sm text-zinc-500 py-4">載入積分資料中…</p>';
-        status.textContent = '';
-        return;
-    }
-
-    const hasLive = teams.some(t => t.provisional);
-    const hasPending = teams.some(t => t.pending);
-    status.textContent = hasLive
-        ? '（含進行中賽事，排名隨時變動）'
-        : hasPending
-            ? '（部分組別尚未踢滿 2 場，第三名可能變動）'
-            : '';
-
-    const rowHtml = teams.map((t, i) => {
-        const rank = i + 1;
-        const advances = rank <= THIRD_PLACE_ADVANCE;
-        const rowCls = advances ? 'third-advance' : 'third-eliminated';
-        const rankCls = advances ? 'text-emerald-400 font-bold' : 'text-zinc-500';
-        const statusBadge = t.provisional
-            ? '<span class="text-xs px-2 py-0.5 rounded-lg bg-amber-950 text-amber-400 ml-1">進行中</span>'
-            : t.pending
-                ? '<span class="text-xs px-2 py-0.5 rounded-lg bg-zinc-800 text-zinc-500 ml-1">待定</span>'
-                : '';
-        const cutoff = rank === THIRD_PLACE_ADVANCE || rank === THIRD_PLACE_ADVANCE + 1 ? ' third-cutoff' : '';
-
-        return `
-        <tr class="border-b border-zinc-800 ${rowCls}${cutoff}">
-            <td class="py-3 pl-3 ${rankCls} tabular-nums">${rank}</td>
-            <td class="py-3 text-center font-bold text-zinc-400">${t.group}</td>
-            <td class="py-3">
-                <span class="inline-flex items-center gap-2">
-                    ${t.flag ? `<img src="${t.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
-                    <span class="font-medium">${teamZh(t.nameEn)}</span>${statusBadge}
-                </span>
-            </td>
-            <td class="py-3 text-center text-sm tracking-wide">${formatResultSequence(t.results)}</td>
-            <td class="py-3 text-center tabular-nums">${t.gf}</td>
-            <td class="py-3 text-center tabular-nums">${t.ga}</td>
-            <td class="py-3 text-center tabular-nums ${t.gd > 0 ? 'text-emerald-400' : t.gd < 0 ? 'text-red-400' : ''}">${t.gd > 0 ? '+' : ''}${t.gd}</td>
-            <td class="py-3 text-center tabular-nums font-bold ${advances ? 'text-emerald-400' : 'text-zinc-400'}">${t.pts}</td>
-            <td class="py-3 pr-3 text-center">
-                ${advances
-                    ? '<span class="text-xs px-2.5 py-1 rounded-xl bg-emerald-950 text-emerald-400 font-semibold">晉級</span>'
-                    : '<span class="text-xs px-2.5 py-1 rounded-xl bg-zinc-800 text-zinc-500">淘汰</span>'}
-            </td>
-        </tr>`;
-    });
-
-    const cutoffRow = `
-        <tr class="third-cutoff">
-            <td colspan="9" class="py-1.5 text-center text-xs font-semibold text-emerald-500/80 bg-emerald-950/30">
-                ▲ 前 ${THIRD_PLACE_ADVANCE} 名晉級十六強 · 第 ${THIRD_PLACE_ADVANCE + 1}–12 名淘汰
-            </td>
-        </tr>`;
-
-    const topPart = rowHtml.slice(0, THIRD_PLACE_ADVANCE).join('');
-    const bottomPart = rowHtml.slice(THIRD_PLACE_ADVANCE).join('');
-
-    container.innerHTML = `
-        <div class="fade-in bg-zinc-900 border border-zinc-700 rounded-3xl overflow-hidden">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="text-zinc-400 border-b border-zinc-700 bg-zinc-900/80">
-                        <th class="text-left py-3 pl-3">排名</th>
-                        <th class="text-center">組別</th>
-                        <th class="text-left">第三名隊伍</th>
-                        <th class="text-center">戰績</th>
-                        <th class="text-center">進</th>
-                        <th class="text-center">失</th>
-                        <th class="text-center">淨勝</th>
-                        <th class="text-center">積分</th>
-                        <th class="text-center pr-3">狀態</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${topPart}
-                    ${cutoffRow}
-                    ${bottomPart}
-                </tbody>
-            </table>
-        </div>`;
-}
-
-function renderStandings() {
-    const container = $('standings-container');
-    const focus = state.groups.filter(g => FOCUS_GROUPS.includes(g.name));
-
-    container.innerHTML = focus.map(g => {
-        const rows = [...g.teams]
-            .sort((a, b) => +b.pts - +a.pts || +b.gd - +a.gd || +b.gf - +a.gf)
-            .map((t, i) => {
-                const team = state.teams[t.team_id];
-                const name = team ? teamZh(team.name_en) : `隊伍 ${t.team_id}`;
-                const eliminated = +t.mp >= 2 && +t.pts === 0;
-                const leader = i === 0;
-                return `
-                <tr class="border-b border-zinc-800 ${eliminated ? 'text-red-400' : ''}">
-                    <td class="py-2.5 font-medium">
-                        <span class="inline-flex items-center gap-2">
-                            ${team?.flag ? `<img src="${team.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
-                            ${name}${eliminated ? '（岌岌可危）' : ''}
-                        </span>
-                    </td>
-                    <td class="text-center">${t.mp}</td>
-                    <td class="text-center">${t.w}</td>
-                    <td class="text-center">${t.d}</td>
-                    <td class="text-center">${t.l}</td>
-                    <td class="text-center ${leader ? 'font-bold text-emerald-400' : ''}">${t.pts}</td>
-                </tr>`;
-            }).join('');
-
-        const hasToday = state.games.some(m => m.group === g.name && isTodayInTaipei(m));
-
-        return `
-        <div class="fade-in">
-            <div class="flex items-center gap-2 mb-3">
-                <span class="font-bold text-lg">${g.name}組</span>
-                ${hasToday ? '<span class="text-xs px-3 py-1 bg-emerald-950 text-emerald-400 rounded-2xl">今日賽事</span>' : ''}
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="text-zinc-400 border-b border-zinc-700">
-                            <th class="text-left py-2">隊伍</th>
-                            <th class="text-center">賽</th>
-                            <th class="text-center">勝</th>
-                            <th class="text-center">和</th>
-                            <th class="text-center">負</th>
-                            <th class="text-center">積分</th>
-                        </tr>
-                    </thead>
-                    <tbody>${rows}</tbody>
-                </table>
-            </div>
-        </div>`;
-    }).join('');
 }
 
 function matchKey(home, away) {
@@ -1456,8 +1232,6 @@ function renderAll() {
     $('date-label').textContent = `${tp} 台灣時間 · 新聞 ${NEWS_UPDATED}`;
     renderMatches();
     renderKnockoutBracket();
-    renderStandings();
-    renderThirdPlaceTracker();
     renderNews();
     renderIdleTeams();
     renderIdleNews();
