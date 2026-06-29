@@ -136,8 +136,8 @@
             <section>
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-solid fa-newspaper text-blue-500"></i>
-                    賽事相關新聞
-                    <span class="text-xs font-normal text-zinc-500">X 熱議 Top 10</span>
+                    今日賽事新聞
+                    <span class="text-xs font-normal text-zinc-500">僅今日比賽</span>
                 </h2>
                 <div id="news-list" class="space-y-4">
                     <div class="skeleton h-28 rounded-3xl"></div>
@@ -161,7 +161,8 @@
             <section>
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-solid fa-newspaper text-purple-500"></i>
-                    無賽事球隊 · 當日重要新聞
+                    無賽事球隊 · 備戰與場外動態
+                    <span class="text-xs font-normal text-zinc-500">非今日賽事</span>
                 </h2>
                 <div id="idle-news-list" class="space-y-4">
                     <div class="skeleton h-28 rounded-3xl"></div>
@@ -206,15 +207,15 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const CACHE_KEY = 'wc_news_cache_v7';
+const CACHE_KEY = 'wc_news_cache_v8';
 const NEWS_UPDATED = '2026-06-28';
 
-/** 今日比賽 X 熱議 Top 10（6/28 十六強首戰 + 6/27 小組收官） */
+/** 今日賽事新聞（match 必須對應今日實際比賽，不混入其他場次） */
 const TODAY_TOP10_NEWS = [
     {
         id: 'canada-sa-r32',
         priority: 1,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '十六強', cls: 'text-emerald-400 bg-emerald-950' }],
+        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '三十二強', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-red-500/40',
         match: { home: 'South Africa', away: 'Canada' },
         meta: '三十二強 · 南非 0-1 加拿大 · 洛杉磯',
@@ -223,112 +224,27 @@ const TODAY_TOP10_NEWS = [
         points: [
             '南非隊史首次三十二強夢碎於補時。',
             '加拿大 7/4 十六強對陣荷蘭／摩洛哥勝者。',
-            '網站「十六強對陣」已自動填入加拿大。',
+            '洛杉磯主場氛圍火熱。',
             '非洲冷門止步，北美球隊續寫奇蹟。',
         ],
         source: 'NBC · ESPN · Yahoo Sports',
     },
     {
-        id: 'argentina-jordan-ft',
+        id: 'canada-r16-path',
         priority: 2,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }],
-        border: 'border-sky-500/40',
-        match: { home: 'South Africa', away: 'Canada' },
-        meta: 'J 組 · 約旦 1-3 阿根廷 · 昨日',
-        title: 'Messi 破門，阿根廷 3-1 約旦 9 分完美收官',
-        summary: 'Lo Celso 第 19 分鐘、Lautaro 第 31 分鐘十二碼、Messi 第 80 分鐘接力破門。阿根廷 J 組三戰全勝，#Messi 世足進球紀錄再度改寫，衛冕冠軍狀態火熱。',
-        points: [
-            '約旦 Al-Taamari 第 55 分鐘一度扳平氣勢。',
-            'Scaloni 末輪適度輪換仍全取三分。',
-            '十六強對陣維德角（7/3）。',
-            '阿根廷被視為冠軍最大熱門之一。',
-        ],
-        source: 'ESPN · SBS · AP',
-    },
-    {
-        id: 'algeria-austria-ft',
-        priority: 3,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '冷門', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-amber-500/40',
-        match: { home: 'South Africa', away: 'Canada' },
-        meta: 'J 組 · 阿爾及利亞 3-3 奧地利 · 昨日',
-        title: 'Mahrez 梅開二度，阿爾及利亞 3-3 奧地利搶第三名',
-        summary: 'Mahrez 第 60、90+3 分鐘兩度扳平，Kalajdžić 第 90+6 分鐘險勝球被 Mahrez 絕平。阿爾及利亞 4 分第三名晉級十六強，#Mahrez 成 X 熱議焦點。',
-        points: [
-            'Arnautović、Sabitzer 一度讓奧地利領先。',
-            '奧地利 4 分亞軍出線。',
-            '阿根廷 9 分鎖定 J 組第一。',
-            '補時六球大戲成本屆小組賽經典。',
-        ],
-        source: 'ESPN · BBC · The Athletic',
-    },
-    {
-        id: 'congo-uzbek-ft',
-        priority: 4,
-        tags: [{ text: '冷門', cls: 'text-cyan-400 bg-cyan-950' }, { text: 'K 組', cls: 'text-orange-400 bg-orange-950' }],
-        border: 'border-cyan-500/40',
-        match: { home: 'South Africa', away: 'Canada' },
-        meta: 'K 組 · 剛果（金）3-1 烏茲別克 · 昨日',
-        title: 'Wissa 補時破門，剛果 3-1 烏茲別克躍居第三名榜首',
-        summary: 'Wissa 第 90+1 分鐘鎖定勝局，剛果 4 分、淨勝球 +1 登頂 12 組第三名積分榜第 1 位。哥倫比亞 0-0 葡萄牙後 7 分奪 K 組第一，#Congo 成最大黑馬。',
-        points: [
-            '烏茲別克三連敗出局。',
-            '葡萄牙 5 分亞軍晉級。',
-            '剛果第三名積分超越瑞典、厄瓜多。',
-            '非洲球隊在 48 隊制下全面爆發。',
-        ],
-        source: 'ESPN · FIFA · Reuters',
-    },
-    {
-        id: 'england-panama-ft',
-        priority: 5,
-        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: 'L 組', cls: 'text-indigo-400 bg-indigo-950' }],
-        border: 'border-blue-500/40',
-        match: { home: 'South Africa', away: 'Canada' },
-        meta: 'L 組 · 巴拿馬 0-2 英格蘭 · 昨日',
-        title: 'Bellingham、Kane 破門，英格蘭 2-0 巴拿馬奪 L 組第一',
-        summary: 'Bellingham 第 62 分鐘、Kane 第 67 分鐘下半場連進，英格蘭 7 分完美收官。#England 三戰兩勝一平，十六強對陣剛果（7/1）。',
-        points: [
-            '克羅埃西亞 2-1 迦納後 6 分亞軍出線。',
-            '迦納 4 分第三名晉級十六強。',
-            '巴拿馬三連敗出局。',
-            '英格蘭冠軍呼聲持續升溫。',
-        ],
-        source: 'BBC · ESPN · Sky Sports',
-    },
-    {
-        id: 'croatia-ghana-ft',
-        priority: 6,
-        tags: [{ text: '克羅埃西亞', cls: 'text-red-400 bg-red-950' }, { text: 'L 組', cls: 'text-indigo-400 bg-indigo-950' }],
+        tags: [{ text: '加拿大', cls: 'text-red-400 bg-red-950' }, { text: '十六強', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-red-500/40',
         match: { home: 'South Africa', away: 'Canada' },
-        meta: 'L 組 · 克羅埃西亞 2-1 迦納 · 昨日',
-        title: 'Vlašić 第 83 分鐘絕殺，克羅埃西亞 2-1 迦納搶亞軍',
-        summary: 'Sučić 先開紀錄，Lookman 第 73 分鐘扳平，Vlašić 第 83 分鐘一槌定音。克羅埃西亞 6 分鎖定 L 組第二，#Croatia 延續淘汰賽強旅本色。',
+        meta: '三十二強 · 加拿大晉級路線',
+        title: '加拿大晉級十六強，7/4 對陣荷蘭或摩洛哥',
+        summary: 'Koné 絕殺後加拿大已鎖定十六強席次，將迎戰 6/29 荷蘭 vs 摩洛哥勝者。主教練稱「這是全新開始」。',
         points: [
-            '迦納 4 分第三名晉級。',
-            '巴拿馬同時落敗，L 組塵埃落定。',
-            '葡萄牙十六強對陣克羅埃西亞（7/2）。',
-            '莫德里奇末段替補登場。',
+            '十六強對陣表已自動更新加拿大。',
+            '荷蘭、摩洛哥 6/29 同日開踢。',
+            '加拿大隊史世界盃最佳進程之一。',
+            '球迷洛杉磯街頭徹夜慶祝。',
         ],
-        source: 'ESPN · UEFA',
-    },
-    {
-        id: 'third-place-final',
-        priority: 7,
-        tags: [{ text: '第三名', cls: 'text-amber-400 bg-amber-950' }, { text: '十六強', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-amber-500/40',
-        match: { home: 'South Africa', away: 'Canada' },
-        meta: '世足 · 小組賽收官',
-        title: '小組賽全部結束，第三名積分榜最終定案',
-        summary: '剛果登頂第三名積分榜，塞內加爾卡線第 8。比利時奪 G 組第一非第三名。蘇格蘭、伊朗、南韓、烏拉圭出局。#WorldCup 進入十六強階段。',
-        points: [
-            '晉級：剛果、瑞典、迦納、厄瓜多、波士尼亞、阿爾及利亞、巴拉圭、塞內加爾。',
-            '淘汰：蘇格蘭、伊朗、南韓、烏拉圭。',
-            '48 隊制首屆小組賽圓滿落幕。',
-            '網站第三名排名已鎖定最終積分。',
-        ],
-        source: 'NYT Athletic · ESPN · Opta',
+        source: 'Yahoo Sports · TSN',
     },
     {
         id: 'brazil-japan-r32',
@@ -383,194 +299,177 @@ const TODAY_TOP10_NEWS = [
     },
 ];
 
-/** 今日無賽事隊伍的場外新聞（relatedTeams 全部不在今日賽程才顯示） */
+/** 無賽事球隊場外動態（備戰、訓練、記者會；不含今日比賽戰報） */
 const IDLE_TEAM_NEWS = [
     {
-        id: 'argentina-j-ft',
+        id: 'argentina-rest',
         priority: 1,
-        relatedTeams: ['Argentina', 'Jordan', 'Algeria', 'Austria'],
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }],
+        relatedTeams: ['Argentina'],
+        tags: [{ text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-sky-500/30',
-        meta: '阿根廷 · J 組 · 昨日',
-        title: 'Messi 破門，阿根廷 3-1 約旦 9 分完美收官',
-        summary: '阿根廷 J 組三戰全勝，Messi 第 80 分鐘進球改寫紀錄。同組阿爾及利亞 3-3 奧地利搶第三名晉級，#Messi 與 #Mahrez 並列熱議。',
+        meta: '阿根廷 · 休息日 · 7/3 十六強',
+        title: 'Scaloni：阿根廷休息備戰，7/3 對維德角',
+        summary: '衛冕冠軍小組賽全勝後進入恢復期，Messi 參與輕量訓練。Scaloni 記者會強調「淘汰賽節奏完全不同」。',
         points: [
-            '十六強對陣維德角（7/3）。',
-            'Scaloni 稱球隊狀態達巔峰。',
-            '衛冕冠軍冠軍呼聲最高。',
-            '奧地利 4 分亞軍同樣晉級。',
+            '7/3 十六強對陣維德角。',
+            'Messi 世足進球紀錄持續受關注。',
+            '球隊無重大傷病傳聞。',
+            '球迷期待衛冕之路延續。',
         ],
-        source: 'ESPN · SBS · AP',
+        source: 'ESPN · SBS',
     },
     {
-        id: 'algeria-mahrez',
+        id: 'france-prep',
         priority: 2,
-        relatedTeams: ['Algeria', 'Austria', 'Argentina', 'Jordan'],
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '冷門', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-amber-500/30',
-        meta: '阿爾及利亞 · J 組 · 昨日',
-        title: 'Mahrez 補時絕平，阿爾及利亞 3-3 搶第三名晉級',
-        summary: 'Mahrez 梅開二度含第 90+3 分鐘扳平，阿爾及利亞 4 分第三名晉級十六強。補時六球大戲成本屆小組賽最瘋狂末輪之一。',
-        points: [
-            '十六強對陣瑞士（7/2）。',
-            '非洲球隊第三名佔 3 席。',
-            'Mahrez 賽後稱「這就是足球」。',
-            '奧地利 4 分亞軍出線。',
-        ],
-        source: 'BBC · ESPN',
-    },
-    {
-        id: 'congo-third-top',
-        priority: 3,
-        relatedTeams: ['Democratic Republic of the Congo', 'Uzbekistan', 'Colombia', 'Portugal'],
-        tags: [{ text: '冷門', cls: 'text-cyan-400 bg-cyan-950' }, { text: 'K 組', cls: 'text-orange-400 bg-orange-950' }],
-        border: 'border-cyan-500/30',
-        meta: '剛果（金）· K 組 · 昨日',
-        title: 'Wissa 補時破門，剛果登頂第三名積分榜',
-        summary: '剛果 3-1 烏茲別克後 4 分、淨勝球 +1 登頂 12 組第三名積分榜首。哥倫比亞 0-0 葡萄牙奪 K 組第一，#Congo 成最大黑馬。',
-        points: [
-            '十六強對陣英格蘭（7/1）。',
-            '烏茲別克三連敗出局。',
-            '葡萄牙 5 分亞軍晉級。',
-            '非洲第三名佔榜單多席。',
-        ],
-        source: 'ESPN · Reuters',
-    },
-    {
-        id: 'england-l-ft',
-        priority: 4,
-        relatedTeams: ['England', 'Panama', 'Croatia', 'Ghana'],
-        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: 'L 組', cls: 'text-indigo-400 bg-indigo-950' }],
+        relatedTeams: ['France', 'Sweden'],
+        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-blue-500/30',
-        meta: '英格蘭 · L 組 · 昨日',
-        title: 'Bellingham、Kane 破門，英格蘭 7 分奪 L 組第一',
-        summary: '英格蘭 2-0 巴拿馬完美收官，克羅埃西亞 2-1 迦納搶亞軍。迦納 4 分第三名晉級，#England 冠軍呼聲升溫。',
+        meta: '法國 · 休息日 · 6/30 十六強',
+        title: '德尚率法國休賽備戰瑞典，冠軍熱門蓄勢',
+        summary: '法國三戰全勝後全隊放假半天，Dembélé 受訪稱「狀態正好」。6/30 十六強對陣瑞典，德尚不願輕敵北歐對手。',
         points: [
-            '十六強對陣剛果（7/1）。',
-            'Kane 小組賽狀態穩定。',
-            '克羅埃西亞十六強對葡萄牙（7/2）。',
-            '巴拿馬三連敗出局。',
+            '瑞典以第三名身分晉級。',
+            '德尚：「小組賽不等於淘汰賽。」',
+            '姆巴佩、Dembélé 輪休。',
+            '球隊士氣處於高峰。',
         ],
-        source: 'BBC · Sky Sports',
+        source: 'L\'Équipe · ESPN',
     },
     {
-        id: 'belgium-g-winner',
-        priority: 5,
-        relatedTeams: ['Belgium', 'Egypt', 'Iran', 'France'],
-        tags: [{ text: '比利時', cls: 'text-yellow-400 bg-yellow-950' }],
-        border: 'border-yellow-500/30',
-        meta: '比利時 · G 組 · 休息日',
-        title: '比利時 5-1 逆襲奪 G 組第一，非第三名晉級',
-        summary: 'Trossard 梅開二度後比利時 5 分、淨勝球 +2 超越埃及奪 G 組頭名。埃及 5 分亞軍、伊朗 3 分第三名出局，#Belgium 完成華麗轉身。',
+        id: 'germany-presser',
+        priority: 3,
+        relatedTeams: ['Germany', 'Paraguay'],
+        tags: [{ text: '德國', cls: 'text-zinc-300 bg-zinc-800' }, { text: '記者會', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-zinc-500/30',
+        meta: '德國 · 賽前 · 6/29 三十二強',
+        title: 'Nagelsmann 賽前記者會：德國必須證明硬度',
+        summary: '厄瓜多爆冷後德國面臨質疑，Nagelsmann 稱「我們從錯誤中學習」。6/29 三十二強對巴拉圭，日耳曼戰車拒絕再翻車。',
         points: [
-            '十六強對陣塞內加爾（7/1）。',
-            '53 射門進球荒已成過去式。',
-            '埃及、伊朗同樣晉級十六強。',
-            '黃金世代末舞仍值得期待。',
+            'Wirtz、Musiala 訓練狀態良好。',
+            '巴拉圭第三名身分晉級。',
+            '球隊加練定位球戰術。',
+            '球迷期待復仇式反彈。',
         ],
-        source: 'ESPN · The Athletic',
+        source: 'Bild · ESPN',
     },
     {
-        id: 'ecuador-germany-upset',
-        priority: 6,
-        relatedTeams: ['Ecuador', 'Germany'],
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '冷門', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-amber-500/30',
-        meta: '厄瓜多 · E 組 · 前日',
-        title: 'Plata 77 分鐘絕殺，厄瓜多 2-1 爆冷擊敗德國',
-        summary: '德國第 2 分鐘破門後，Angulo 第 9 分鐘扳平，Plata 第 77 分鐘折射入網完成逆轉。厄瓜多全場掌控節奏，#Ecuador 與 #Germany 話題對立，Nagelsmann 稱「失去控制」。',
-        points: [
-            '厄瓜多僅 1 分進入末輪，背水一戰爆發。',
-            '德國仍 6 分晉級，但以小組第二出線。',
-            'Beccacece：「你們是過程，不是結果。」',
-            'MetLife 球場厄瓜多球迷落淚慶祝。',
-        ],
-        source: 'NBC · ESPN · AP',
-    },
-    {
-        id: 'netherlands-tunisia-ft',
-        priority: 7,
-        relatedTeams: ['Netherlands', 'Tunisia'],
-        tags: [{ text: '荷蘭', cls: 'text-orange-400 bg-orange-950' }, { text: '昨日賽果', cls: 'text-zinc-400 bg-zinc-800' }],
+        id: 'netherlands-recovery',
+        priority: 4,
+        relatedTeams: ['Netherlands', 'Morocco'],
+        tags: [{ text: '荷蘭', cls: 'text-orange-400 bg-orange-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-orange-500/30',
-        meta: '荷蘭 · F 組 · 昨日',
-        title: 'Brobbey 雙響，荷蘭 3-1 突尼西亞奪 F 組第一',
-        summary: 'Skhiri 烏龍第 2 分鐘開局，Brobbey 第 7、62 分鐘連進兩球。突尼西亞 Mejbri 第 54 分鐘一度扳平，荷蘭全場 72% 控球、小組賽 10 球，#Oranje 冠軍呼聲高漲。',
+        meta: '荷蘭 · 恢復期 · 6/29 三十二強',
+        title: 'Koeman 安排荷蘭輪休，備戰摩洛哥硬仗',
+        summary: '小組賽 10 球後 Koeman 讓 Brobbey 等主力減量訓練。6/29 三十二強對摩洛哥，荷蘭冠軍呼聲與非洲強旅正面交鋒。',
         points: [
-            '荷蘭三戰 10 球，進攻火力本屆頂尖。',
-            'Koeman 輪換思路獲讚。',
-            '突尼西亞三連敗出局。',
-            '十六強對陣摩洛哥（6/29）。',
-        ],
-        source: 'NBC · ESPN · The Athletic',
-    },
-    {
-        id: 'japan-sweden-draw',
-        priority: 8,
-        relatedTeams: ['Japan', 'Sweden'],
-        tags: [{ text: '日本', cls: 'text-red-400 bg-red-950' }, { text: '昨日賽果', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-red-500/30',
-        meta: '日本 · F 組 · 昨日',
-        title: 'Maeda 破門、Elanga 世界波，日本 1-1 瑞典奪 F 組亞軍',
-        summary: 'Maeda 第 59 分鐘接 Ueda、Doan 連線破門，Elanga 第 62 分鐘遠射扳平。日本 4 分以淨勝球屈居第二，瑞典 4 分第三名晉級在望，#Japan 與 #Sweden 剪輯洗版。',
-        points: [
-            '日本兩戰 7 球後末輪保守。',
-            'Elanga 遠射被譽為本屆最佳之一。',
-            '瑞典第三名機率極高（Opta）。',
-            '藍武士仍昂首晉級十六強。',
-        ],
-        source: 'NBC · ESPN · NYT Athletic',
-    },
-    {
-        id: 'ivory-curacao-e',
-        priority: 9,
-        relatedTeams: ['Ivory Coast', 'Curaçao'],
-        tags: [{ text: '象牙海岸', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-emerald-500/30',
-        meta: '象牙海岸 · E 組 · 昨日',
-        title: '象牙海岸 2-0 古拉索，鎖定 E 組亞軍晉級',
-        summary: '象牙海岸費城 2-0 勝古拉索，晉級十六強。曾 2-1 勝德國震驚全場，#AFCON 話題升溫，非洲強旅深走呼聲高漲。',
-        points: [
-            '德國 2-1 敗厄瓜多後 E 組頭名仍為德國。',
-            '厄瓜多 4 分緊追第三名。',
-            '古拉索兩連敗出局。',
-            '象牙海岸成淘汰賽黑馬候選。',
+            'Aké 膝傷疑雲已澄清。',
+            'Morocco 防守穩健，不可輕敵。',
+            'Koeman 稱「體能是關鍵」。',
+            '球迷期待 Orange 再進一步。',
         ],
         source: 'NBC · ESPN',
     },
     {
-        id: 'mexico-three-wins',
-        priority: 10,
-        relatedTeams: ['Mexico'],
-        tags: [{ text: '墨西哥', cls: 'text-green-400 bg-green-950' }],
-        border: 'border-green-500/30',
-        meta: '墨西哥 · A 組 · 休息日',
-        title: '墨西哥 3-0 捷克三連勝，主辦國 9 分完美收官',
-        summary: 'Chávez、Quiñones、Fidalgo 補時世界波，墨西哥三戰全勝領先 A 組。今日休息備戰十六強，#Mexico 持續霸榜。',
+        id: 'brazil-training',
+        priority: 5,
+        relatedTeams: ['Brazil', 'Japan'],
+        tags: [{ text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }, { text: '訓練', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-yellow-500/30',
+        meta: '巴西 · 賽前 · 6/29 三十二強',
+        title: 'Vinícius 狀態火熱，巴西備戰日本藍武士',
+        summary: '巴西封閉訓練備戰 6/29 三十二強對日本，Vinícius 連續射門練習引媒體圍觀。Dorival 強調「尊重亞洲對手」。',
         points: [
-            '主辦國士氣達巔峰。',
-            '十六強對陣 C/E/F/H/I 組第三名之一。',
-            '阿茲特克球場氛圍無可取代。',
-            '南非 6/28 對陣加拿大。',
+            'Raphinha 傷勢好轉，有望先發。',
+            '日本 Doan、Ueda 速度是威脅。',
+            '巴西小組賽 3-0 蘇格蘭氣勢正旺。',
+            '南美冠軍熱門壓力不小。',
+        ],
+        source: 'ESPN · Globo',
+    },
+    {
+        id: 'england-camp',
+        priority: 6,
+        relatedTeams: ['England', 'Democratic Republic of the Congo'],
+        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-blue-500/30',
+        meta: '英格蘭 · 休息日 · 7/1 十六強',
+        title: 'Tuchel 英格蘭營區：Kane 領銜備戰剛果',
+        summary: '英格蘭小組賽收官後進入恢復期，Tuchel 安排戰術會議研究剛果（金）黑馬。7/1 十六強對決，三獅軍團拒絕重蹈覆轍。',
+        points: [
+            'Bellingham 體能數據優異。',
+            '剛果第三名積分榜首，不可輕敵。',
+            'Tuchel 稱「每場都是決賽」。',
+            '球迷期待終結冠軍乾旱。',
+        ],
+        source: 'BBC · Sky Sports',
+    },
+    {
+        id: 'belgium-mindset',
+        priority: 7,
+        relatedTeams: ['Belgium', 'Senegal'],
+        tags: [{ text: '比利時', cls: 'text-yellow-400 bg-yellow-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-yellow-500/30',
+        meta: '比利時 · 休息日 · 7/1 十六強',
+        title: 'Tedesco：比利時進球荒已過，專注塞內加爾',
+        summary: '5-1 逆襲紐西蘭後比利時全隊放假，Tedesco 受訪稱「信心回來了」。7/1 十六強對塞內加爾，黃金世代末舞。',
+        points: [
+            'De Bruyne 膝傷管理是課題。',
+            '塞內加爾 5-0 伊拉克後氣勢正旺。',
+            'Courtois 仍是防線核心。',
+            '球隊拒絕再被嘲笑。',
+        ],
+        source: 'ESPN · The Athletic',
+    },
+    {
+        id: 'mexico-host',
+        priority: 8,
+        relatedTeams: ['Mexico'],
+        tags: [{ text: '墨西哥', cls: 'text-green-400 bg-green-950' }, { text: '主辦國', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-green-500/30',
+        meta: '墨西哥 · 主辦國 · 十六強備戰',
+        title: '墨西哥主辦國休賽，阿茲特克球場氛圍持續升溫',
+        summary: '墨西哥三戰全勝後進入備戰期，主辦國球迷動員十六強門票。主教練稱「我們要讓全國驕傲」。',
+        points: [
+            '十六強對陣組合即將揭曉。',
+            '主辦國 9 分完美小組賽。',
+            '全隊無新增傷病。',
+            '街頭慶祝持續數日。',
         ],
         source: 'Yahoo Sports · FIFA',
     },
     {
-        id: 'france-r32-wait',
-        priority: 11,
-        relatedTeams: ['France', 'Sweden', 'Norway'],
-        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }],
+        id: 'usa-prep',
+        priority: 9,
+        relatedTeams: ['United States', 'Bosnia and Herzegovina'],
+        tags: [{ text: '美國', cls: 'text-blue-400 bg-blue-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-blue-500/30',
-        meta: '法國 · 休息日',
-        title: '法國 9 分完美小組賽，備戰十六強對瑞典',
-        summary: 'Dembélé 帽子戲法橫掃挪威後休息，6/30 十六強對 F 組第三名瑞典。#France 冠軍頭號熱門蓄勢待發。',
+        meta: '美國 · 休息日 · 7/1 三十二強',
+        title: 'Pochettino 美國隊備戰波士尼亞，主場優勢受期待',
+        summary: '美國 D 組第一出線後休賽，Pochettino 強調「淘汰賽是全新賽事」。7/1 三十二強對波士尼亞，#USMNT 盼主場再進一步。',
         points: [
-            '瑞典 4 分第三名晉級。',
-            '法國三戰全勝淨勝球 +8。',
-            '德尚稱淘汰賽才是開始。',
-            '6/30 開踢。',
+            'Pulisic 訓練狀態良好。',
+            '波士尼亞第三名積分穩定晉級。',
+            '主場球迷動員聲浪空前。',
+            '球隊防守仍需加強。',
         ],
-        source: 'L\'Équipe · ESPN',
+        source: 'NBC · ESPN',
+    },
+    {
+        id: 'spain-austria',
+        priority: 10,
+        relatedTeams: ['Spain', 'Austria'],
+        tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-red-500/30',
+        meta: '西班牙 · 休息日 · 7/2 十六強',
+        title: 'De la Fuente 西班牙備戰奧地利，Yamal 受保護性輪休',
+        summary: '西班牙小組賽強勢出線後 Yamal 獲額外休息。7/2 十六強對奧地利，De la Fuente 稱「年輕球星需要管理」。',
+        points: [
+            'Morata 狀態回升。',
+            '奧地利 J 組亞軍出線。',
+            '西班牙冠軍呼聲再起。',
+            '球隊士氣處於高位。',
+        ],
+        source: 'ESPN · SBS',
     },
 ];
 
@@ -1050,11 +949,18 @@ function getTodayFinishedKeys() {
     );
 }
 
+function addTeamName(set, name) {
+    if (name && name !== '待定' && !name.includes('勝者') && !name.includes('組')) set.add(name);
+}
+
 function getTeamsPlayingToday() {
     const set = new Set();
     state.games.filter(isTodayInTaipei).forEach(g => {
-        if (g.home_team_name_en) set.add(g.home_team_name_en);
-        if (g.away_team_name_en) set.add(g.away_team_name_en);
+        const t = resolveGameTeams(g);
+        addTeamName(set, g.home_team_name_en);
+        addTeamName(set, g.away_team_name_en);
+        if (t.homeResolved) addTeamName(set, t.home);
+        if (t.awayResolved) addTeamName(set, t.away);
     });
     return set;
 }
@@ -1067,47 +973,42 @@ function getIdleTeams() {
 }
 
 function getTodayMatchKeys() {
-    return new Set(
-        state.games
-            .filter(isTodayInTaipei)
-            .map(g => matchKey(g.home_team_name_en, g.away_team_name_en))
-    );
+    const keys = new Set();
+    state.games.filter(isTodayInTaipei).forEach(g => {
+        const t = resolveGameTeams(g);
+        const home = g.home_team_name_en || (t.homeResolved ? t.home : null);
+        const away = g.away_team_name_en || (t.awayResolved ? t.away : null);
+        if (home && away) keys.add(matchKey(home, away));
+    });
+    return keys;
 }
 
 function generateNews() {
     const todayKeys = getTodayMatchKeys();
     const hasApi = state.games.length > 0;
 
-    let items = TODAY_TOP10_NEWS
+    return TODAY_TOP10_NEWS
         .filter(item => {
-            if (!hasApi || todayKeys.size === 0) return true;
+            if (!hasApi || !todayKeys.size) return false;
             return todayKeys.has(matchKey(item.match.home, item.match.away));
         })
         .sort((a, b) => a.priority - b.priority)
         .slice(0, 10);
-
-    if (!items.length) {
-        items = [...TODAY_TOP10_NEWS].sort((a, b) => a.priority - b.priority).slice(0, 10);
-    }
-    return items;
 }
 
 function generateIdleNews() {
     const playing = getTeamsPlayingToday();
     const hasApi = state.games.length > 0;
+    const todayIds = new Set(generateNews().map(n => n.id));
 
-    let items = IDLE_TEAM_NEWS
+    return IDLE_TEAM_NEWS
         .filter(item => {
+            if (todayIds.has(item.id)) return false;
             if (!hasApi) return true;
             return item.relatedTeams.every(t => !playing.has(t));
         })
         .sort((a, b) => a.priority - b.priority)
         .slice(0, 10);
-
-    if (!items.length) {
-        items = [...IDLE_TEAM_NEWS].sort((a, b) => a.priority - b.priority).slice(0, 10);
-    }
-    return items;
 }
 
 function renderNewsCard(n, i) {
@@ -1137,7 +1038,12 @@ function renderNewsCard(n, i) {
 
 function renderNews() {
     const news = generateNews();
-    $('news-list').innerHTML = news.map((n, i) => renderNewsCard(n, i)).join('');
+    const list = $('news-list');
+    if (!news.length) {
+        list.innerHTML = '<p class="text-sm text-zinc-500 py-4">今日暫無比賽新聞，請查看「無賽事球隊動態」分頁的備戰消息。</p>';
+        return;
+    }
+    list.innerHTML = news.map((n, i) => renderNewsCard(n, i)).join('');
 }
 
 function renderTrendingCard(t, i) {
