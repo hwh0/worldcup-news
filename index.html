@@ -102,7 +102,7 @@
             <button id="tab-trending" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
                 <i class="fa-brands fa-x-twitter"></i>
                 X 網路熱議
-                <span id="tab-trending-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400">10 則</span>
+                <span id="tab-trending-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400">20 則</span>
             </button>
         </div>
 
@@ -182,7 +182,7 @@
             <section>
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-brands fa-x-twitter text-zinc-200"></i>
-                    今日 X 熱議 Top 10
+                    今日 X 熱議 Top 20
                     <span class="text-xs font-normal text-zinc-500">網友評論摘要</span>
                 </h2>
                 <div id="trending-list" class="space-y-4">
@@ -207,8 +207,9 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const CACHE_KEY = 'wc_news_cache_v8';
-const NEWS_UPDATED = '2026-06-28';
+const CACHE_KEY = 'wc_news_cache_v9';
+const NEWS_UPDATED = '2026-06-29';
+const TRENDING_LIMIT = 20;
 
 /** 今日賽事新聞（match 必須對應今日實際比賽，不混入其他場次） */
 const TODAY_TOP10_NEWS = [
@@ -302,8 +303,25 @@ const TODAY_TOP10_NEWS = [
 /** 無賽事球隊場外動態（備戰、訓練、記者會；不含今日比賽戰報） */
 const IDLE_TEAM_NEWS = [
     {
-        id: 'argentina-rest',
+        id: 'korea-exit-followup',
         priority: 1,
+        relatedTeams: ['South Korea'],
+        tags: [{ text: '南韓', cls: 'text-red-400 bg-red-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-red-500/30',
+        meta: '南韓 · A 組出局 · 第三名積分落選',
+        title: '南韓 A 組第三名積分落選，Son 落淚告別本屆世界盃',
+        summary: '末輪 0-1 不敵南非後積 3 分、淨勝球 -1，跨組第三名積分榜未能擠進前 8。孫興愍賽後情緒激動落淚，#SouthKorea 與 #SonHeungmin 持續霸榜，韓國媒體聚焦黃金世代謝幕與亞洲僅日本晉級三十二強。',
+        points: [
+            'A 組排名：墨西哥 9 分、南非 4 分、南韓 3 分、捷克 1 分。',
+            '第三名積分榜剛果領跑，南韓差淨勝球未能晉級。',
+            'Son 賽後落淚，退役與隊長身分討論發酵。',
+            '亞洲球隊僅日本晉級，6/29 對巴西成最後希望。',
+        ],
+        source: 'KBS · ESPN · The Athletic',
+    },
+    {
+        id: 'argentina-rest',
+        priority: 2,
         relatedTeams: ['Argentina'],
         tags: [{ text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-sky-500/30',
@@ -320,7 +338,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'france-prep',
-        priority: 2,
+        priority: 3,
         relatedTeams: ['France', 'Sweden'],
         tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-blue-500/30',
@@ -337,7 +355,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'germany-presser',
-        priority: 3,
+        priority: 4,
         relatedTeams: ['Germany', 'Paraguay'],
         tags: [{ text: '德國', cls: 'text-zinc-300 bg-zinc-800' }, { text: '記者會', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-zinc-500/30',
@@ -354,7 +372,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'netherlands-recovery',
-        priority: 4,
+        priority: 5,
         relatedTeams: ['Netherlands', 'Morocco'],
         tags: [{ text: '荷蘭', cls: 'text-orange-400 bg-orange-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-orange-500/30',
@@ -371,7 +389,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'brazil-training',
-        priority: 5,
+        priority: 6,
         relatedTeams: ['Brazil', 'Japan'],
         tags: [{ text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }, { text: '訓練', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-yellow-500/30',
@@ -388,7 +406,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'england-camp',
-        priority: 6,
+        priority: 7,
         relatedTeams: ['England', 'Democratic Republic of the Congo'],
         tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-blue-500/30',
@@ -405,7 +423,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'belgium-mindset',
-        priority: 7,
+        priority: 8,
         relatedTeams: ['Belgium', 'Senegal'],
         tags: [{ text: '比利時', cls: 'text-yellow-400 bg-yellow-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-yellow-500/30',
@@ -422,7 +440,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'mexico-host',
-        priority: 8,
+        priority: 9,
         relatedTeams: ['Mexico'],
         tags: [{ text: '墨西哥', cls: 'text-green-400 bg-green-950' }, { text: '主辦國', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-green-500/30',
@@ -439,7 +457,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'usa-prep',
-        priority: 9,
+        priority: 10,
         relatedTeams: ['United States', 'Bosnia and Herzegovina'],
         tags: [{ text: '美國', cls: 'text-blue-400 bg-blue-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-blue-500/30',
@@ -456,7 +474,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'spain-austria',
-        priority: 10,
+        priority: 11,
         relatedTeams: ['Spain', 'Austria'],
         tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-red-500/30',
@@ -474,8 +492,8 @@ const IDLE_TEAM_NEWS = [
 ];
 
 
-/** 今日 X 網路熱議 Top 10（含網友評論摘要，每日更新） */
-const X_TRENDING_TOP10 = [
+/** 今日 X 網路熱議 Top 20（含網友評論摘要，每日更新） */
+const X_TRENDING_TOP20 = [
     {
         id: 'canada-stoppage',
         priority: 1,
@@ -604,6 +622,136 @@ const X_TRENDING_TOP10 = [
             { tone: 'positive', text: '『南非已創歷史，驕傲！』' },
             { tone: 'negative', text: '『補時被絕殺太殘酷了。』' },
             { tone: 'positive', text: '『非洲足球越來越強。』' },
+        ],
+    },
+    {
+        id: 'south-korea-exit',
+        priority: 11,
+        hashtag: '#SouthKorea',
+        heat: '🔥 爆熱',
+        topic: '南韓 A 組第三名積分落選，亞洲僅日本晉級',
+        summary: '末輪 0-1 不敵南非後積 3 分、淨勝球 -1，跨組第三名積分榜未能擠進前 8，本屆世界盃之旅結束。',
+        reactions: [
+            { tone: 'negative', text: '『差一點就晉級，太可惜了。』' },
+            { tone: 'neutral', text: '『48 隊制第三名規則太殘酷。』' },
+            { tone: 'positive', text: '『至少比上屆有進步，繼續加油。』' },
+        ],
+    },
+    {
+        id: 'son-heungmin',
+        priority: 12,
+        hashtag: '#SonHeungmin',
+        heat: '🔥 爆熱',
+        topic: 'Son 賽後落淚，隊長與國家隊未來成焦點',
+        summary: '孫興愍末輪賽後情緒激動落淚，#SonHeungmin 與退役、隊長身分討論持續發酵，韓國媒體聚焦「黃金世代」謝幕。',
+        reactions: [
+            { tone: 'positive', text: '『Son 已經盡力了，韓國足球的象徵。』' },
+            { tone: 'negative', text: '『最後一屆世界盃就這樣結束…』' },
+            { tone: 'neutral', text: '『希望他還會為國家隊效力。』' },
+        ],
+    },
+    {
+        id: 'germany-paraguay-preview',
+        priority: 13,
+        hashtag: '#Germany',
+        heat: '⚡ 熱議',
+        topic: '6/29 十六強：德國對巴拉圭復仇戰',
+        summary: '小組賽末輪敗厄瓜多後，日耳曼戰車 6/29 迎戰第三名晉級的巴拉圭，Nagelsmann 壓力山大。',
+        reactions: [
+            { tone: 'positive', text: '『德國淘汰賽會醒來的。』' },
+            { tone: 'negative', text: '『再翻車就笑話了。』' },
+            { tone: 'neutral', text: '『巴拉圭不是軟柿子。』' },
+        ],
+    },
+    {
+        id: 'netherlands-morocco-preview',
+        priority: 14,
+        hashtag: '#Oranje',
+        heat: '⚡ 熱議',
+        topic: '荷蘭 10 球火力對摩洛哥，6/29 末場開踢',
+        summary: 'Brobbey 領銜的荷蘭小組賽兇猛，對決 C 組亞軍摩洛哥，Aké 與 Ziyech 對決備受期待。',
+        reactions: [
+            { tone: 'positive', text: '『荷蘭冠軍相真的來了？』' },
+            { tone: 'positive', text: '『摩洛哥能再創 2022 奇蹟嗎？』' },
+            { tone: 'neutral', text: '『這場勝者可能對加拿大。』' },
+        ],
+    },
+    {
+        id: 'mexico-host-fest',
+        priority: 15,
+        hashtag: '#Mexico',
+        heat: '⚡ 熱議',
+        topic: '墨西哥主辦國 9 分完美出線',
+        summary: 'A 組頭名三戰全勝，阿茲特克球場氛圍火熱，主辦國球迷動員十六強。',
+        reactions: [
+            { tone: 'positive', text: '『主辦國氣勢無敵！』' },
+            { tone: 'positive', text: '『墨西哥足球復興了。』' },
+            { tone: 'neutral', text: '『十六強才是真正的考驗。』' },
+        ],
+    },
+    {
+        id: 'japan-last-hope',
+        priority: 16,
+        hashtag: '#Japan',
+        heat: '⚡ 熱議',
+        topic: '日本成亞洲唯一晉級隊，明日對巴西',
+        summary: '南韓、沙烏地等亞洲隊出局後，藍武士成亞洲最後希望，6/29 十六強對南美冠軍熱門巴西。',
+        reactions: [
+            { tone: 'positive', text: '『亞洲足球靠日本了！』' },
+            { tone: 'positive', text: '『2018、2022 的奇蹟能再現嗎？』' },
+            { tone: 'negative', text: '『巴西太強，希望渺茫。』' },
+        ],
+    },
+    {
+        id: 'usa-host-prep',
+        priority: 17,
+        hashtag: '#USMNT',
+        heat: '💬 討論',
+        topic: '美國主場備戰波士尼亞，7/1 三十二強',
+        summary: 'D 組第一美國休賽備戰，Pochettino 強調主場優勢，#USMNT 盼再進一步。',
+        reactions: [
+            { tone: 'positive', text: '『主場世界盃，美國要證明自己。』' },
+            { tone: 'neutral', text: '『波士尼亞第三名不好對付。』' },
+            { tone: 'positive', text: '『Pulisic 狀態是關鍵。』' },
+        ],
+    },
+    {
+        id: 'spain-yamal',
+        priority: 18,
+        hashtag: '#Spain',
+        heat: '💬 討論',
+        topic: 'Yamal 輪休，西班牙冠軍呼聲再起',
+        summary: 'De la Fuente 保護年輕球星 Yamal，西班牙小組賽強勢後 7/2 十六強對奧地利。',
+        reactions: [
+            { tone: 'positive', text: '『西班牙年輕一代太強了。』' },
+            { tone: 'positive', text: '『Yamal 是未來。』' },
+            { tone: 'neutral', text: '『奧地利不好惹。』' },
+        ],
+    },
+    {
+        id: 'france-sweden-preview',
+        priority: 19,
+        hashtag: '#France',
+        heat: '💬 討論',
+        topic: '法國 6/30 十六強對瑞典，冠軍熱門蓄勢',
+        summary: '三戰全勝的法國休賽備戰，瑞典以第三名身分晉級，德尚不願輕敵。',
+        reactions: [
+            { tone: 'positive', text: '『法國衛冕之路穩了。』' },
+            { tone: 'neutral', text: '『瑞典北歐硬度不能小看。』' },
+            { tone: 'positive', text: '『Mbappé 狀態回來了。』' },
+        ],
+    },
+    {
+        id: 'third-place-final',
+        priority: 20,
+        hashtag: '#WorldCup',
+        heat: '💬 討論',
+        topic: '第三名積分大戰落幕，8 隊晉級名單塵埃落定',
+        summary: '剛果領跑第三名積分榜，南韓、烏茲別克等遺憾落選。網友笑稱「第三名計算器」終於可以關機。',
+        reactions: [
+            { tone: 'funny', text: '『第三名計算器可以休息了。』' },
+            { tone: 'neutral', text: '『48 隊制規則太複雜了。』' },
+            { tone: 'negative', text: '『南韓就差一點，太殘酷。』' },
         ],
     },
 ];
@@ -1077,7 +1225,7 @@ function renderTrendingCard(t, i) {
 }
 
 function renderTrending() {
-    const items = [...X_TRENDING_TOP10].sort((a, b) => a.priority - b.priority);
+    const items = [...X_TRENDING_TOP20].sort((a, b) => a.priority - b.priority).slice(0, TRENDING_LIMIT);
     $('trending-list').innerHTML = items.map((t, i) => renderTrendingCard(t, i)).join('');
 }
 
@@ -1116,8 +1264,10 @@ function renderIdleNews() {
 function updateTabBadges() {
     const todayGames = state.games.filter(g => isTodayInTaipei(g) && isPlayedOrLive(g)).length;
     const idleNews = generateIdleNews().length;
+    const trendingCount = Math.min(X_TRENDING_TOP20.length, TRENDING_LIMIT);
     $('tab-results-badge').textContent = todayGames ? `${todayGames} 場` : '—';
     $('tab-idle-badge').textContent = idleNews ? `${idleNews} 則` : '—';
+    $('tab-trending-badge').textContent = `${trendingCount} 則`;
 }
 
 function switchTab(tab) {
