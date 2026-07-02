@@ -137,7 +137,7 @@
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-solid fa-newspaper text-blue-500"></i>
                     今日賽事新聞
-                    <span class="text-xs font-normal text-zinc-500">僅今日比賽</span>
+                    <span class="text-xs font-normal text-zinc-500">戰報 · 賽後分析</span>
                 </h2>
                 <div id="news-list" class="space-y-4">
                     <div class="skeleton h-28 rounded-3xl"></div>
@@ -176,14 +176,14 @@
         <div id="panel-trending" class="tab-panel">
             <section class="mb-6">
                 <p class="text-sm text-zinc-400 leading-relaxed">
-                    彙整今日 X（Twitter）熱門話題與網友評論摘要，並標示社群正反應聲量。
+                    彙整 X（Twitter）社群話題與網友評論摘要；不重複「今日賽事新聞」的戰報內容。
                 </p>
             </section>
             <section>
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-brands fa-x-twitter text-zinc-200"></i>
                     今日 X 熱議 Top 20
-                    <span class="text-xs font-normal text-zinc-500">網友評論摘要</span>
+                    <span class="text-xs font-normal text-zinc-500">社群討論 · 非戰報</span>
                 </h2>
                 <div id="trending-list" class="space-y-4">
                     <div class="skeleton h-36 rounded-3xl"></div>
@@ -207,7 +207,7 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const CACHE_KEY = 'wc_news_cache_v13';
+const CACHE_KEY = 'wc_news_cache_v14';
 const NEWS_UPDATED = '2026-07-02';
 const TRENDING_LIMIT = 20;
 
@@ -216,7 +216,7 @@ const TODAY_TOP10_NEWS = [
     {
         id: 'england-congo-r32',
         priority: 1,
-        tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '三十二強', cls: 'text-emerald-400 bg-emerald-950' }],
+        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '三十二強', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-blue-500/40',
         match: { home: 'England', away: 'Democratic Republic of the Congo' },
         meta: '三十二強 · 英格蘭 2-1 民主剛果 · 台灣 7/2',
@@ -509,54 +509,28 @@ const IDLE_TEAM_NEWS = [
 ];
 
 
-/** 今日 X 網路熱議 Top 20（含網友評論摘要，每日更新） */
+/** 今日 X 網路熱議 Top 20（社群討論角度，自動排除與今日戰報重複的場次） */
 const X_TRENDING_TOP20 = [
     {
-        id: 'england-congo-scare',
+        id: 'portugal-croatia-legend',
         priority: 1,
-        hashtag: '#England',
+        hashtag: '#Portugal',
         heat: '🔥 爆熱',
-        topic: 'Kane 梅開二度，英格蘭 2-1 驚險淘汰民主剛果',
-        summary: '民主剛果第 7 分鐘先入球，Kane 下半場連入兩球逆轉。英格蘭有驚無險晉級，#England 熱議不斷。',
+        topic: 'C 羅 vs 莫德里奇，網友稱「最後一屆傳奇對決」',
+        summary: '葡萄牙對克羅埃西亞開賽前，#Portugal 與 #Croatia 熱議「誰先退役」。',
         reactions: [
-            { tone: 'positive', text: '『Kane 永遠的大場面先生！』' },
-            { tone: 'negative', text: '『開局 7 分鐘失球太離譜。』' },
-            { tone: 'neutral', text: '『民主剛果雖敗猶榮。』' },
-        ],
-    },
-    {
-        id: 'belgium-late-comeback',
-        priority: 2,
-        hashtag: '#Belgium',
-        heat: '🔥 爆熱',
-        topic: 'Lukaku、Tielemans 補時連入，比利時 3-2 塞內加爾',
-        summary: '比利時補時逆轉塞內加爾，黃金世代驚險晉級，#Belgium 霸榜。',
-        reactions: [
-            { tone: 'positive', text: '『比利時永不放棄！』' },
-            { tone: 'positive', text: '『Lukaku 大場面先生！』' },
-            { tone: 'negative', text: '『差點又翻車…』' },
-        ],
-    },
-    {
-        id: 'usa-bosnia-win',
-        priority: 3,
-        hashtag: '#USMNT',
-        heat: '🔥 爆熱',
-        topic: '美國 2-0 波士尼亞，主場優勢發威',
-        summary: '美國主場 2-0 淘汰波士尼亞，#USMNT 穩健晉級。',
-        reactions: [
-            { tone: 'positive', text: '『主場世界盃太香了！』' },
-            { tone: 'positive', text: '『Tillman 那球漂亮！』' },
-            { tone: 'neutral', text: '『下一輪對手更強。』' },
+            { tone: 'positive', text: '『這場比決賽還好看！』' },
+            { tone: 'positive', text: '『莫德里奇永遠的大場面先生。』' },
+            { tone: 'neutral', text: '『C 羅還能進球嗎？』' },
         ],
     },
     {
         id: 'japan-sano-hero',
-        priority: 4,
+        priority: 2,
         hashtag: '#SamuraiBlue',
-        heat: '🔥 高熱',
-        topic: '佐野海舟破門領先，日本曾讓巴西陷入苦戰',
-        summary: '佐野海舟第 29 分鐘先入球，日本上半場氣勢如虹。雖遭 Martinelli 補時絕殺，#SamuraiBlue 仍獲讚。',
+        heat: '🔥 爆熱',
+        topic: '佐野海舟進球洗版，日本網友：雖敗猶榮',
+        summary: '藍武士出局後，#SamuraiBlue 仍瘋傳佐野海舟破門片段，討論亞洲足球與留洋。',
         reactions: [
             { tone: 'positive', text: '『佐野海舟是本屆日本最佳！』' },
             { tone: 'positive', text: '『領先巴西的那一刻太夢幻了。』' },
@@ -564,25 +538,25 @@ const X_TRENDING_TOP20 = [
         ],
     },
     {
-        id: 'spain-austria-preview',
-        priority: 5,
-        hashtag: '#Spain',
-        heat: '🔥 高熱',
-        topic: '台灣 7/3 凌晨：西班牙對奧地利',
-        summary: '冠軍熱門西班牙對奧地利，台灣時間 7/3 00:00 開踢，#Spain 賽前受關注。',
+        id: 'stoppage-time-era',
+        priority: 3,
+        hashtag: '#WorldCup',
+        heat: '🔥 爆熱',
+        topic: '本屆世界盃成「補時絕殺之年」',
+        summary: '加拿大、日本相繼死於補時，網友笑稱「千萬別在補時犯錯」。',
         reactions: [
-            { tone: 'positive', text: '『西班牙冠軍相穩了！』' },
-            { tone: 'positive', text: '『Yamal 太期待了。』' },
-            { tone: 'neutral', text: '『奧地利不好對付。』' },
+            { tone: 'funny', text: '『補時比正賽還精彩。』' },
+            { tone: 'negative', text: '『日本球迷今晚睡不著了。』' },
+            { tone: 'positive', text: '『這就是世界盃的魅力。』' },
         ],
     },
     {
         id: 'germany-paraguay-draw',
-        priority: 6,
+        priority: 4,
         hashtag: '#Germany',
         heat: '🔥 高熱',
-        topic: 'Havertz 扳平，德國 1-1 巴拉圭',
-        summary: 'Ansisv 先入球，Havertz 第 54 分鐘扳平。德國淘汰賽首戰未能全取三分。',
+        topic: '德國網友崩潰：又差點翻車',
+        summary: '德國 1-1 巴拉圭後，#Germany 熱搜「淘汰賽魔咒」與 Nagelsmann 去留。',
         reactions: [
             { tone: 'negative', text: '『德國又在淘汰賽翻車邊緣。』' },
             { tone: 'positive', text: '『Havertz 救主！』' },
@@ -591,15 +565,28 @@ const X_TRENDING_TOP20 = [
     },
     {
         id: 'netherlands-morocco-draw',
-        priority: 7,
+        priority: 5,
         hashtag: '#Oranje',
         heat: '⚡ 熱議',
-        topic: 'Diop 補時扳平，荷蘭 1-1 摩洛哥',
-        summary: 'Khakpv 第 72 分鐘破門，Diop 第 90+1 分鐘絕平。荷蘭 10 球火力本場僅入一球。',
+        topic: '荷蘭網友怒：小組賽 10 球，淘汰賽只進 1 球',
+        summary: '荷蘭 1-1 摩洛哥後，#Oranje 熱搜「浪費機會」與 Koeman 戰術。',
         reactions: [
             { tone: 'negative', text: '『荷蘭浪費太多機會了。』' },
             { tone: 'positive', text: '『摩洛哥補時扳平太硬了。』' },
             { tone: 'neutral', text: '『加拿大十六強對手受影響。』' },
+        ],
+    },
+    {
+        id: 'mahrez-algeria',
+        priority: 6,
+        hashtag: '#Mahrez',
+        heat: '⚡ 熱議',
+        topic: 'Mahrez 小組賽封神，網友：淘汰賽還能演出嗎',
+        summary: '阿爾及利亞補時六球大戲後，#Mahrez 話題持續延燒，等待瑞士戰。',
+        reactions: [
+            { tone: 'positive', text: '『Mahrez 永遠的大場面先生！』' },
+            { tone: 'positive', text: '『這屆最精彩小組賽之一。』' },
+            { tone: 'neutral', text: '『瑞士不好對付。』' },
         ],
     },
     {
@@ -720,55 +707,55 @@ const X_TRENDING_TOP20 = [
         ],
     },
     {
-        id: 'usa-host-prep',
+        id: 'france-mbappe-brace',
         priority: 17,
-        hashtag: '#USMNT',
-        heat: '💬 討論',
-        topic: '美國主場備戰波士尼亞，7/1 三十二強',
-        summary: 'D 組第一美國休賽備戰，Pochettino 強調主場優勢，#USMNT 盼再進一步。',
-        reactions: [
-            { tone: 'positive', text: '『主場世界盃，美國要證明自己。』' },
-            { tone: 'neutral', text: '『波士尼亞第三名不好對付。』' },
-            { tone: 'positive', text: '『Pulisic 狀態是關鍵。』' },
-        ],
-    },
-    {
-        id: 'spain-yamal',
-        priority: 18,
-        hashtag: '#Spain',
-        heat: '💬 討論',
-        topic: 'Yamal 輪休，西班牙冠軍呼聲再起',
-        summary: 'De la Fuente 保護年輕球星 Yamal，西班牙小組賽強勢後 7/2 十六強對奧地利。',
-        reactions: [
-            { tone: 'positive', text: '『西班牙年輕一代太強了。』' },
-            { tone: 'positive', text: '『Yamal 是未來。』' },
-            { tone: 'neutral', text: '『奧地利不好惹。』' },
-        ],
-    },
-    {
-        id: 'france-sweden-preview',
-        priority: 19,
         hashtag: '#France',
         heat: '💬 討論',
-        topic: '法國 6/30 十六強對瑞典，冠軍熱門蓄勢',
-        summary: '三戰全勝的法國休賽備戰，瑞典以第三名身分晉級，德尚不願輕敵。',
+        topic: 'Mbappé 梅開二度，法國網友：冠軍相回來了',
+        summary: '法國 3-0 瑞典後，#France 熱議 Mbappé 狀態與衛冕前景。',
         reactions: [
-            { tone: 'positive', text: '『法國衛冕之路穩了。』' },
-            { tone: 'neutral', text: '『瑞典北歐硬度不能小看。』' },
-            { tone: 'positive', text: '『Mbappé 狀態回來了。』' },
+            { tone: 'positive', text: '『Mbappé 狀態全面回勇！』' },
+            { tone: 'positive', text: '『法國衛冕穩了。』' },
+            { tone: 'neutral', text: '『淘汰賽才是考驗。』' },
         ],
     },
     {
-        id: 'stoppage-time-era',
-        priority: 20,
-        hashtag: '#WorldCup',
+        id: 'haaland-norway',
+        priority: 18,
+        hashtag: '#Haaland',
         heat: '💬 討論',
-        topic: '本屆世界盃成「補時絕殺之年」',
-        summary: '加拿大、日本相繼死於補時，Martinelli 與 Koné 絕殺霸榜。網友笑稱「千萬別在補時犯錯」。',
+        topic: 'Haaland 破門，挪威網友：能擋巴西嗎',
+        summary: 'Haaland 與 Nusa 建功後，#Haaland 話題討論挪威黑馬能走多遠。',
         reactions: [
-            { tone: 'funny', text: '『補時比正賽還精彩。』' },
-            { tone: 'negative', text: '『日本球迷今晚睡不著了。』' },
-            { tone: 'positive', text: '『這就是世界盃的魅力。』' },
+            { tone: 'positive', text: '『Haaland 終於在世界盃進球了！』' },
+            { tone: 'positive', text: '『挪威黑馬？』' },
+            { tone: 'neutral', text: '『十六強對巴西，難。』' },
+        ],
+    },
+    {
+        id: 'mexico-ecuador-win',
+        priority: 19,
+        hashtag: '#Mexico',
+        heat: '💬 討論',
+        topic: '主辦國墨西哥 2-0 厄瓜多，街頭狂歡洗版',
+        summary: '墨西哥主場再勝，球迷上街慶祝影片瘋傳，#Mexico 熱度持續升溫。',
+        reactions: [
+            { tone: 'positive', text: '『主辦國氣勢無敵！』' },
+            { tone: 'positive', text: '『Jiménez 還是核心。』' },
+            { tone: 'neutral', text: '『十六強才是考驗。』' },
+        ],
+    },
+    {
+        id: 'asia-all-out',
+        priority: 20,
+        hashtag: '#Japan',
+        heat: '💬 討論',
+        topic: '亞洲全數出局，網友討論留洋與青訓',
+        summary: '日本出局後，#Japan 與亞洲足球話題持續發酵，森保一落淚片段瘋傳。',
+        reactions: [
+            { tone: 'negative', text: '『亞洲又全軍覆沒了…』' },
+            { tone: 'positive', text: '『至少佐野海舟帶來希望。』' },
+            { tone: 'neutral', text: '『需要更多球員留洋。』' },
         ],
     },
 ];
@@ -1245,9 +1232,37 @@ function renderTrendingCard(t, i) {
         </article>`;
 }
 
+function getTodayNewsMatchKeys() {
+    const keys = new Set();
+    generateNews().forEach(n => {
+        if (n.match?.home && n.match?.away) keys.add(matchKey(n.match.home, n.match.away));
+    });
+    return keys;
+}
+
+/** X 熱議：排除與今日賽事新聞相同 id 或相同場次的戰報重複 */
+function generateTrending() {
+    const newsIds = new Set(generateNews().map(n => n.id));
+    const newsMatchKeys = getTodayNewsMatchKeys();
+
+    return [...X_TRENDING_TOP20]
+        .filter(t => {
+            if (newsIds.has(t.id)) return false;
+            if (t.match?.home && t.match?.away && newsMatchKeys.has(matchKey(t.match.home, t.match.away))) return false;
+            return true;
+        })
+        .sort((a, b) => a.priority - b.priority)
+        .slice(0, TRENDING_LIMIT);
+}
+
 function renderTrending() {
-    const items = [...X_TRENDING_TOP20].sort((a, b) => a.priority - b.priority).slice(0, TRENDING_LIMIT);
-    $('trending-list').innerHTML = items.map((t, i) => renderTrendingCard(t, i)).join('');
+    const items = generateTrending();
+    const list = $('trending-list');
+    if (!items.length) {
+        list.innerHTML = '<p class="text-sm text-zinc-500 py-4">今日戰報已收錄於「今日賽果」分頁，暫無額外社群熱議。</p>';
+        return;
+    }
+    list.innerHTML = items.map((t, i) => renderTrendingCard(t, i)).join('');
 }
 
 function renderIdleTeams() {
@@ -1285,7 +1300,7 @@ function renderIdleNews() {
 function updateTabBadges() {
     const todayGames = state.games.filter(g => isTodayInTaipei(g) && isPlayedOrLive(g)).length;
     const idleNews = generateIdleNews().length;
-    const trendingCount = Math.min(X_TRENDING_TOP20.length, TRENDING_LIMIT);
+    const trendingCount = generateTrending().length;
     $('tab-results-badge').textContent = todayGames ? `${todayGames} 場` : '—';
     $('tab-idle-badge').textContent = idleNews ? `${idleNews} 則` : '—';
     $('tab-trending-badge').textContent = `${trendingCount} 則`;
