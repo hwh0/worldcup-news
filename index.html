@@ -207,7 +207,7 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const CACHE_KEY = 'wc_news_cache_v12';
+const CACHE_KEY = 'wc_news_cache_v13';
 const NEWS_UPDATED = '2026-07-02';
 const TRENDING_LIMIT = 20;
 
@@ -219,11 +219,11 @@ const TODAY_TOP10_NEWS = [
         tags: [{ text: '🔥 X 熱議', cls: 'text-rose-400 bg-rose-950' }, { text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '三十二強', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-blue-500/40',
         match: { home: 'England', away: 'Democratic Republic of the Congo' },
-        meta: '三十二強 · 英格蘭 2-1 剛果（金）· 台灣 7/2',
-        title: '英格蘭 2-1 驚險淘汰剛果，Kane 軍團有驚無險晉級',
-        summary: '剛果（金）第 7 分鐘先入球，Kane 第 75、86 分鐘連入兩球逆轉。英格蘭驚險過關，#England 熱議三獅軍團表現與十六強前景。',
+        meta: '三十二強 · 英格蘭 2-1 民主剛果 · 台灣 7/2',
+        title: '英格蘭 2-1 驚險淘汰民主剛果，Kane 軍團有驚無險晉級',
+        summary: '民主剛果第 7 分鐘先入球，Kane 第 75、86 分鐘連入兩球逆轉。英格蘭驚險過關，#England 熱議三獅軍團表現與十六強前景。',
         points: [
-            '剛果黑馬上半場取得領先。',
+            '民主剛果黑馬上半場取得領先。',
             'Kane 下半場梅開二度扭轉戰局。',
             'Tuchel 賽後稱「表現不夠好但贏了」。',
             '英格蘭晉級十六強，下一輪對手待定。',
@@ -271,8 +271,8 @@ const TODAY_TOP10_NEWS = [
         border: 'border-blue-500/40',
         match: { home: 'England', away: 'Democratic Republic of the Congo' },
         meta: '三十二強 · 英格蘭賽後 · 台灣 7/2',
-        title: 'Tuchel：英格蘭贏了但必須改進，剛果值得尊敬',
-        summary: '賽後記者會 Tuchel 坦言防守開局鬆懈，Bellingham 稱「我們不能再慢熱」。剛果雖出局仍獲尊重，#England 討論十六強前景。',
+        title: 'Tuchel：英格蘭贏了但必須改進，民主剛果值得尊敬',
+        summary: '賽後記者會 Tuchel 坦言防守開局鬆懈，Bellingham 稱「我們不能再慢熱」。民主剛果雖出局仍獲尊重，#England 討論十六強前景。',
         points: [
             '英格蘭開局 7 分鐘失球引發質疑。',
             'Kane 再次證明大場面價值。',
@@ -394,10 +394,10 @@ const IDLE_TEAM_NEWS = [
         tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '晉級', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-blue-500/30',
         meta: '英格蘭 · 7/1 晉級 · 十六強備戰',
-        title: '英格蘭 2-1 驚險淘汰剛果，Tuchel 稱「還要改進」',
-        summary: '7/1 英格蘭 2-1 擊敗剛果黑馬晉級，Tuchel 賽後坦言「表現不夠好但贏了」。Kane 軍團進入休賽備戰下一輪。',
+        title: '英格蘭 2-1 驚險淘汰民主剛果，Tuchel 稱「還要改進」',
+        summary: '7/1 英格蘭 2-1 擊敗民主剛果黑馬晉級，Tuchel 賽後坦言「表現不夠好但贏了」。Kane 軍團進入休賽備戰下一輪。',
         points: [
-            '剛果黑馬構成嚴重威脅。',
+            '民主剛果黑馬構成嚴重威脅。',
             'Bellingham 體能數據仍優異。',
             'Tuchel 強調防守穩定性。',
             '球迷鬆一口氣但仍憂慮。',
@@ -516,12 +516,12 @@ const X_TRENDING_TOP20 = [
         priority: 1,
         hashtag: '#England',
         heat: '🔥 爆熱',
-        topic: 'Kane 梅開二度，英格蘭 2-1 驚險淘汰剛果',
-        summary: '剛果第 7 分鐘先入球，Kane 下半場連入兩球逆轉。英格蘭有驚無險晉級，#England 熱議不斷。',
+        topic: 'Kane 梅開二度，英格蘭 2-1 驚險淘汰民主剛果',
+        summary: '民主剛果第 7 分鐘先入球，Kane 下半場連入兩球逆轉。英格蘭有驚無險晉級，#England 熱議不斷。',
         reactions: [
             { tone: 'positive', text: '『Kane 永遠的大場面先生！』' },
             { tone: 'negative', text: '『開局 7 分鐘失球太離譜。』' },
-            { tone: 'neutral', text: '『剛果雖敗猶榮。』' },
+            { tone: 'neutral', text: '『民主剛果雖敗猶榮。』' },
         ],
     },
     {
@@ -660,7 +660,7 @@ const X_TRENDING_TOP20 = [
         hashtag: '#England',
         heat: '⚡ 熱議',
         topic: 'Bellingham、Kane 破門，英格蘭 7 分奪 L 組第一',
-        summary: '英格蘭小組賽強勢出線，十六強對陣剛果。',
+        summary: '英格蘭小組賽強勢出線，十六強對陣民主剛果。',
         reactions: [
             { tone: 'positive', text: '『英格蘭終於有冠軍相了？』' },
             { tone: 'positive', text: '『Bellingham 越來越成熟。』' },
@@ -672,10 +672,10 @@ const X_TRENDING_TOP20 = [
         priority: 13,
         hashtag: '#Congo',
         heat: '⚡ 熱議',
-        topic: '剛果 3-1 烏茲別克，登頂第三名積分榜',
+        topic: '民主剛果 3-1 烏茲別克，登頂第三名積分榜',
         summary: 'Wissa 補時破門，非洲黑馬躍居第三名榜首。',
         reactions: [
-            { tone: 'positive', text: '『剛果是本屆最大驚喜之一。』' },
+            { tone: 'positive', text: '『民主剛果是本屆最大驚喜之一。』' },
             { tone: 'positive', text: '『非洲足球全面爆發！』' },
             { tone: 'neutral', text: '『英格蘭十六強要小心了。』' },
         ],
@@ -795,7 +795,7 @@ const TEAM_ZH = {
     'Jamaica': '牙買加', 'Panama': '巴拿馬', 'New Zealand': '紐西蘭', 'Ukraine': '烏克蘭',
     'Poland': '波蘭', 'Austria': '奧地利', 'Denmark': '丹麥', 'Serbia': '塞爾維亞',
     'Wales': '威爾斯', 'Norway': '挪威', 'Algeria': '阿爾及利亞', 'Jordan': '約旦',
-    'Cape Verde': '維德角', 'Iraq': '伊拉克', 'Democratic Republic of the Congo': '剛果（金）',
+    'Cape Verde': '維德角', 'Iraq': '伊拉克', 'Democratic Republic of the Congo': '民主剛果',
     'Uzbekistan': '烏茲別克', 'Curaçao': '古拉索',
 };
 
