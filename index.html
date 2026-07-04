@@ -127,7 +127,7 @@
                     淘汰賽對陣
                     <span id="knockout-qualified-count" class="text-xs font-normal text-zinc-500"></span>
                 </h2>
-                <p class="text-sm text-zinc-400 mb-4">小組賽已結束，以下為三十二強與十六強對戰表。完賽後自動填入晉級隊伍。</p>
+                <p class="text-sm text-zinc-400 mb-4">三十二強已全部完賽，以下為十六強對戰表。完賽後自動填入晉級隊伍。</p>
                 <div id="knockout-container" class="space-y-8">
                     <div class="skeleton h-20 rounded-3xl"></div>
                 </div>
@@ -207,7 +207,7 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const CACHE_KEY = 'wc_news_cache_v17';
+const CACHE_KEY = 'wc_news_cache_v18';
 const NEWS_UPDATED = '2026-07-04';
 const TRENDING_LIMIT = 20;
 
@@ -371,191 +371,276 @@ const TODAY_TOP10_NEWS = [
 /** 無賽事球隊場外動態（備戰、訓練、記者會；不含今日比賽戰報） */
 const IDLE_TEAM_NEWS = [
     {
-        id: 'japan-exit-reflection',
+        id: 'france-paraguay-prep',
         priority: 1,
-        relatedTeams: ['Japan'],
-        tags: [{ text: '日本', cls: 'text-blue-400 bg-blue-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
+        relatedTeams: ['France'],
+        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-blue-500/30',
-        meta: '日本 · 出局後續 · 森保一記者會',
-        title: '日本出局後續：佐野海舟成亮點，森保一落淚致歉',
-        summary: 'Martinelli 補時絕殺後藍武士世界盃之旅畫下句點。森保一賽後落淚致歉，佐野海舟進球獲讚「本屆最佳瞬間之一」。#Japan 熱議聚焦亞洲足球改革與四年後再戰。',
+        meta: '法國 · 休賽 · 台灣 7/5 十六強',
+        title: '德尚率法國備戰巴拉圭，Mbappé 金靴之爭緊追 Messi',
+        summary: '3-0 輕取瑞典後法國進入恢復期，7/5 十六強對點球淘汰德國的巴拉圭黑馬。德尚強調「絕不輕敵」。',
         points: [
-            '佐野海舟第 29 分鐘破門曾讓日本領先。',
-            'Martinelli 第 90+5 分鐘絕殺成致命一擊。',
-            '森保一：「對不起球迷，球員已拼盡全力。」',
-            '亞洲球隊本屆世界盃全數出局。',
-        ],
-        source: 'NHK · 日刊體育 · The Athletic',
-    },
-    {
-        id: 'portugal-r16-prep',
-        priority: 2,
-        relatedTeams: ['Portugal', 'Spain'],
-        tags: [{ text: '葡萄牙', cls: 'text-green-400 bg-green-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-green-500/30',
-        meta: '葡萄牙 · 休息日 · 7/7 十六強',
-        title: '葡萄牙休賽備戰西班牙，Ramos 補時英雄狀態受關注',
-        summary: '2-1 驚險淘汰克羅埃西亞後進入恢復期，7/7 十六強伊比利亞內戰。Martínez 稱球隊韌性十足。',
-        points: [
-            'Ramos 補時絕殺成頭條。',
-            'C 羅與莫德里奇對決已落幕。',
-            '7/7 十六強對西班牙。',
-            '葡萄牙無新增重大傷病。',
-        ],
-        source: 'Record · ESPN',
-    },
-    {
-        id: 'france-prep',
-        priority: 3,
-        relatedTeams: ['France', 'Sweden'],
-        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-blue-500/30',
-        meta: '法國 · 休息日 · 晉級後備戰',
-        title: 'Mbappé 梅開二度，法國 3-0 瑞典晉級十六強',
-        summary: '6/30 法國 3-0 輕取瑞典，Mbappé 兩度破門、Barcola 建功。德尚率隊進入休賽備戰下一輪，冠軍熱門氣勢如虹。',
-        points: [
-            'Mbappé 狀態全面回勇。',
-            '法國防守穩健未失球。',
-            '德尚：「球隊越來越成熟。」',
-            '十六強對手即將揭曉。',
+            'Mbappé 本屆 6 球，金靴之爭白熱化。',
+            '巴拉圭點球淘汰德國震驚歐洲。',
+            '台灣時間 7/5 05:00 開踢。',
+            '法國防線本屆僅失少數球。',
         ],
         source: 'L\'Équipe · ESPN',
     },
     {
-        id: 'england-advance',
-        priority: 4,
-        relatedTeams: ['England'],
-        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '晉級', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-blue-500/30',
-        meta: '英格蘭 · 7/1 晉級 · 十六強備戰',
-        title: '英格蘭 2-1 驚險淘汰民主剛果，Tuchel 稱「還要改進」',
-        summary: '7/1 英格蘭 2-1 擊敗民主剛果黑馬晉級，Tuchel 賽後坦言「表現不夠好但贏了」。Kane 軍團進入休賽備戰下一輪。',
+        id: 'canada-morocco-prep',
+        priority: 2,
+        relatedTeams: ['Canada'],
+        tags: [{ text: '加拿大', cls: 'text-red-400 bg-red-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-red-500/30',
+        meta: '加拿大 · 休賽 · 台灣 7/5 十六強',
+        title: 'Koné 絕殺英雄領銜，加拿大備戰摩洛哥',
+        summary: '補時絕殺晉級後加拿大士氣高漲，7/5 十六強首戰對摩洛哥。主教練稱「我們要繼續書寫歷史」。',
         points: [
-            '民主剛果黑馬構成嚴重威脅。',
-            'Bellingham 體能數據仍優異。',
-            'Tuchel 強調防守穩定性。',
-            '球迷鬆一口氣但仍憂慮。',
+            'Koné 補時進球成國家英雄。',
+            '摩洛哥小組賽表現強韌。',
+            '台灣時間 7/5 00:00 開踢。',
+            '北美足球話題持續升溫。',
         ],
-        source: 'BBC · Sky Sports',
+        source: 'TSN · ESPN',
     },
     {
-        id: 'brazil-recovery',
-        priority: 5,
-        relatedTeams: ['Brazil'],
-        tags: [{ text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-yellow-500/30',
-        meta: '巴西 · 休息日 · 7/5 十六強',
-        title: 'Dorival 巴西休賽備戰挪威，Martinelli 成英雄',
-        summary: '2-1 驚險淘汰日本後巴西進入恢復期，7/5 十六強對挪威，Martinelli 補時進球振奮全隊。',
+        id: 'morocco-canada-prep',
+        priority: 3,
+        relatedTeams: ['Morocco'],
+        tags: [{ text: '摩洛哥', cls: 'text-red-400 bg-red-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-red-500/30',
+        meta: '摩洛哥 · 休賽 · 台灣 7/5 十六強',
+        title: '摩洛哥備戰加拿大，補時扳平荷蘭後信心滿滿',
+        summary: '點球淘汰賽逼和荷蘭後摩洛哥進入休賽，7/5 對加拿大。Regragui 強調防守紀律與反擊速度。',
         points: [
-            'Martinelli 補時絕殺成頭條。',
-            'Vinícius 狀態受關注。',
-            '7/5 十六強對陣挪威。',
-            '球隊無新增重大傷病。',
+            '非洲代表僅存少數晉級隊之一。',
+            '加拿大補時絕殺聲勢強勁。',
+            '台灣時間 7/5 00:00 開踢。',
+            '球隊無重大傷病傳聞。',
+        ],
+        source: 'BBC · FIFA',
+    },
+    {
+        id: 'portugal-spain-iberian',
+        priority: 4,
+        relatedTeams: ['Portugal'],
+        tags: [{ text: '葡萄牙', cls: 'text-green-400 bg-green-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-green-500/30',
+        meta: '葡萄牙 · 休賽 · 台灣 7/7 十六強',
+        title: '伊比利亞內戰將上演，葡萄牙備戰西班牙',
+        summary: 'Ramos 補時絕殺克羅埃西亞後進入恢復期，7/7 十六強對宿敵西班牙。Martínez 稱「這是冠軍級對決」。',
+        points: [
+            'C 羅與 Yamal 世代對決受關注。',
+            '葡萄牙本屆多次驚險過關。',
+            '台灣時間 7/7 02:00 開踢。',
+            '兩隊皆為冠軍熱門。',
+        ],
+        source: 'Record · Marca',
+    },
+    {
+        id: 'spain-portugal-iberian',
+        priority: 5,
+        relatedTeams: ['Spain'],
+        tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-red-500/30',
+        meta: '西班牙 · 休賽 · 台灣 7/7 十六強',
+        title: 'De la Fuente：西班牙備戰葡萄牙，冠軍呼聲來自團隊',
+        summary: '3-0 輕取奧地利後西班牙進入休賽，7/7 十六強伊比利亞德比。Oyarzabal 與 Yamal 狀態受關注。',
+        points: [
+            '西班牙本屆防守穩健。',
+            'Pedri 掌控中場節奏。',
+            '台灣時間 7/7 02:00 開踢。',
+            'Yamal 體能管理仍是課題。',
+        ],
+        source: 'Marca · ESPN',
+    },
+    {
+        id: 'brazil-norway-r16',
+        priority: 6,
+        relatedTeams: ['Brazil'],
+        tags: [{ text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-yellow-500/30',
+        meta: '巴西 · 休賽 · 台灣 7/6 十六強',
+        title: 'Dorival 巴西備戰挪威，Vinícius 狀態成關鍵',
+        summary: '三十二強驚險晉級後巴西進入恢復期，7/6 十六強對 Haaland 領銜的挪威黑馬。',
+        points: [
+            'Vinícius 與 Raphinha 進攻組合受關注。',
+            '挪威點球大戰後士氣高昂。',
+            '台灣時間 7/6 04:00 開踢。',
+            '南美對北歐硬度對決。',
         ],
         source: 'Globo · ESPN',
     },
     {
-        id: 'belgium-late-win',
-        priority: 6,
-        relatedTeams: ['Belgium'],
-        tags: [{ text: '比利時', cls: 'text-yellow-400 bg-yellow-950' }, { text: '晉級', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-yellow-500/30',
-        meta: '比利時 · 7/1 晉級 · 十六強備戰',
-        title: 'Lukaku、Tielemans 補時逆轉，比利時 3-2 塞內加爾',
-        summary: '7/1 比利時補時連入兩球逆轉塞內加爾，Tedesco 稱「這就是比利時的精神」。黃金世代驚險晉級。',
-        points: [
-            'Lukaku 第 86 分鐘、Tielemans 第 89 分鐘建功。',
-            '塞內加爾曾 2-1 領先。',
-            'De Bruyne 膝傷管理是課題。',
-            '球隊士氣大幅回升。',
-        ],
-        source: 'ESPN · The Athletic',
-    },
-    {
-        id: 'capeverde-exit-reflection',
-        priority: 8,
-        relatedTeams: ['Cape Verde'],
-        tags: [{ text: '維德角', cls: 'text-blue-400 bg-blue-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
+        id: 'norway-brazil-r16',
+        priority: 7,
+        relatedTeams: ['Norway'],
+        tags: [{ text: '挪威', cls: 'text-blue-400 bg-blue-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-blue-500/30',
-        meta: '維德角 · 出局後續 · 光榮落敗',
-        title: '維德角出局後續：Cabral 世界波成絕響，Bubista 落淚告別',
-        summary: '加時 2-3 不敵阿根廷後，維德角教練與球員獲得全球尊重。Cabral 加時扳平球被譽為本屆最佳進球候選之一。',
+        meta: '挪威 · 休賽 · 台灣 7/6 十六強',
+        title: 'Haaland 備戰巴西，挪威黑馬能否再進一步',
+        summary: '淘汰象牙海岸後挪威進入休賽，7/6 十六強對巴西。Solskjær 稱「我們沒有什麼可失去的」。',
         points: [
-            '兩度扳平衛冕冠軍震驚世界。',
-            'Vozinha 40 歲門將成英雄。',
-            'Bubista：「我們為國家帶來尊嚴。」',
-            '非洲小國世界盃故事落幕。',
+            'Haaland 本屆世界盃進球受期待。',
+            'Nusa 速度是反擊武器。',
+            '台灣時間 7/6 04:00 開踢。',
+            '北歐足球話題升溫。',
         ],
-        source: 'ESPN · BBC',
+        source: 'NRK · ESPN',
     },
     {
-        id: 'ghana-exit',
+        id: 'mexico-england-r16',
         priority: 8,
-        relatedTeams: ['Ghana'],
-        tags: [{ text: '迦納', cls: 'text-yellow-400 bg-yellow-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
-        border: 'border-yellow-500/30',
-        meta: '迦納 · 出局後續',
-        title: '迦納 0-1 不敵哥倫比亞，Semenyo 錯失良機',
-        summary: '早段失球後迦納未能翻盤，Semenyo 無人包抄的傳中成遺憾。非洲第三名止步三十二強。',
-        points: [
-            'Arias 第 14 分鐘進球決定勝負。',
-            '迦納下半場控球卻難以破門。',
-            '主教練稱「已盡全力」。',
-            '非洲代表再少一隊。',
-        ],
-        source: 'ESPN · BBC',
-    },
-    {
-        id: 'mexico-host',
-        priority: 9,
         relatedTeams: ['Mexico'],
-        tags: [{ text: '墨西哥', cls: 'text-green-400 bg-green-950' }, { text: '主辦國', cls: 'text-emerald-400 bg-emerald-950' }],
+        tags: [{ text: '墨西哥', cls: 'text-green-400 bg-green-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-green-500/30',
-        meta: '墨西哥 · 主辦國 · 十六強備戰',
-        title: '墨西哥主辦國休賽，阿茲特克球場氛圍持續升溫',
-        summary: '墨西哥三戰全勝後進入備戰期，主辦國球迷動員十六強門票。主教練稱「我們要讓全國驕傲」。',
+        meta: '墨西哥 · 主辦國 · 台灣 7/6 十六強',
+        title: '主辦國墨西哥備戰英格蘭，阿茲特克球場氛圍火熱',
+        summary: '小組三戰全勝後墨西哥進入休賽，7/6 十六強主場對英格蘭。球迷動員聲浪預期破表。',
         points: [
-            '十六強對陣組合即將揭曉。',
-            '主辦國 9 分完美小組賽。',
-            '全隊無新增傷病。',
-            '街頭慶祝持續數日。',
+            '主辦國優勢與氣氛是 X 因子。',
+            '英格蘭剛驚險淘汰民主剛果。',
+            '台灣時間 7/6 06:00 開踢。',
+            'Jiménez 仍是進攻核心。',
         ],
         source: 'Yahoo Sports · FIFA',
     },
     {
-        id: 'usa-advance',
+        id: 'england-mexico-r16',
+        priority: 9,
+        relatedTeams: ['England'],
+        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-blue-500/30',
+        meta: '英格蘭 · 休賽 · 台灣 7/6 十六強',
+        title: 'Tuchel 英格蘭備戰墨西哥，Kane 領銜衝擊八強',
+        summary: '2-1 驚險過關後英格蘭進入恢復期，7/6 十六強客場對主辦國墨西哥。Tuchel 強調「要踢得更穩」。',
+        points: [
+            'Bellingham 體能數據仍優異。',
+            '客場對主辦國心理壓力大。',
+            '台灣時間 7/6 06:00 開踢。',
+            'Kane 進球紀錄持續累積。',
+        ],
+        source: 'BBC · Sky Sports',
+    },
+    {
+        id: 'usa-belgium-r16',
         priority: 10,
         relatedTeams: ['United States'],
-        tags: [{ text: '美國', cls: 'text-blue-400 bg-blue-950' }, { text: '晉級', cls: 'text-emerald-400 bg-emerald-950' }],
+        tags: [{ text: '美國', cls: 'text-blue-400 bg-blue-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-blue-500/30',
-        meta: '美國 · 晉級後備戰',
-        title: 'Pochettino 美國 2-0 晉級後休賽，主場優勢持續',
-        summary: '2-0 淘汰波士尼亞後美國進入恢復期，Pochettino 稱「球隊還要更穩定」。#USMNT 盼在主場世界盃再進一步。',
+        meta: '美國 · 休賽 · 台灣 7/7 十六強',
+        title: 'Pochettino 美國備戰比利時，主場世界盃再進一步？',
+        summary: '2-0 晉級後美國進入休賽，7/7 十六強對補時逆轉的比利時。Pulisic 狀態良好。',
         points: [
+            '主場優勢持續發酵。',
+            '比利時黃金世代最後一舞。',
+            '台灣時間 7/7 05:00 開踢。',
             'Tillman 末段進球鎖定勝局。',
-            'Pulisic 狀態良好。',
-            '下一輪對手即將揭曉。',
-            '主場球迷動員聲浪持續。',
         ],
         source: 'NBC · ESPN',
     },
     {
-        id: 'spain-r16-prep',
+        id: 'belgium-usa-r16',
         priority: 11,
-        relatedTeams: ['Spain', 'Switzerland'],
-        tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-red-500/30',
-        meta: '西班牙 · 休息日 · 7/7 十六強',
-        title: '西班牙休賽備戰葡萄牙，Oyarzabal 狀態持續火熱',
-        summary: '3-0 輕取奧地利後進入恢復期，7/7 十六強伊比利亞內戰。De la Fuente 強調冠軍呼聲來自團隊而非個人。',
+        relatedTeams: ['Belgium'],
+        tags: [{ text: '比利時', cls: 'text-yellow-400 bg-yellow-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-yellow-500/30',
+        meta: '比利時 · 休賽 · 台灣 7/7 十六強',
+        title: 'Tedesco 比利時備戰美國，Lukaku 補時英雄狀態回勇',
+        summary: '3-2 補時逆轉塞內加爾後比利時進入恢復期，7/7 十六強對主場美國。',
         points: [
-            'Oyarzabal 梅開二度振奮士氣。',
-            'Yamal 體能管理受關注。',
-            '7/7 十六強對葡萄牙。',
-            '西班牙本屆防守穩健。',
+            'De Bruyne 膝傷管理是課題。',
+            'Lukaku 補時進球振奮士氣。',
+            '台灣時間 7/7 05:00 開踢。',
+            '黃金世代盼世界盃突破。',
         ],
-        source: 'Marca · ESPN',
+        source: 'ESPN · The Athletic',
+    },
+    {
+        id: 'switzerland-colombia-r16',
+        priority: 12,
+        relatedTeams: ['Switzerland'],
+        tags: [{ text: '瑞士', cls: 'text-red-400 bg-red-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-red-500/30',
+        meta: '瑞士 · 休賽 · 台灣 7/8 十六強',
+        title: '瑞士備戰哥倫比亞，Embolo 領銜穩健晉級路',
+        summary: '2-0 淘汰阿爾及利亞後瑞士進入休賽，7/8 十六強對連續三場零失球的哥倫比亞。',
+        points: [
+            '瑞士本屆防守組織嚴密。',
+            '哥倫比亞 Díaz 進攻火力兇猛。',
+            '台灣時間 7/8 01:00 開踢。',
+            '歐洲對南美硬度對決。',
+        ],
+        source: 'BBC · ESPN',
+    },
+    {
+        id: 'paraguay-darkhorse',
+        priority: 13,
+        relatedTeams: ['Paraguay'],
+        tags: [{ text: '巴拉圭', cls: 'text-red-400 bg-red-950' }, { text: '黑馬', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-red-500/30',
+        meta: '巴拉圭 · 十六強黑馬 · 台灣 7/5',
+        title: '巴拉圭點球淘汰德國後士氣大振，備戰法國',
+        summary: '點球大戰擊敗德國後巴拉圭成最大黑馬之一，7/5 十六強對衛冕熱門法國。',
+        points: [
+            '德國再次淘汰賽出局引發震盪。',
+            '巴拉圭防守紀律是核心。',
+            '台灣時間 7/5 05:00 對法國。',
+            '南美足球話題升溫。',
+        ],
+        source: 'ESPN · FIFA',
+    },
+    {
+        id: 'australia-exit',
+        priority: 14,
+        relatedTeams: ['Australia'],
+        tags: [{ text: '澳洲', cls: 'text-green-400 bg-green-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-green-500/30',
+        meta: '澳洲 · 出局後續 · 點球落敗',
+        title: '澳洲點球不敵埃及，Popovic 換門將策略引發討論',
+        summary: '加時激戰後十二碼 2-4 落敗，澳洲世界盃之旅結束。Jordan Bos 傷退、Mat Ryan 換上撲點成賽後焦點。',
+        points: [
+            'Beach 加時多次撲救力保懸念。',
+            'Bos 遭粗野鏟球傷退待檢。',
+            '大洋洲代表全數出局。',
+            'Popovic 仍為球員驕傲。',
+        ],
+        source: 'Nine · ESPN',
+    },
+    {
+        id: 'germany-exit',
+        priority: 15,
+        relatedTeams: ['Germany'],
+        tags: [{ text: '德國', cls: 'text-yellow-400 bg-yellow-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-yellow-500/30',
+        meta: '德國 · 出局後續 · 點球落敗',
+        title: '德國點球不敵巴拉圭，Nagelsmann 面臨輿論壓力',
+        summary: '1-1 後點球 3-4 落敗，德國再度淘汰賽提前回家。媒體熱議重建方向與心理素質。',
+        points: [
+            'Havertz 正賽補時曾扳平。',
+            '巴拉圭門將撲點成英雄。',
+            '德國球迷失望但仍支持重建。',
+            '歐洲強隊再少一隊。',
+        ],
+        source: 'ESPN · Bild',
+    },
+    {
+        id: 'croatia-exit',
+        priority: 16,
+        relatedTeams: ['Croatia'],
+        tags: [{ text: '克羅埃西亞', cls: 'text-red-400 bg-red-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-red-500/30',
+        meta: '克羅埃西亞 · 出局後續 · 莫德里奇謝幕',
+        title: '莫德里奇世界盃謝幕，克羅埃西亞不敵葡萄牙補時絕殺',
+        summary: 'Perišić 破門仍難阻 Ramos 第 90+4 分鐘絕殺。達利奇與莫德里奇賽後落淚，黃金世代謝幕。',
+        points: [
+            'C 羅與莫德里奇賽後擁抱成經典畫面。',
+            'Perišić 進球曾讓克隊領先。',
+            '達利奇：「我們無憾。」',
+            '克羅埃西亞傳奇落幕。',
+        ],
+        source: 'Sports Illustrated · ESPN',
     },
 ];
 
@@ -706,16 +791,16 @@ const X_TRENDING_TOP20 = [
         ],
     },
     {
-        id: 'japan-sano-hero',
+        id: 'iberian-derby-hype',
         priority: 12,
-        hashtag: '#SamuraiBlue',
+        hashtag: '#Portugal',
         heat: '💬 討論',
-        topic: '佐野海舟進球仍被討論，日本網友：雖敗猶榮',
-        summary: '藍武士出局後，#SamuraiBlue 仍瘋傳佐野海舟破門片段。',
+        topic: '葡萄牙 vs 西班牙十六強，網友：伊比利亞冠軍戰',
+        summary: '7/7 伊比利亞德比話題升溫，#Portugal 與 #Spain 熱議 C 羅與 Yamal 世代對決。',
         reactions: [
-            { tone: 'positive', text: '『佐野海舟是本屆日本最佳！』' },
-            { tone: 'positive', text: '『領先巴西的那一刻太夢幻了。』' },
-            { tone: 'negative', text: '『補時被絕殺太殘酷…』' },
+            { tone: 'positive', text: '『這場必看！』' },
+            { tone: 'neutral', text: '『兩隊剛踢完三十二強，體能是變數。』' },
+            { tone: 'positive', text: '『冠軍相對決提前上演。』' },
         ],
     },
     {
@@ -780,20 +865,20 @@ const X_TRENDING_TOP20 = [
         reactions: [
             { tone: 'positive', text: '『Haaland vs 巴西，太期待了。』' },
             { tone: 'positive', text: '『挪威黑馬？』' },
-            { tone: 'neutral', text: '『巴西剛贏日本，狀態上來了。』' },
+            { tone: 'neutral', text: '『巴西剛驚險晉級，狀態上來了。』' },
         ],
     },
     {
         id: 'asia-oceania-out',
         priority: 18,
-        hashtag: '#Japan',
+        hashtag: '#Socceroos',
         heat: '💬 討論',
-        topic: '亞洲與大洋洲全數出局，網友嘆息',
-        summary: '澳洲點球落敗後，#Japan 與亞洲足球話題再熱「何時再突破」。',
+        topic: '亞洲與大洋洲全數出局，澳洲點球落敗引熱議',
+        summary: '埃及 4-2 點球淘汰澳洲後，#Socceroos 與亞洲足球話題再熱「何時再突破」。',
         reactions: [
-            { tone: 'negative', text: '『亞洲又全軍覆沒了…』' },
-            { tone: 'positive', text: '『至少佐野海舟帶來希望。』' },
-            { tone: 'neutral', text: '『需要更多留洋球員。』' },
+            { tone: 'negative', text: '『亞洲與大洋洲又全軍覆沒了…』' },
+            { tone: 'negative', text: '『Popovic 換門將太冒險。』' },
+            { tone: 'neutral', text: '『埃及值得尊敬。』' },
         ],
     },
     {
@@ -1057,14 +1142,13 @@ function renderKnockoutBracket() {
     const countEl = $('knockout-qualified-count');
     const byDate = (a, b) => gameToTaipeiDate(a.local_date) - gameToTaipeiDate(b.local_date);
 
-    const r32 = state.games.filter(g => g.type === 'r32' || g.group === 'R32').sort(byDate);
     const r16 = state.games.filter(g => g.type === 'r16' || g.group === 'R16').sort(byDate);
-    const r32Done = r32.filter(isFinished).length;
+    const r16Done = r16.filter(isFinished).length;
 
-    countEl.textContent = r32.length ? `（三十二強 ${r32Done}/${r32.length} 場完賽）` : '';
+    countEl.textContent = r16.length ? `（十六強 ${r16Done}/${r16.length} 場完賽）` : '';
 
-    if (!r32.length && !r16.length) {
-        container.innerHTML = '<p class="text-sm text-zinc-500">載入淘汰賽對陣中…</p>';
+    if (!r16.length) {
+        container.innerHTML = '<p class="text-sm text-zinc-500">載入十六強對陣中…</p>';
         return;
     }
 
@@ -1079,9 +1163,7 @@ function renderKnockoutBracket() {
         </div>`;
     };
 
-    container.innerHTML =
-        block('三十二強', r32, '三十二強', '十六強') +
-        block('十六強', r16, '十六強', '八強');
+    container.innerHTML = block('十六強', r16, '十六強', '八強');
 }
 
 function renderMatches() {
@@ -1114,8 +1196,8 @@ function renderMatches() {
         const homeTeam = state.teams[t.homeId];
         const awayTeam = state.teams[t.awayId];
         const stage = stageLabel(g);
-        const advanceNote = isFinished(g) && (g.type === 'r32' || g.group === 'R32')
-            ? '<div class="text-xs text-emerald-400/80 mt-1">晉級十六強</div>' : '';
+        const advanceNote = isFinished(g) && (g.type === 'r16' || g.group === 'R16')
+            ? '<div class="text-xs text-emerald-400/80 mt-1">晉級八強</div>' : '';
 
         return `
         <div class="match-card fade-in bg-zinc-900 border ${live ? 'border-amber-500/50' : 'border-zinc-700'} rounded-3xl p-5">
