@@ -207,8 +207,22 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const CACHE_KEY = 'wc_news_cache_v18';
+const APP_VERSION = 'v19';
+const CACHE_KEY = 'wc_news_cache_v19';
 const NEWS_UPDATED = '2026-07-04';
+
+/** 換版時清除舊 localStorage，避免瀏覽器沿用過期快取 */
+function migrateAppStorage() {
+    const verKey = 'wc_app_version';
+    if (localStorage.getItem(verKey) === APP_VERSION) return;
+    try {
+        Object.keys(localStorage).forEach(k => {
+            if (k.startsWith('wc_news_cache_')) localStorage.removeItem(k);
+        });
+        localStorage.setItem(verKey, APP_VERSION);
+    } catch {}
+}
+migrateAppStorage();
 const TRENDING_LIMIT = 20;
 
 /** 今日賽事新聞（match 必須對應台灣時間今日 API 賽程，不混入其他場次） */
@@ -1467,7 +1481,7 @@ function setupTabs() {
 
 function renderAll() {
     const tp = getTaipeiToday().replace(/-/g, '/');
-    $('date-label').textContent = `${tp} 台灣時間 · 新聞 ${NEWS_UPDATED}`;
+    $('date-label').textContent = `${tp} 台灣時間 · 新聞 ${NEWS_UPDATED} · ${APP_VERSION}`;
     renderMatches();
     renderKnockoutBracket();
     renderNews();
