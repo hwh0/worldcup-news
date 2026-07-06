@@ -225,7 +225,7 @@ function migrateAppStorage() {
 migrateAppStorage();
 const TRENDING_LIMIT = 20;
 
-/** 今日賽事新聞（match 必須對應台灣時間今日 API 賽程，不混入其他場次） */
+/** 今日賽事新聞（match 對應今日或近 3 日完賽淘汰賽） */
 const TODAY_TOP10_NEWS = [
     {
         id: 'morocco-canada-r16',
@@ -327,7 +327,7 @@ const TODAY_TOP10_NEWS = [
             '南美黑馬本屆最動人故事之一。',
             '德國出局後巴拉圭再證南美硬度。',
         ],
-        source: 'ESPN · FIFA',
+        source: 'ESPN · SBS',
     },
     {
         id: 'hakimi-setpiece-morocco',
@@ -399,7 +399,7 @@ const TODAY_TOP10_NEWS = [
     },
 ];
 
-/** 無賽事球隊場外動態（備戰、訓練、記者會；不含今日比賽戰報） */
+/** 無賽事球隊場外動態（備戰、出局後續；不含今日比賽戰報） */
 const IDLE_TEAM_NEWS = [
     {
         id: 'france-morocco-qf-prep',
@@ -450,7 +450,7 @@ const IDLE_TEAM_NEWS = [
             '非洲代表僅存少數晉級隊之一。',
             '台灣時間 7/8 開踢。',
         ],
-        source: 'BBC · FIFA',
+        source: 'ESPN · SMH · BBC',
     },
     {
         id: 'colombia-switzerland-qf-prep',
@@ -654,7 +654,7 @@ const IDLE_TEAM_NEWS = [
             '南美黑馬本屆最大驚喜之一。',
             '球隊光榮返國。',
         ],
-        source: 'ESPN · FIFA',
+        source: 'ESPN · SMH · Al Jazeera',
     },
     {
         id: 'australia-exit',
@@ -694,23 +694,52 @@ const IDLE_TEAM_NEWS = [
         id: 'croatia-exit',
         priority: 18,
         relatedTeams: ['Croatia'],
-        tags: [{ text: '克羅埃西亞', cls: 'text-red-400 bg-red-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
+        tags: [{ text: '克羅埃西亞', cls: 'text-red-400 bg-red-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-red-500/30',
-        meta: '克羅埃西亞 · 出局後續 · 莫德里奇謝幕',
-        title: '莫德里奇世界盃謝幕，克羅埃西亞不敵葡萄牙補時絕殺',
-        summary: 'Perišić 破門仍難阻 Ramos 第 90+4 分鐘絕殺。達利奇與莫德里奇賽後落淚，黃金世代謝幕。',
+        meta: '克羅埃西亞 · 32 強出局',
+        title: '克羅埃西亞 1-2 不敵葡萄牙，Modrić 世界盃謝幕？',
+        summary: 'Perišić 進球後遭 Ramos 補時絕殺，克羅埃西亞出局。Modrić 賽後未明確宣布退役，但本屆或為最後一舞。',
         points: [
-            'C 羅與莫德里奇賽後擁抱成經典畫面。',
-            'Perišić 進球曾讓克隊領先。',
-            '達利奇：「我們無憾。」',
-            '克羅埃西亞傳奇落幕。',
+            '2018 亞軍再展現大賽韌性。',
+            '葡萄牙絕殺成媒體頭條。',
         ],
-        source: 'Sports Illustrated · ESPN',
+        source: 'ESPN · BBC',
+    },
+    {
+        id: 'idle-australia-out',
+        priority: 9,
+        relatedTeams: ['Australia'],
+        tags: [{ text: '澳洲', cls: 'text-amber-400 bg-amber-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-amber-500/30',
+        meta: '澳洲 · 32 強出局',
+        title: '澳洲十二碼不敵埃及，黃金世代告一段落',
+        summary: '1-1 戰平後互射十二碼 2-4 落敗，澳洲未能延續近年世界盃驚喜。埃及創隊史最佳戰績。',
+        points: [
+            '埃及歷史性晉級 16 強。',
+            '澳洲球迷肯定球隊拼搏。',
+        ],
+        source: 'ESPN · SMH',
+    },
+    {
+        id: 'usa-prep-r16',
+        priority: 10,
+        relatedTeams: ['United States', 'Belgium'],
+        tags: [{ text: '美國', cls: 'text-blue-400 bg-blue-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-blue-500/30',
+        meta: '美國 · 7/6 16 強',
+        title: 'Pochettino 美國備戰比利時，主場 16 強來襲',
+        summary: '美國 2-0 波士尼亞晉級後休賽，7/6 16 強對上 3-2 險勝塞內加爾的比利時。Pulisic 狀態是關鍵。',
+        points: [
+            '東道主之一仍留在淘汰賽。',
+            '比利時黃金世代末舞。',
+            '主場氛圍預期再創高峰。',
+        ],
+        source: 'NBC · ESPN',
     },
 ];
 
 
-/** 今日 X 網路熱議 Top 20（社群討論角度，自動排除與今日戰報重複的場次） */
+/** 今日 X 網路熱議 Top 20（含網友評論摘要，每日更新） */
 const X_TRENDING_TOP20 = [
     {
         id: 'morocco-first-quarters',
@@ -873,8 +902,8 @@ const X_TRENDING_TOP20 = [
         priority: 13,
         hashtag: '#Haaland',
         heat: '💬 討論',
-        topic: '挪威十六強對巴西，Haaland 能挑戰最強？',
-        summary: 'Haaland 話題討論挪威黑馬 7/6 對巴西的懸念。',
+        topic: 'Haaland 能否在 16 強爆發？',
+        summary: '對日本絕殺後今晚對巴西，#Haaland 壓力與期待並存。',
         reactions: [
             { tone: 'positive', text: '『Haaland vs 巴西，太期待了。』' },
             { tone: 'positive', text: '『挪威黑馬？』' },
@@ -886,8 +915,8 @@ const X_TRENDING_TOP20 = [
         priority: 14,
         hashtag: '#Mexico',
         heat: '💬 討論',
-        topic: '墨西哥 vs 英格蘭十六強，主辦國氛圍火熱',
-        summary: '7/6 主辦國對決前，#Mexico 熱議主場優勢能否扳倒英格蘭。',
+        topic: 'Kane 雙響助英格蘭晉級',
+        summary: '對民主剛果逆轉後今晚對墨西哥，#Kane 狀態受關注。',
         reactions: [
             { tone: 'positive', text: '『主辦國氣勢無敵！』' },
             { tone: 'neutral', text: '『英格蘭剛贏民主剛果。』' },
@@ -972,9 +1001,7 @@ const X_TRENDING_TOP20 = [
             { tone: 'negative', text: '『關鍵戰還是差一口氣。』' },
         ],
     },
-];
-
-const REACTION_TONE = {
+];const REACTION_TONE = {
     positive: { label: '支持', cls: 'text-emerald-400 bg-emerald-950', quote: 'reaction-positive' },
     negative: { label: '批評', cls: 'text-red-400 bg-red-950', quote: 'reaction-negative' },
     neutral:  { label: '中立', cls: 'text-zinc-400 bg-zinc-800', quote: 'reaction-neutral' },
