@@ -207,9 +207,9 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v21';
-const CACHE_KEY = 'wc_news_cache_v21';
-const NEWS_UPDATED = '2026-07-05';
+const APP_VERSION = 'v22';
+const CACHE_KEY = 'wc_news_cache_v22';
+const NEWS_UPDATED = '2026-07-06';
 
 /** 換版時清除舊 localStorage，避免瀏覽器沿用過期快取 */
 function migrateAppStorage() {
@@ -228,174 +228,174 @@ const TRENDING_LIMIT = 20;
 /** 今日賽事新聞（match 對應今日或近 3 日完賽淘汰賽） */
 const TODAY_TOP10_NEWS = [
     {
-        id: 'morocco-canada-r16',
+        id: 'norway-brazil-r16',
         priority: 1,
-        tags: [{ text: '摩洛哥', cls: 'text-red-400 bg-red-950' }, { text: '十六強', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-red-500/40',
-        match: { home: 'Canada', away: 'Morocco' },
-        meta: '十六強 · 摩洛哥 3-0 加拿大 · 台灣 7/5',
-        title: 'Ounahi 梅開二度，摩洛哥 3-0 淘汰主辦國加拿大晉級八強',
-        summary: 'Azzedine Ounahi 第 50、82 分鐘入球，Soufiane Rahimi 補刀鎖定 3-0。加拿大上半場掌控局面卻屢失良機，摩洛哥逆勢反擊一氣呵成，成為本屆首支晉級八強的球隊。',
+        tags: [{ text: '挪威', cls: 'text-blue-400 bg-blue-950' }, { text: '十六強', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-blue-500/40',
+        match: { home: 'Brazil', away: 'Norway' },
+        meta: '十六強 · 挪威 2-1 巴西 · 台灣 7/6',
+        title: 'Haaland 梅開二度，挪威 2-1 爆冷淘汰巴西',
+        summary: 'Nyland 上半場撲出 Guimaraes 十二碼，Schjelderup 助攻 Haaland 第 79 分鐘破門，Haaland 第 90 分鐘再下一城。Neymar 補時十二碼追回一分，五冠王巴西自 1990 年以來最早出局。',
         points: [
-            'Hakimi 自由球助攻 Ounahi 破門翻轉戰局。',
-            'Brahim Díaz 反擊助攻 Ounahi 完成梅開二度。',
-            'Bounou 上半場多次化解加拿大威脅。',
-            '八強將對法國，重現 2022 世足四強對決。',
+            'Haaland 7 球追平 Messi 本屆金靴。',
+            'Nyland 全場多次神撲成挪威英雄。',
+            '巴西連續六屆世足敗於歐洲球隊。',
+            '挪威史上首闖八強，將對英格蘭或墨西哥勝者。',
         ],
-        source: 'CNN · Reuters · ESPN',
+        source: 'Al Jazeera · ESPN · AFP',
     },
     {
-        id: 'france-paraguay-r16',
+        id: 'england-mexico-r16',
         priority: 2,
-        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '十六強', cls: 'text-emerald-400 bg-emerald-950' }],
+        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '十六強', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-blue-500/40',
-        match: { home: 'Paraguay', away: 'France' },
-        meta: '十六強 · 法國 1-0 巴拉圭 · 台灣 7/5',
-        title: 'Mbappé 點球一槌定音，法國 1-0 苦戰巴拉圭晉級八強',
-        summary: '費城高溫近 38°C 下，巴拉圭鐵桶防守讓法國上半場零射正。第 70 分鐘 VAR 判給點球，Mbappé 穩操勝券，法國連續四屆世足晉級八強。',
+        match: { home: 'Mexico', away: 'England' },
+        meta: '十六強 · 英格蘭 3-2 墨西哥 · 台灣 7/6',
+        title: 'Bellingham 兩分鐘兩球，十人英格蘭 3-2 客場淘汰墨西哥',
+        summary: '阿茲特克球場風暴延賽一小時，Bellingham 第 36、38 分鐘連入兩球。Quansah 第 54 分鐘紅牌後 Kane 十二碼、Jiménez 十二碼互換，英格蘭驚險晉級八強。',
         points: [
-            'Diego Gómez 膝部碰撞 Doué，VAR 介入判點。',
-            'Mbappé 本屆第 7 球，金靴之爭緊追 Messi。',
-            'Gill 補時兩連撲 Mbappé 重砲保住 0-1。',
-            '八強將對摩洛哥，衛冕之路再遇非洲勁旅。',
+            'Quiñones 第 42 分鐘遠射縮小差距。',
+            'Pickford 多次撲救力保勝果。',
+            'Tuchel：「這是我執教英格蘭最驕傲的一夜。」',
+            '八強將對挪威，Miami 7/11 開踢。',
         ],
-        source: 'ESPN · CNN · AP',
+        source: 'ESPN · PA · BBC',
     },
     {
-        id: 'ounahi-hero-morocco',
+        id: 'haaland-nyland-hero',
         priority: 3,
-        tags: [{ text: '摩洛哥', cls: 'text-red-400 bg-red-950' }, { text: '賽後', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-red-500/40',
-        match: { home: 'Canada', away: 'Morocco' },
-        meta: '十六強 · Ounahi 英雄戰 · 台灣 7/5',
-        title: 'Ounahi 梅開二度成摩洛哥英雄，延續 2022 黑馬氣勢',
-        summary: '自由球世界波與反擊補射雙響，Ounahi 複製對西班牙的經典演出。Regragui 賽後稱「我們在對的時機終結比賽」。',
-        points: [
-            '2022 世足對西班牙自由球名場面再現。',
-            'Ismael Saibari 上半場傷退是隱憂。',
-            '非洲冠軍摩洛哥狀態持續火熱。',
-            '球隊連續大賽晉級八強。',
-        ],
-        source: 'Reuters · BBC',
-    },
-    {
-        id: 'mbappe-pen-deschamps',
-        priority: 4,
-        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '賽後', cls: 'text-zinc-400 bg-zinc-800' }],
+        tags: [{ text: '挪威', cls: 'text-blue-400 bg-blue-950' }, { text: '賽後', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-blue-500/40',
-        match: { home: 'Paraguay', away: 'France' },
-        meta: '十六強 · 法國賽後 · 台灣 7/5',
-        title: 'Deschamps：別跟巴拉圭鬧情緒，Mbappé 稱高溫下拼到最後',
-        summary: '德尚提醒球員勿被對手粗野打法激怒，法國上半場已吃三黃。Mbappé 點球後成隊史世界盃 19 球，距 Messi 紀錄僅差 1 球。',
+        match: { home: 'Brazil', away: 'Norway' },
+        meta: '十六強 · Nyland 神撲 · 台灣 7/6',
+        title: 'Nyland 撲點又連救險，Haaland 賽後大讚門將',
+        summary: 'Guimaraes 十二碼被 Nyland 撲出，Martinelli 與 Vinícius 的射門亦屢遭化解。Solbakken 稱「這是挪威世界盃史上最偉大的夜晚之一」。',
         points: [
-            '法國上半場控球逾 80% 卻無射正。',
-            'Koné 遠射被 Gill 神撲是最佳機會之一。',
-            '德尚：「我們沒踢出最好足球，但贏了。」',
-            '下一戰對摩洛哥，體能與輪換受關注。',
+            'Endrick 單刀射偏成巴西轉捩點。',
+            'Neymar 第 67 分鐘替補未能改寫命運。',
+            'Schjelderup 助攻 Haaland 破門。',
+            '北歐黑馬再進一步。',
         ],
-        source: 'ESPN · L\'Équipe',
+        source: 'Reuters · NRK',
     },
     {
-        id: 'canada-cohost-exit',
-        priority: 5,
-        tags: [{ text: '加拿大', cls: 'text-red-400 bg-red-950' }, { text: '出局', cls: 'text-rose-400 bg-rose-950' }],
-        border: 'border-red-500/30',
-        match: { home: 'Canada', away: 'Morocco' },
-        meta: '十六強 · 加拿大出局 · 台灣 7/5',
-        title: '主辦國加拿大 0-3 落敗，高壓足球未能轉化進球',
-        summary: 'Oluwaseyi 第 11 分鐘險些破門被 Bounou 化解，加拿大上半場 8 張黃牌中的對手紀律更佳。Jonathan David 自由球射飛後士氣受挫，主辦國世界盃之旅結束。',
-        points: [
-            'Alphonso Davies 先發坐板凳引發討論。',
-            'Buchanan 遠射被 Bounou 撲出已是下半場最佳機會。',
-            'Houston 主場氛圍熱烈仍難阻出局。',
-            '北美足球話題轉向美國與墨西哥。',
-        ],
-        source: 'CNN · TSN',
-    },
-    {
-        id: 'paraguay-gallant-exit',
-        priority: 6,
-        tags: [{ text: '巴拉圭', cls: 'text-red-400 bg-red-950' }, { text: '出局', cls: 'text-rose-400 bg-rose-950' }],
-        border: 'border-red-500/30',
-        match: { home: 'Paraguay', away: 'France' },
-        meta: '十六強 · 巴拉圭出局 · 台灣 7/5',
-        title: '巴拉圭鐵桶差點逼入加時，Gill 補時雙撲成最後英雄',
-        summary: '點球淘汰德國後，巴拉圭再以粗野但有效的防守逼法國苦戰 90 分鐘。門將 Gill 補時連擋 Mbappé 兩記重砲，Alfaro 賽後稱「我們沒有遺憾」。',
-        points: [
-            'Cubas 與 Mbappé 衝突險釀罰下。',
-            '巴拉圭全場幾乎無射正卻差點拖入加時。',
-            '南美黑馬本屆最動人故事之一。',
-            '德國出局後巴拉圭再證南美硬度。',
-        ],
-        source: 'ESPN · SBS',
-    },
-    {
-        id: 'hakimi-setpiece-morocco',
-        priority: 7,
-        tags: [{ text: '摩洛哥', cls: 'text-red-400 bg-red-950' }, { text: '戰術', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-red-500/30',
-        match: { home: 'Canada', away: 'Morocco' },
-        meta: '十六強 · 戰術 · 台灣 7/5',
-        title: 'Hakimi 自由球助攻破門，摩洛哥定位球戰術再發威',
-        summary: 'Luc De Fougerolles 犯規送自由球，Hakimi 短傳 Ounahi 弧線入網。加拿大控球優勢瞬間化為泡影，成為本場分水嶺。',
-        points: [
-            'Oliver 全場出示 8 張黃牌，火藥味濃。',
-            '加拿大越位判決取消潛在十二碼。',
-            '摩洛哥反擊速度懲罰對手壓上。',
-            '定位球成非洲勁旅招牌武器。',
-        ],
-        source: 'CNN · Reuters',
-    },
-    {
-        id: 'heat-philly-france',
-        priority: 8,
-        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '場外', cls: 'text-zinc-400 bg-zinc-800' }],
+        id: 'bellingham-brace-azteca',
+        priority: 4,
+        tags: [{ text: 'Bellingham', cls: 'text-blue-400 bg-blue-950' }, { text: '賽後', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-blue-500/30',
-        match: { home: 'Paraguay', away: 'France' },
-        meta: '十六強 · 高溫作戰 · 台灣 7/5',
-        title: '費城近 38°C 高溫開踢，補充水分暫停成關鍵',
-        summary: '極端熱浪警告下，林肯金融球場觀眾中場紛紛躲入陰影。補充水分暫停與中場灑水成為本場標配，球員體能分配影響戰術節奏。',
+        match: { home: 'Mexico', away: 'England' },
+        meta: '十六強 · Bellingham 雙響 · 台灣 7/6',
+        title: 'Bellingham：對墨西哥是我英格蘭生涯最驕傲一夜',
+        summary: 'Saka 傳中助攻首球，Kane 低傳助攻第二球，兩分鐘內阿茲特克球場鴉雀無聲。Bellingham 賽後稱在高海拔客場紅牌少打一人仍能贏，意義非凡。',
         points: [
-            '開球時氣溫約華氏 100 度（38°C）。',
-            '球迷中場大量離席避暑。',
-            '法國仍維持高強度逼搶。',
-            '八強賽程密集，體能成隱憂。',
+            '36、38 分鐘連入兩球震懾主場。',
+            '補時關鍵鏟球化解 Montes 威脅。',
+            '英格蘭連續大賽晉級淘汰賽第二輪。',
+            'Kane 十二碼穩定輸出。',
         ],
-        source: 'AP · CNN',
+        source: 'ESPN · Sky Sports',
     },
     {
-        id: 'france-morocco-preview-qf',
-        priority: 9,
+        id: 'brazil-exit-anchelotti',
+        priority: 5,
+        tags: [{ text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }, { text: '出局', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-yellow-500/30',
+        match: { home: 'Brazil', away: 'Norway' },
+        meta: '十六強 · 巴西出局 · 台灣 7/6',
+        title: '巴西 24 年冠軍夢碎，Ancelotti 首屆世足即止步十六強',
+        summary: '五冠王自 1990 年來首次無法晉級八強，且連續六屆淘汰賽敗於歐洲球隊。Neymar 補時十二碼雖追回一分，已無法改寫結局。',
+        points: [
+            'Guimaraes 十二碼成上半場轉捩點。',
+            'Vinícius 與 Endrick 屢失良機。',
+            '巴西球迷紐約現場沉默離場。',
+            '南美僅存阿根廷等少數隊伍。',
+        ],
+        source: 'ESPN · Globo',
+    },
+    {
+        id: 'mexico-azteca-exit',
+        priority: 6,
+        tags: [{ text: '墨西哥', cls: 'text-green-400 bg-green-950' }, { text: '出局', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-green-500/30',
+        match: { home: 'Mexico', away: 'England' },
+        meta: '十六強 · 墨西哥出局 · 台灣 7/6',
+        title: '主辦國墨西哥 2-3 落敗，阿茲特克氛圍仍難阻英格蘭',
+        summary: 'Quiñones 世界波與 Jiménez 十二碼讓比賽懸念持續到最後，但 Quansah 紅牌後英格蘭展現韌性。主辦三國僅剩美國。',
+        points: [
+            '開賽因風暴延遲一小時。',
+            '2200 公尺海拔英格蘭適應良好。',
+            'Gallardo 與 Quansah 衝突引發紅牌。',
+            '墨西哥球迷仍為球隊喝采。',
+        ],
+        source: 'ESPN · Yahoo Sports',
+    },
+    {
+        id: 'quansah-red-card',
+        priority: 7,
+        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '戰術', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-blue-500/30',
+        match: { home: 'Mexico', away: 'England' },
+        meta: '十六強 · 紅牌 · 台灣 7/6',
+        title: 'Quansah 紅牌後 Tuchel 變陣，英格蘭十人守住勝果',
+        summary: 'Faghani VAR 回看後向 Quansah 出示紅牌，Tuchel 換上 Stones、Burn 加固防線。Dan Burn 補時關鍵解圍成晉級功臣。',
+        points: [
+            'Saka 被換下改打五後衛。',
+            'Kane 十二碼第 60 分鐘擴大優勢。',
+            'Jiménez 十二碼 69 分鐘再追近。',
+            '英格蘭防守韌性受讚。',
+        ],
+        source: 'PA · BBC',
+    },
+    {
+        id: 'england-norway-qf-preview',
+        priority: 8,
         tags: [{ text: '八強', cls: 'text-emerald-400 bg-emerald-950' }, { text: '預告', cls: 'text-amber-400 bg-amber-950' }],
         border: 'border-emerald-500/30',
-        match: { home: 'Canada', away: 'Morocco' },
-        meta: '八強預告 · 法國 vs 摩洛哥 · 台灣 7/9',
-        title: '八強預告：法國對摩洛哥，2022 四強對決再演',
-        summary: '兩強同日晉級後，台灣時間 7/9 將在 Foxborough 對決。2022 世足摩洛哥曾淘汰西班牙、葡萄牙，法國則奪冠，復仇與衛冕話題齊發。',
+        match: { home: 'Mexico', away: 'England' },
+        meta: '八強預告 · 英格蘭 vs 挪威 · 台灣 7/11',
+        title: '八強預告：英格蘭對挪威，Haaland 再遇三獅軍團',
+        summary: '兩強同日晉級後，台灣時間 7/11 邁阿密對決。Haaland 與 Bellingham 金靴之爭、北歐黑馬 vs 歐洲亞軍話題齊發。',
         points: [
-            'Mbappé 與 Hakimi 老友對決受關注。',
-            '摩洛哥本屆首支晉級八強。',
-            '法國連續四屆晉級八強。',
-            '台灣時間 7/9 開踢。',
+            '挪威史上首闖八強。',
+            '英格蘭剛在少一人情況下過關。',
+            'Haaland 本屆 7 球。',
+            '台灣時間 7/11 開踢。',
         ],
-        source: 'ESPN · L\'Équipe',
+        source: 'ESPN · BBC',
     },
     {
-        id: 'mbappe-golden-boot-race',
-        priority: 10,
-        tags: [{ text: 'Mbappé', cls: 'text-blue-400 bg-blue-950' }, { text: '金靴', cls: 'text-yellow-400 bg-yellow-950' }],
-        border: 'border-blue-500/30',
-        match: { home: 'Paraguay', away: 'France' },
-        meta: '十六強 · 金靴之爭 · 台灣 7/5',
-        title: 'Mbappé 7 球追平 Messi 本屆，金靴之爭白熱化',
-        summary: '點球進帳後 Mbappé 與 Messi 同為 7 球，並以隊史世界盃 19 球緊追 Messi 的 20 球紀錄。Haaland、Kane 以 5 球緊隨其後。',
+        id: 'neymar-late-penalty',
+        priority: 9,
+        tags: [{ text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }, { text: '賽後', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-yellow-500/30',
+        match: { home: 'Brazil', away: 'Norway' },
+        meta: '十六強 · Neymar 補時 · 台灣 7/6',
+        title: 'Neymar 補時十二碼追回一分，Nyland 與其衝突成賽後焦點',
+        summary: '第 67 分鐘替補登場的 Neymar 第 90+10 分鐘十二碼入網，但挪威已領先兩球。Nyland 與 Neymar 賽後口角引發討論。',
         points: [
-            'Mbappé 兩屆世足皆至少 7 球。',
-            'Messi 仍領先歷史總進球 1 球。',
-            '法國衛冕前鋒狀態穩定。',
-            '八強後金靴歸屬仍難預料。',
+            'Casemiro 遭肘擊獲十二碼。',
+            '巴西全場兩度十二碼一進一失。',
+            'Neymar 世界盃告別戰？',
+            '挪威慶祝首闖八強。',
         ],
-        source: 'ESPN · FIFA',
+        source: 'AFP · ESPN',
+    },
+    {
+        id: 'pickford-azteca-hero',
+        priority: 10,
+        tags: [{ text: 'Pickford', cls: 'text-blue-400 bg-blue-950' }, { text: '賽後', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-blue-500/30',
+        match: { home: 'Mexico', away: 'England' },
+        meta: '十六強 · Pickford 神撲 · 台灣 7/6',
+        title: 'Pickford 開賽世界級撲救 Jiménez，高海拔客場定海神針',
+        summary: '開賽初期 Pickford 飛身擋下 Jiménez 頭槌，為英格蘭穩住陣腳。全場在敵對氛圍下多次化解墨西哥攻勢。',
+        points: [
+            'Bellingham 讚門將「拯救我們多次」。',
+            'Jiménez 十二碼與頭槌均構成威脅。',
+            '英格蘭客場世界盃再進一步。',
+            '八強對挪威硬仗在望。',
+        ],
+        source: 'ESPN · PA',
     },
 ];
 
@@ -409,599 +409,146 @@ const IDLE_TEAM_NEWS = [
         border: 'border-blue-500/30',
         meta: '法國 · 休賽 · 台灣 7/9 八強',
         title: '法國備戰摩洛哥，Mbappé 與 Hakimi 老友對決將上演',
-        summary: '同日晉級八強後進入恢復期，台灣時間 7/9 對 2022 四強老對手摩洛哥。德尚稱「非洲冠軍狀態正佳，絕不輕敵」。',
-        points: [
-            '2022 世足法國 2-0 摩洛哥奪冠之路。',
-            'Mbappé 本屆 7 球領跑金靴之爭。',
-            'Ounahi 連續大賽高光表現受關注。',
-            '台灣時間 7/9 開踢。',
-        ],
+        summary: '7/5 雙雙晉級八強後進入恢復期，台灣時間 7/9 對 2022 四強老對手摩洛哥。',
+        points: ['Mbappé 本屆 7 球。', 'Ounahi 狀態火熱。', '衛冕冠軍再遇非洲勁旅。', '台灣時間 7/9 開踢。'],
         source: 'L\'Équipe · ESPN',
     },
     {
-        id: 'argentina-egypt-qf-prep',
-        priority: 2,
-        relatedTeams: ['Argentina'],
-        tags: [{ text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }, { text: '八強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-sky-500/30',
-        meta: '阿根廷 · 休賽 · 台灣 7/8 八強',
-        title: 'Scaloni 阿根廷備戰埃及，Messi vs Salah 八強對決將上演',
-        summary: '加時驚險淘汰維德角後進入恢復期，台灣時間 7/8 八強對點球淘汰澳洲的埃及。衛冕冠軍再遇非洲勁旅。',
-        points: [
-            'Messi 本屆 7 球，金靴之爭白熱化。',
-            'Salah 領銜埃及士氣正旺。',
-            '阿根廷剛被維德角嚇出一身冷汗。',
-            '台灣時間 7/8 開踢。',
-        ],
-        source: 'ESPN · The Athletic',
-    },
-    {
-        id: 'egypt-argentina-qf-prep',
-        priority: 3,
-        relatedTeams: ['Egypt'],
-        tags: [{ text: '埃及', cls: 'text-green-400 bg-green-950' }, { text: '八強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-green-500/30',
-        meta: '埃及 · 休賽 · 台灣 7/8 八強',
-        title: '埃及備戰阿根廷，Salah 率隊挑戰衛冕冠軍',
-        summary: '史上首闖十六強後再進一步的機會來臨，7/8 八強對阿根廷。主教練稱「我們沒有什麼可失去的」。',
-        points: [
-            '點球 4-2 淘汰澳洲士氣大振。',
-            'Messi 與 Salah 對決成全球焦點。',
-            '非洲代表僅存少數晉級隊之一。',
-            '台灣時間 7/8 開踢。',
-        ],
-        source: 'ESPN · SMH · BBC',
-    },
-    {
-        id: 'colombia-switzerland-qf-prep',
-        priority: 4,
-        relatedTeams: ['Colombia'],
-        tags: [{ text: '哥倫比亞', cls: 'text-yellow-400 bg-yellow-950' }, { text: '八強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-yellow-500/30',
-        meta: '哥倫比亞 · 休賽 · 台灣 7/8 八強',
-        title: '哥倫比亞備戰瑞士，連續三場零失球後挑戰八強',
-        summary: '1-0 小勝迦納晉級後進入恢復期，台灣時間 7/8 八強對瑞士。Díaz 領銜進攻，南美黑馬盼再進一步。',
-        points: [
-            '本屆連續三場零失球創隊史紀錄。',
-            '瑞士 2-0 淘汰阿爾及利亞狀態穩健。',
-            '台灣時間 7/8 01:00 開踢。',
-            '歐洲對南美硬度對決。',
-        ],
-        source: 'AP · ESPN',
-    },
-    {
-        id: 'switzerland-colombia-qf-prep',
-        priority: 5,
-        relatedTeams: ['Switzerland'],
-        tags: [{ text: '瑞士', cls: 'text-red-400 bg-red-950' }, { text: '八強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-red-500/30',
-        meta: '瑞士 · 休賽 · 台灣 7/8 八強',
-        title: '瑞士備戰哥倫比亞，Embolo 領銜穩健晉級路',
-        summary: '2-0 淘汰阿爾及利亞後瑞士進入休賽，7/8 八強對連續零失球的哥倫比亞。防守組織仍是核心優勢。',
-        points: [
-            '瑞士本屆防守紀律嚴密。',
-            '哥倫比亞 Díaz 進攻火力兇猛。',
-            '台灣時間 7/8 01:00 開踢。',
-            '歐洲對南美硬度對決。',
-        ],
-        source: 'BBC · ESPN',
-    },
-    {
         id: 'portugal-spain-iberian',
-        priority: 6,
+        priority: 2,
         relatedTeams: ['Portugal'],
         tags: [{ text: '葡萄牙', cls: 'text-green-400 bg-green-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-green-500/30',
         meta: '葡萄牙 · 休賽 · 台灣 7/7 十六強',
         title: '伊比利亞內戰將上演，葡萄牙備戰西班牙',
-        summary: 'Ramos 補時絕殺克羅埃西亞後進入恢復期，7/7 十六強對宿敵西班牙。Martínez 稱「這是冠軍級對決」。',
-        points: [
-            'C 羅與 Yamal 世代對決受關注。',
-            '葡萄牙本屆多次驚險過關。',
-            '台灣時間 7/7 02:00 開踢。',
-            '兩隊皆為冠軍熱門。',
-        ],
+        summary: 'Ramos 補時絕殺克羅埃西亞後進入恢復期，7/7 十六強對宿敵西班牙。',
+        points: ['C 羅與 Yamal 世代對決。', '台灣時間 7/7 02:00 開踢。', '冠軍熱門對決。', '兩隊皆剛歷經苦戰。'],
         source: 'Record · Marca',
     },
     {
         id: 'spain-portugal-iberian',
-        priority: 7,
+        priority: 3,
         relatedTeams: ['Spain'],
         tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-red-500/30',
         meta: '西班牙 · 休賽 · 台灣 7/7 十六強',
         title: 'De la Fuente：西班牙備戰葡萄牙，冠軍呼聲來自團隊',
-        summary: '3-0 輕取奧地利後西班牙進入休賽，7/7 十六強伊比利亞德比。Oyarzabal 與 Yamal 狀態受關注。',
-        points: [
-            '西班牙本屆防守穩健。',
-            'Pedri 掌控中場節奏。',
-            '台灣時間 7/7 02:00 開踢。',
-            'Yamal 體能管理仍是課題。',
-        ],
+        summary: '3-0 輕取奧地利後進入休賽，7/7 十六強伊比利亞德比。',
+        points: ['Pedri 掌控中場。', 'Yamal 體能管理受關注。', '台灣時間 7/7 02:00 開踢。', '歐洲冠軍熱門對決。'],
         source: 'Marca · ESPN',
     },
     {
-        id: 'brazil-norway-r16',
-        priority: 8,
-        relatedTeams: ['Brazil'],
-        tags: [{ text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-yellow-500/30',
-        meta: '巴西 · 休賽 · 台灣 7/6 十六強',
-        title: 'Dorival 巴西備戰挪威，Vinícius 狀態成關鍵',
-        summary: '三十二強驚險晉級後巴西進入恢復期，7/6 十六強對 Haaland 領銜的挪威黑馬。',
-        points: [
-            'Vinícius 與 Raphinha 進攻組合受關注。',
-            '挪威點球大戰後士氣高昂。',
-            '台灣時間 7/6 04:00 開踢。',
-            '南美對北歐硬度對決。',
-        ],
-        source: 'Globo · ESPN',
-    },
-    {
-        id: 'norway-brazil-r16',
-        priority: 9,
-        relatedTeams: ['Norway'],
-        tags: [{ text: '挪威', cls: 'text-blue-400 bg-blue-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-blue-500/30',
-        meta: '挪威 · 休賽 · 台灣 7/6 十六強',
-        title: 'Haaland 備戰巴西，挪威黑馬能否再進一步',
-        summary: '淘汰象牙海岸後挪威進入休賽，7/6 十六強對巴西。Solskjær 稱「我們沒有什麼可失去的」。',
-        points: [
-            'Haaland 本屆世界盃進球受期待。',
-            'Nusa 速度是反擊武器。',
-            '台灣時間 7/6 04:00 開踢。',
-            '北歐足球話題升溫。',
-        ],
-        source: 'NRK · ESPN',
-    },
-    {
-        id: 'mexico-england-r16',
-        priority: 10,
-        relatedTeams: ['Mexico'],
-        tags: [{ text: '墨西哥', cls: 'text-green-400 bg-green-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-green-500/30',
-        meta: '墨西哥 · 主辦國 · 台灣 7/6 十六強',
-        title: '主辦國墨西哥備戰英格蘭，阿茲特克球場氛圍火熱',
-        summary: '小組三戰全勝後墨西哥進入休賽，7/6 十六強主場對英格蘭。球迷動員聲浪預期破表。',
-        points: [
-            '主辦國優勢與氣氛是 X 因子。',
-            '英格蘭剛驚險淘汰民主剛果。',
-            '台灣時間 7/6 06:00 開踢。',
-            'Jiménez 仍是進攻核心。',
-        ],
-        source: 'Yahoo Sports · FIFA',
-    },
-    {
-        id: 'england-mexico-r16',
-        priority: 11,
-        relatedTeams: ['England'],
-        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-blue-500/30',
-        meta: '英格蘭 · 休賽 · 台灣 7/6 十六強',
-        title: 'Tuchel 英格蘭備戰墨西哥，Kane 領銜衝擊八強',
-        summary: '2-1 驚險過關後英格蘭進入恢復期，7/6 十六強客場對主辦國墨西哥。Tuchel 強調「要踢得更穩」。',
-        points: [
-            'Bellingham 體能數據仍優異。',
-            '客場對主辦國心理壓力大。',
-            '台灣時間 7/6 06:00 開踢。',
-            'Kane 進球紀錄持續累積。',
-        ],
-        source: 'BBC · Sky Sports',
-    },
-    {
         id: 'usa-belgium-r16',
-        priority: 12,
+        priority: 4,
         relatedTeams: ['United States'],
         tags: [{ text: '美國', cls: 'text-blue-400 bg-blue-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-blue-500/30',
         meta: '美國 · 休賽 · 台灣 7/7 十六強',
         title: 'Pochettino 美國備戰比利時，主場世界盃再進一步？',
-        summary: '2-0 晉級後美國進入休賽，7/7 十六強對補時逆轉的比利時。Pulisic 狀態良好。',
-        points: [
-            '主場優勢持續發酵。',
-            '比利時黃金世代最後一舞。',
-            '台灣時間 7/7 05:00 開踢。',
-            'Tillman 末段進球鎖定勝局。',
-        ],
+        summary: '2-0 晉級後美國進入休賽，7/7 十六強對比利時。',
+        points: ['主場優勢持續。', 'Pulisic 狀態良好。', '台灣時間 7/7 05:00 開踢。', '北美最後希望之一。'],
         source: 'NBC · ESPN',
     },
     {
         id: 'belgium-usa-r16',
-        priority: 13,
+        priority: 5,
         relatedTeams: ['Belgium'],
         tags: [{ text: '比利時', cls: 'text-yellow-400 bg-yellow-950' }, { text: '十六強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-yellow-500/30',
         meta: '比利時 · 休賽 · 台灣 7/7 十六強',
         title: 'Tedesco 比利時備戰美國，Lukaku 補時英雄狀態回勇',
         summary: '3-2 補時逆轉塞內加爾後比利時進入恢復期，7/7 十六強對主場美國。',
-        points: [
-            'De Bruyne 膝傷管理是課題。',
-            'Lukaku 補時進球振奮士氣。',
-            '台灣時間 7/7 05:00 開踢。',
-            '黃金世代盼世界盃突破。',
-        ],
+        points: ['De Bruyne 膝傷管理是課題。', '黃金世代最後一舞。', '台灣時間 7/7 05:00 開踢。', '歐洲對北美硬度對決。'],
         source: 'ESPN · The Athletic',
     },
     {
+        id: 'argentina-egypt-qf-prep',
+        priority: 6,
+        relatedTeams: ['Argentina'],
+        tags: [{ text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }, { text: '八強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-sky-500/30',
+        meta: '阿根廷 · 休賽 · 台灣 7/8 八強',
+        title: 'Scaloni 阿根廷備戰埃及，Messi vs Salah 八強對決',
+        summary: '加時驚險淘汰維德角後進入恢復期，7/8 八強對埃及。',
+        points: ['Messi 本屆 7 球。', 'Salah 領銜埃及士氣正旺。', '台灣時間 7/8 開踢。', '衛冕冠軍再遇非洲勁旅。'],
+        source: 'ESPN · The Athletic',
+    },
+    {
+        id: 'colombia-switzerland-qf-prep',
+        priority: 7,
+        relatedTeams: ['Colombia'],
+        tags: [{ text: '哥倫比亞', cls: 'text-yellow-400 bg-yellow-950' }, { text: '八強備戰', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-yellow-500/30',
+        meta: '哥倫比亞 · 休賽 · 台灣 7/8 八強',
+        title: '哥倫比亞備戰瑞士，連續三場零失球後挑戰八強',
+        summary: '1-0 小勝迦納後進入恢復期，7/8 八強對瑞士。',
+        points: ['Díaz 領銜進攻。', '瑞士防守嚴密。', '台灣時間 7/8 01:00 開踢。', '南美對歐洲硬度對決。'],
+        source: 'AP · ESPN',
+    },
+    {
         id: 'canada-exit',
-        priority: 14,
+        priority: 8,
         relatedTeams: ['Canada'],
         tags: [{ text: '加拿大', cls: 'text-red-400 bg-red-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-red-500/30',
-        meta: '加拿大 · 出局後續 · 十六強落敗',
-        title: '主辦國加拿大十六強出局，Davies 先發疑雲成賽後焦點',
-        summary: '0-3 不敵摩洛哥後加拿大世界盃之旅結束。主教練稱仍為球員驕傲，但輿論質疑關鍵戰術調度與先發人選。',
-        points: [
-            '上半場控球優勢未能轉化。',
-            'Ounahi 兩球成分水嶺。',
-            '北美僅剩美國與墨西哥。',
-            '球迷仍肯定本屆突破。',
-        ],
+        meta: '加拿大 · 出局後續',
+        title: '主辦國加拿大十六強 0-3 出局，Ounahi 梅開二度',
+        summary: '7/5 不敵摩洛哥後世界盃之旅結束，北美僅剩美國。',
+        points: ['上半場控球優勢未能轉化。', 'Davies 先發疑雲引熱議。', 'Koné 絕殺晉級後黯然出局。', '球迷仍肯定本屆突破。'],
         source: 'TSN · CNN',
     },
     {
         id: 'paraguay-exit',
-        priority: 15,
+        priority: 9,
         relatedTeams: ['Paraguay'],
         tags: [{ text: '巴拉圭', cls: 'text-red-400 bg-red-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-red-500/30',
-        meta: '巴拉圭 · 出局後續 · 十六強落敗',
-        title: '巴拉圭光榮出局，Gill 補時雙撲成最後高光',
-        summary: '點球淘汰德國後再逼法國苦戰，最終 0-1 落敗。Alfaro 稱「我們向世界展示了南美足球的韌性」。',
-        points: [
-            '全場幾乎無射正卻差點拖入加時。',
-            'Gill 補時兩撲 Mbappé 成經典畫面。',
-            '南美黑馬本屆最大驚喜之一。',
-            '球隊光榮返國。',
-        ],
-        source: 'ESPN · SMH · Al Jazeera',
+        meta: '巴拉圭 · 出局後續',
+        title: '巴拉圭 0-1 不敵法國，Gill 補時雙撲成最後高光',
+        summary: '點球淘汰德國後再逼法國苦戰，Mbappé 點球決定勝負。',
+        points: ['鐵桶防守差點拖入加時。', '南美黑馬光榮出局。', 'Gill 補時兩撲成經典。', '德國出局後巴拉圭再證南美韌性。'],
+        source: 'ESPN · FIFA',
     },
     {
         id: 'australia-exit',
-        priority: 16,
+        priority: 10,
         relatedTeams: ['Australia'],
         tags: [{ text: '澳洲', cls: 'text-green-400 bg-green-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-green-500/30',
-        meta: '澳洲 · 出局後續 · 點球落敗',
+        meta: '澳洲 · 出局後續',
         title: '澳洲點球不敵埃及，Popovic 換門將策略引發討論',
-        summary: '加時激戰後十二碼 2-4 落敗，澳洲世界盃之旅結束。Jordan Bos 傷退、Mat Ryan 換上撲點成賽後焦點。',
-        points: [
-            'Beach 加時多次撲救力保懸念。',
-            'Bos 遭粗野鏟球傷退待檢。',
-            '大洋洲代表全數出局。',
-            'Popovic 仍為球員驕傲。',
-        ],
+        summary: '加時激戰後十二碼 2-4 落敗，大洋洲代表全數出局。',
+        points: ['Beach 加時多次撲救。', 'Bos 傷退待檢。', 'Mat Ryan 換上撲點失敗。', 'Popovic 仍為球員驕傲。'],
         source: 'Nine · ESPN',
-    },
-    {
-        id: 'germany-exit',
-        priority: 17,
-        relatedTeams: ['Germany'],
-        tags: [{ text: '德國', cls: 'text-yellow-400 bg-yellow-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
-        border: 'border-yellow-500/30',
-        meta: '德國 · 出局後續 · 點球落敗',
-        title: '德國點球不敵巴拉圭，Nagelsmann 面臨輿論壓力',
-        summary: '1-1 後點球 3-4 落敗，德國再度淘汰賽提前回家。媒體熱議重建方向與心理素質。',
-        points: [
-            'Havertz 正賽補時曾扳平。',
-            '巴拉圭門將撲點成英雄。',
-            '德國球迷失望但仍支持重建。',
-            '歐洲強隊再少一隊。',
-        ],
-        source: 'ESPN · Bild',
-    },
-    {
-        id: 'croatia-exit',
-        priority: 18,
-        relatedTeams: ['Croatia'],
-        tags: [{ text: '克羅埃西亞', cls: 'text-red-400 bg-red-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-red-500/30',
-        meta: '克羅埃西亞 · 32 強出局',
-        title: '克羅埃西亞 1-2 不敵葡萄牙，Modrić 世界盃謝幕？',
-        summary: 'Perišić 進球後遭 Ramos 補時絕殺，克羅埃西亞出局。Modrić 賽後未明確宣布退役，但本屆或為最後一舞。',
-        points: [
-            '2018 亞軍再展現大賽韌性。',
-            '葡萄牙絕殺成媒體頭條。',
-        ],
-        source: 'ESPN · BBC',
-    },
-    {
-        id: 'idle-australia-out',
-        priority: 9,
-        relatedTeams: ['Australia'],
-        tags: [{ text: '澳洲', cls: 'text-amber-400 bg-amber-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-amber-500/30',
-        meta: '澳洲 · 32 強出局',
-        title: '澳洲十二碼不敵埃及，黃金世代告一段落',
-        summary: '1-1 戰平後互射十二碼 2-4 落敗，澳洲未能延續近年世界盃驚喜。埃及創隊史最佳戰績。',
-        points: [
-            '埃及歷史性晉級 16 強。',
-            '澳洲球迷肯定球隊拼搏。',
-        ],
-        source: 'ESPN · SMH',
-    },
-    {
-        id: 'usa-prep-r16',
-        priority: 10,
-        relatedTeams: ['United States', 'Belgium'],
-        tags: [{ text: '美國', cls: 'text-blue-400 bg-blue-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-blue-500/30',
-        meta: '美國 · 7/6 16 強',
-        title: 'Pochettino 美國備戰比利時，主場 16 強來襲',
-        summary: '美國 2-0 波士尼亞晉級後休賽，7/6 16 強對上 3-2 險勝塞內加爾的比利時。Pulisic 狀態是關鍵。',
-        points: [
-            '東道主之一仍留在淘汰賽。',
-            '比利時黃金世代末舞。',
-            '主場氛圍預期再創高峰。',
-        ],
-        source: 'NBC · ESPN',
     },
 ];
 
 
 /** 今日 X 網路熱議 Top 20（含網友評論摘要，每日更新） */
 const X_TRENDING_TOP20 = [
-    {
-        id: 'morocco-first-quarters',
-        priority: 1,
-        hashtag: '#Morocco',
-        heat: '🔥 爆熱',
-        topic: '摩洛哥成首支晉級八強，網友：非洲冠軍來真的',
-        summary: '3-0 淘汰加拿大後 #Morocco 洗版「Atlas Lions 又來了」，2022 四強回憶殺全開。',
-        reactions: [
-            { tone: 'positive', text: '『非洲足球驕傲！』' },
-            { tone: 'positive', text: '『Ounahi 太強了。』' },
-            { tone: 'funny', text: '『法國你準備好了嗎？』' },
-        ],
-    },
-    {
-        id: 'mbappe-pk-heat',
-        priority: 2,
-        hashtag: '#Mbappé',
-        heat: '🔥 爆熱',
-        topic: '費城 38°C 下 Mbappé 點球致勝，網友：熱到窒息還能進球',
-        summary: '極端高溫成 #WorldCup 熱議，Mbappé 點球後金靴話題與「這天氣怎麼踢」並列洗版。',
-        reactions: [
-            { tone: 'positive', text: '『Mbappé 大心臟。』' },
-            { tone: 'funny', text: '『球迷中場都逃去陰影了。』' },
-            { tone: 'neutral', text: '『補充水分暫停有必要。』' },
-        ],
-    },
-    {
-        id: 'canada-cruel-football',
-        priority: 3,
-        hashtag: '#Canada',
-        heat: '🔥 爆熱',
-        topic: '加拿大控球卻 0-3 落敗，網友：足球最殘酷的一天',
-        summary: '上半場壓著打卻沒進球，#Canada 熱議「支配比賽但輸球」的經典案例。',
-        reactions: [
-            { tone: 'negative', text: '『太殘忍了…』' },
-            { tone: 'neutral', text: '『足球就是這樣。』' },
-            { tone: 'positive', text: '『至少主辦國踢得有尊嚴。』' },
-        ],
-    },
-    {
-        id: 'gill-double-save',
-        priority: 4,
-        hashtag: '#Gill',
-        heat: '🔥 爆熱',
-        topic: 'Gill 補時連擋 Mbappé 兩炮，網友：門將才是巴拉圭最後英雄',
-        summary: '巴拉圭落敗但 #Gill 影片瘋傳，社群稱「輸了但這撲救會被記住很久」。',
-        reactions: [
-            { tone: 'positive', text: '『這門將太神了！』' },
-            { tone: 'positive', text: '『巴拉圭雖敗猶榮。』' },
-            { tone: 'funny', text: '『Mbappé：我今天跟門將過不去。』' },
-        ],
-    },
-    {
-        id: 'france-morocco-rematch',
-        priority: 5,
-        hashtag: '#WorldCup',
-        heat: '🔥 高熱',
-        topic: '八強法國對摩洛哥，網友：2022 四強重播？',
-        summary: '兩強同日晉級後，#WorldCup 熱議 Mbappé vs Hakimi 老友對決與復仇話題。',
-        reactions: [
-            { tone: 'positive', text: '『這場八強必看！』' },
-            { tone: 'neutral', text: '『法國 2022 贏過一次。』' },
-            { tone: 'positive', text: '『摩洛哥更強了這次。』' },
-        ],
-    },
-    {
-        id: 'ounahi-free-kick',
-        priority: 6,
-        hashtag: '#Ounahi',
-        heat: '🔥 高熱',
-        topic: 'Ounahi 自由球世界波，網友：對西班牙那球重現了',
-        summary: 'Hakimi 助攻 Ounahi 破門影片洗版，#Ounahi 成摩洛哥新國民英雄。',
-        reactions: [
-            { tone: 'positive', text: '『這腳法太美了！』' },
-            { tone: 'positive', text: '『2022 對西班牙記憶回來了。』' },
-            { tone: 'funny', text: '『加拿大：我們剛才還在壓著打…』' },
-        ],
-    },
-    {
-        id: 'paraguay-physical',
-        priority: 7,
-        hashtag: '#Paraguay',
-        heat: '⚡ 熱議',
-        topic: '巴拉圭粗野防守引爭議，網友：足球還是摔角？',
-        summary: 'Cubas 與 Mbappé 衝突、多次犯規未判，#Paraguay 話題兩極「硬漢足球 vs 過度粗野」。',
-        reactions: [
-            { tone: 'negative', text: '『有些動作太過分了。』' },
-            { tone: 'positive', text: '『這就是巴拉圭的風格。』' },
-            { tone: 'neutral', text: '『法國也吃了不少黃牌。』' },
-        ],
-    },
-    {
-        id: 'davies-bench',
-        priority: 8,
-        hashtag: '#Davies',
-        heat: '⚡ 熱議',
-        topic: 'Davies 十六強先發坐板凳，加拿大網友炸鍋',
-        summary: '關鍵戰 Alphonso Davies 未先發，#Davies 與 #Canada 熱議教練調度。',
-        reactions: [
-            { tone: 'negative', text: '『為什麼不先發 Davies？』' },
-            { tone: 'neutral', text: '『也許有傷病管理。』' },
-            { tone: 'negative', text: '『主辦國最後一戰這樣排？』' },
-        ],
-    },
-    {
-        id: 'golden-boot-race',
-        priority: 9,
-        hashtag: '#GoldenBoot',
-        heat: '⚡ 熱議',
-        topic: 'Mbappé 7 球追平 Messi 本屆，金靴之爭越來越好看',
-        summary: '點球後 #GoldenBoot 話題升溫，網友熱議「Messi 還是 Mbappé」與歷史進球紀錄。',
-        reactions: [
-            { tone: 'positive', text: '『兩個傳奇對飆進球。』' },
-            { tone: 'neutral', text: '『還要看阿根廷能走多遠。』' },
-            { tone: 'positive', text: '『Mbappé 狀態太穩。』' },
-        ],
-    },
-    {
-        id: 'eight-yellow-cards',
-        priority: 10,
-        hashtag: '#WorldCup',
-        heat: '⚡ 熱議',
-        topic: '加拿大對摩洛哥 8 張黃牌，網友：Oliver 今天很忙',
-        summary: 'Michael Oliver 全場 8 黃，#WorldCup 熱議火藥味濃烈的北美對非洲對決。',
-        reactions: [
-            { tone: 'funny', text: '『裁判口袋快滿了。』' },
-            { tone: 'neutral', text: '『雙方都踢得很硬。』' },
-            { tone: 'negative', text: '『有些犯規該紅牌。』' },
-        ],
-    },
-    {
-        id: 'messi-salah-preview',
-        priority: 11,
-        hashtag: '#Messi',
-        heat: '💬 討論',
-        topic: '八強阿根廷對埃及預熱，網友：Messi vs Salah 要來了',
-        summary: '法摩大戰之外，#Messi 與 #MoSalah 八強對決話題開始升溫。',
-        reactions: [
-            { tone: 'positive', text: '『這對決太夢幻。』' },
-            { tone: 'neutral', text: '『阿根廷剛被維德角嚇到。』' },
-            { tone: 'positive', text: '『埃及士氣正旺。』' },
-        ],
-    },
-    {
-        id: 'iberian-derby-hype',
-        priority: 12,
-        hashtag: '#Portugal',
-        heat: '💬 討論',
-        topic: '葡萄牙 vs 西班牙十六強，網友：伊比利亞冠軍戰',
-        summary: '7/7 伊比利亞德比話題持續升溫，#Portugal 與 #Spain 熱議 C 羅與 Yamal 世代對決。',
-        reactions: [
-            { tone: 'positive', text: '『這場必看！』' },
-            { tone: 'neutral', text: '『葡萄牙剛踢完加時。』' },
-            { tone: 'positive', text: '『冠軍相提前對決。』' },
-        ],
-    },
-    {
-        id: 'haaland-norway',
-        priority: 13,
-        hashtag: '#Haaland',
-        heat: '💬 討論',
-        topic: 'Haaland 能否在 16 強爆發？',
-        summary: '對日本絕殺後今晚對巴西，#Haaland 壓力與期待並存。',
-        reactions: [
-            { tone: 'positive', text: '『Haaland vs 巴西，太期待了。』' },
-            { tone: 'positive', text: '『挪威黑馬？』' },
-            { tone: 'neutral', text: '『巴西剛驚險晉級。』' },
-        ],
-    },
-    {
-        id: 'mexico-england-preview',
-        priority: 14,
-        hashtag: '#Mexico',
-        heat: '💬 討論',
-        topic: 'Kane 雙響助英格蘭晉級',
-        summary: '對民主剛果逆轉後今晚對墨西哥，#Kane 狀態受關注。',
-        reactions: [
-            { tone: 'positive', text: '『主辦國氣勢無敵！』' },
-            { tone: 'neutral', text: '『英格蘭剛贏民主剛果。』' },
-            { tone: 'positive', text: '『阿茲特克球場會很瘋。』' },
-        ],
-    },
-    {
-        id: 'saibari-injury',
-        priority: 15,
-        hashtag: '#Morocco',
-        heat: '💬 討論',
-        topic: 'Saibari 傷退引擔憂，網友：剛簽 Bayern 就受傷？',
-        summary: '摩洛哥中場 Saibari 上半場傷退，#Morocco 熱議八強前能否滿陣。',
-        reactions: [
-            { tone: 'negative', text: '『希望不是大傷。』' },
-            { tone: 'neutral', text: '『Bayern 新援體檢還沒開始吧。』' },
-            { tone: 'positive', text: '『摩洛哥陣容深度還不錯。』' },
-        ],
-    },
-    {
-        id: 'france-possession-no-shot',
-        priority: 16,
-        hashtag: '#France',
-        heat: '💬 討論',
-        topic: '法國上半場 80% 控球零射正，網友：傳來傳去然後呢',
-        summary: '對巴拉圭上半場沉悶，#France 球迷熱議「有控球沒威脅」的衛冕煩惱。',
-        reactions: [
-            { tone: 'negative', text: '『這樣怎麼衛冕？』' },
-            { tone: 'neutral', text: '『至少最後贏了。』' },
-            { tone: 'positive', text: '『巴拉圭防守太硬了。』' },
-        ],
-    },
-    {
-        id: 'cohost-canada-out',
-        priority: 17,
-        hashtag: '#WorldCup',
-        heat: '💬 討論',
-        topic: '主辦國加拿大出局，網友：北美只剩美墨',
-        summary: '加拿大淘汰後 #WorldCup 熱議「主辦三國只剩兩個」與足球版圖變化。',
-        reactions: [
-            { tone: 'neutral', text: '『加拿大已經踢得不錯了。』' },
-            { tone: 'positive', text: '『美國墨西哥還在。』' },
-            { tone: 'negative', text: '『主辦國壓力太大了。』' },
-        ],
-    },
-    {
-        id: 'brahim-diaz-assist',
-        priority: 18,
-        hashtag: '#BrahimDiaz',
-        heat: '💬 討論',
-        topic: 'Brahim Díaz 反擊助攻，網友：Real Madrid 雙星都亮了',
-        summary: '摩洛哥第三球反擊中 Díaz 助攻 Ounahi，#BrahimDiaz 話題升溫。',
-        reactions: [
-            { tone: 'positive', text: '『Díaz 選對了摩洛哥！』' },
-            { tone: 'positive', text: '『反擊太漂亮了。』' },
-            { tone: 'funny', text: '『西班牙球迷心情複雜。』' },
-        ],
-    },
-    {
-        id: 'deschamps-calm',
-        priority: 19,
-        hashtag: '#Deschamps',
-        heat: '💬 討論',
-        topic: '德尚場邊冷靜指揮，網友：三黃還能忍住不爆',
-        summary: '巴拉圭粗野打法下德尚提醒球員別上當，#Deschamps 老狐狸話題再起。',
-        reactions: [
-            { tone: 'positive', text: '『經驗豐富的教練。』' },
-            { tone: 'funny', text: '『德尚表情永遠一樣。』' },
-            { tone: 'neutral', text: '『但法國踢得還是悶。』' },
-        ],
-    },
-    {
-        id: 'north-america-soccer',
-        priority: 20,
-        hashtag: '#Canada',
-        heat: '💬 討論',
-        topic: '加拿大足球崛起還是曇花一現？網友吵翻了',
-        summary: '出局後 #Canada 足球長期發展話題再起，與 Koné 絕殺晉級的甜蜜形成對比。',
-        reactions: [
-            { tone: 'positive', text: '『這屆已經創歷史了。』' },
-            { tone: 'neutral', text: '『還需要時間累積。』' },
-            { tone: 'negative', text: '『關鍵戰還是差一口氣。』' },
-        ],
-    },
-];const REACTION_TONE = {
+    { id: 'haaland-stun-brazil', priority: 1, hashtag: '#Haaland', heat: '🔥 爆熱', topic: 'Haaland 兩球淘汰巴西，網友：北歐怪物成真', summary: '挪威 2-1 爆冷後 #Haaland 洗版，社群驚呼「五冠王竟然這麼早回家」。', reactions: [{ tone: 'positive', text: '『Haaland 就是為大場而生。』' }, { tone: 'positive', text: '『挪威黑馬！』' }, { tone: 'funny', text: '『巴西球迷心碎了。』' }] },
+    { id: 'nyland-penalty-save', priority: 2, hashtag: '#Nyland', heat: '🔥 爆熱', topic: 'Nyland 撲出 Guimaraes 十二碼，網友：門將搶走所有頭條', summary: '上半場撲點後 #Nyland 成挪威國民英雄，影片瘋傳全網。', reactions: [{ tone: 'positive', text: '『這撲救值一座城。』' }, { tone: 'positive', text: '『Haaland 背後的巨人。』' }, { tone: 'funny', text: '『巴西：我們有兩個十二碼還是輸了。』' }] },
+    { id: 'bellingham-two-minute-brace', priority: 3, hashtag: '#Bellingham', heat: '🔥 爆熱', topic: 'Bellingham 兩分鐘兩球沉默阿茲特克，網友：最佳一夜', summary: '36、38 分鐘連入兩球後 #Bellingham 話題霸榜，英格蘭球迷洗版「Football\'s Coming Home」。', reactions: [{ tone: 'positive', text: '『貝林厄姆太狠了！』' }, { tone: 'positive', text: '『客場阿茲特克還能這樣踢。』' }, { tone: 'neutral', text: '『墨西哥球迷心碎。』' }] },
+    { id: 'brazil-earliest-exit', priority: 4, hashtag: '#Brazil', heat: '🔥 爆熱', topic: '巴西自 1990 年以來最早出局，網友：六連敗歐洲了', summary: '#Brazil 熱議「24 年冠軍夢」與 Ancelotti 首屆世足即止步。', reactions: [{ tone: 'negative', text: '『巴西又回家了…』' }, { tone: 'neutral', text: '『挪威值得尊重。』' }, { tone: 'negative', text: '『歐洲球隊又是剋星。』' }] },
+    { id: 'quansah-red-azteca', priority: 5, hashtag: '#England', heat: '🔥 高熱', topic: 'Quansah 紅牌後英格蘭十人守住，網友：Tuchel 變陣神了', summary: '少打一人仍 3-2 過關，#England 熱議 Dan Burn 補時解圍與韌性。', reactions: [{ tone: 'positive', text: '『這支英格蘭有骨氣！』' }, { tone: 'neutral', text: '『紅牌太蠢了。』' }, { tone: 'positive', text: '『Tuchel 調整及時。』' }] },
+    { id: 'azteca-storm-delay', priority: 6, hashtag: '#Mexico', heat: '⚡ 熱議', topic: '阿茲特克風暴延賽一小時，網友：世足最戲劇開場', summary: '開賽延遲與 2200 公尺海拔疊加，#Mexico 熱議主場氛圍仍難阻英格蘭。', reactions: [{ tone: 'funny', text: '『天氣也在幫墨西哥？』' }, { tone: 'neutral', text: '『英格蘭適應了海拔。』' }, { tone: 'positive', text: '『阿茲特克氛圍無敵。』' }] },
+    { id: 'quinones-worldie', priority: 7, hashtag: '#Mexico', heat: '⚡ 熱議', topic: 'Quiñones 遠射世界波，網友：阿茲特克瞬間沸騰', summary: '第 42 分鐘遠射入網後 #Mexico 球迷狂歡，影片瘋傳。', reactions: [{ tone: 'positive', text: '『這球太漂亮了！』' }, { tone: 'negative', text: '『可惜最後還是輸了。』' }, { tone: 'positive', text: '『主辦國拼到最後。』' }] },
+    { id: 'endrick-miss', priority: 8, hashtag: '#Endrick', heat: '⚡ 熱議', topic: 'Endrick 單刀射偏，網友：巴西錯過最佳機會', summary: 'Vinícius 直塞後 Endrick 挑射偏出，#Endrick 成賽後檢討焦點。', reactions: [{ tone: 'negative', text: '『這球必須進啊…』' }, { tone: 'neutral', text: '『還年輕，別灰心。』' }, { tone: 'negative', text: '『巴西就是缺臨門一腳。』' }] },
+    { id: 'england-norway-qf-hype', priority: 9, hashtag: '#WorldCup', heat: '⚡ 熱議', topic: '八強英格蘭對挪威，網友：Haaland vs Bellingham', summary: '兩強同日晉級後，#WorldCup 熱議 7/11 邁阿密對決。', reactions: [{ tone: 'positive', text: '『這場八強必看！』' }, { tone: 'positive', text: '『北歐黑馬能再贏嗎？』' }, { tone: 'neutral', text: '『英格蘭剛踢完十人戰。』' }] },
+    { id: 'neymar-late-pen-social', priority: 10, hashtag: '#Neymar', heat: '⚡ 熱議', topic: 'Neymar 補時十二碼與 Nyland 衝突，網友：最後的煙火', summary: '補時追回一分仍落敗，#Neymar 與門將口角引發二次傳播。', reactions: [{ tone: 'neutral', text: '『內馬爾盡力了。』' }, { tone: 'negative', text: '『太遲了。』' }, { tone: 'funny', text: '『Nyland 今天誰都惹不起。』' }] },
+    { id: 'pickford-jimenez-save', priority: 11, hashtag: '#Pickford', heat: '💬 討論', topic: 'Pickford 開賽撲 Jiménez 頭槌，網友：三獅門神', summary: '高海拔客場 Pickford 多次救險，#Pickford 獲英格蘭球迷盛讚。', reactions: [{ tone: 'positive', text: '『皮克福德又救國了。』' }, { tone: 'positive', text: '『這撲救改寫比賽。』' }, { tone: 'neutral', text: '『墨西哥運氣也不好。』' }] },
+    { id: 'south-america-crisis', priority: 12, hashtag: '#Brazil', heat: '💬 討論', topic: '巴西墨西哥雙雙出局，網友：南美只剩阿根廷？', summary: '同日兩大傳統強隊出局，#WorldCup 熱議南美版圖變化。', reactions: [{ tone: 'neutral', text: '『阿根廷壓力大了。』' }, { tone: 'negative', text: '『南美這屆好慘。』' }, { tone: 'positive', text: '『挪威巴拉圭黑馬精彩。』' }] },
+    { id: 'france-morocco-rematch', priority: 13, hashtag: '#France', heat: '💬 討論', topic: '法國八強對摩洛哥預熱升溫，網友：2022 重播？', summary: '7/9 八強對決話題延續，#France 與 #Morocco 熱議 Mbappé vs Hakimi。', reactions: [{ tone: 'positive', text: '『復仇戰來了。』' }, { tone: 'neutral', text: '『摩洛哥更強了。』' }, { tone: 'positive', text: '『法國衛冕穩嗎？』' }] },
+    { id: 'iberian-derby-hype', priority: 14, hashtag: '#Portugal', heat: '💬 討論', topic: '葡萄牙 vs 西班牙十六強，伊比利亞冠軍戰', summary: '7/7 伊比利亞德比話題升溫，C 羅與 Yamal 世代對決。', reactions: [{ tone: 'positive', text: '『這場必看！』' }, { tone: 'positive', text: '『冠軍相提前對決。』' }, { tone: 'neutral', text: '『兩隊都剛踢完苦戰。』' }] },
+    { id: 'golden-boot-three', priority: 15, hashtag: '#GoldenBoot', heat: '💬 討論', topic: 'Haaland、Messi、Mbappé 三人 7 球並列', summary: 'Haaland 追平後 #GoldenBoot 三方混戰話題再起。', reactions: [{ tone: 'positive', text: '『金靴之爭太好看。』' }, { tone: 'neutral', text: '『還要看誰走得遠。』' }, { tone: 'positive', text: '『Haaland 當之無愧。』' }] },
+    { id: 'mexico-cohost-out', priority: 16, hashtag: '#Mexico', heat: '💬 討論', topic: '主辦國墨西哥出局，網友：只剩美國了', summary: '3-2 落敗後 #Mexico 熱議主辦國壓力與驕傲並存。', reactions: [{ tone: 'positive', text: '『踢得很光榮。』' }, { tone: 'negative', text: '『主辦國夢碎了。』' }, { tone: 'neutral', text: '『英格蘭太強韌。』' }] },
+    { id: 'solbakken-history', priority: 17, hashtag: '#Norway', heat: '💬 討論', topic: 'Solbakken：挪威世界盃史上最偉大夜晚', summary: '教練賽後發言引發 #Norway 全國慶祝潮。', reactions: [{ tone: 'positive', text: '『整個北歐都瘋了！』' }, { tone: 'positive', text: '『值得這句話。』' }, { tone: 'funny', text: '『巴西球迷不同意。』' }] },
+    { id: 'tuchel-proudest-night', priority: 18, hashtag: '#Tuchel', heat: '💬 討論', topic: 'Tuchel 稱對墨西哥是最驕傲一夜，網友：認同', summary: '十人客場過關後 #Tuchel 獲英媒一致好評。', reactions: [{ tone: 'positive', text: '『這支英格蘭不一樣了。』' }, { tone: 'positive', text: '『韌性贏得尊重。』' }, { tone: 'neutral', text: '『八強對挪威更難。』' }] },
+    { id: 'messi-salah-preview', priority: 19, hashtag: '#Messi', heat: '💬 討論', topic: '八強阿根廷對埃及預熱，Messi vs Salah 將上演', summary: '7/8 對決話題升溫，與英挪大戰並列焦點。', reactions: [{ tone: 'positive', text: '『世紀對決！』' }, { tone: 'neutral', text: '『阿根廷剛踢完加時。』' }, { tone: 'positive', text: '『埃及能再爆冷嗎？』' }] },
+    { id: 'henderson-injury-celebration', priority: 20, hashtag: '#England', heat: '💬 討論', topic: 'Henderson 慶祝受傷送醫，網友：贏太瘋了', summary: '勝利慶祝中 Henderson 手腕受傷，#England 球迷又笑又擔心。', reactions: [{ tone: 'funny', text: '『慶祝慶祝進醫院了…』' }, { tone: 'negative', text: '『希望不嚴重。』' }, { tone: 'positive', text: '『這勝利值得瘋狂。』' }] },
+];
+
+const REACTION_TONE = {
     positive: { label: '支持', cls: 'text-emerald-400 bg-emerald-950', quote: 'reaction-positive' },
     negative: { label: '批評', cls: 'text-red-400 bg-red-950', quote: 'reaction-negative' },
     neutral:  { label: '中立', cls: 'text-zinc-400 bg-zinc-800', quote: 'reaction-neutral' },
@@ -1063,6 +610,13 @@ function isTodayInTaipei(game) {
     const taipei = gameToTaipeiDate(game.local_date);
     const tp = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(taipei);
     return tp === getTaipeiToday();
+}
+
+/** 新聞文案對應 NEWS_UPDATED 當天台灣賽程，避免隔天開啟時新聞空白 */
+function isNewsDateInTaipei(game) {
+    const taipei = gameToTaipeiDate(game.local_date);
+    const tp = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(taipei);
+    return tp === NEWS_UPDATED;
 }
 
 function isLive(game) {
@@ -1355,6 +909,18 @@ function getTeamsPlayingToday() {
     return set;
 }
 
+function getTeamsPlayingOnNewsDate() {
+    const set = new Set();
+    state.games.filter(isNewsDateInTaipei).forEach(g => {
+        const t = resolveGameTeams(g);
+        addTeamName(set, g.home_team_name_en);
+        addTeamName(set, g.away_team_name_en);
+        if (t.homeResolved) addTeamName(set, t.home);
+        if (t.awayResolved) addTeamName(set, t.away);
+    });
+    return set;
+}
+
 function getIdleTeams() {
     const playing = getTeamsPlayingToday();
     return Object.values(state.teams)
@@ -1373,21 +939,32 @@ function getTodayMatchKeys() {
     return keys;
 }
 
+function getNewsDateMatchKeys() {
+    const keys = new Set();
+    state.games.filter(isNewsDateInTaipei).forEach(g => {
+        const t = resolveGameTeams(g);
+        const home = g.home_team_name_en || (t.homeResolved ? t.home : null);
+        const away = g.away_team_name_en || (t.awayResolved ? t.away : null);
+        if (home && away) keys.add(matchKey(home, away));
+    });
+    return keys;
+}
+
 function generateNews() {
-    const todayKeys = getTodayMatchKeys();
+    const newsKeys = getNewsDateMatchKeys();
     const hasApi = state.games.length > 0;
 
     return TODAY_TOP10_NEWS
         .filter(item => {
-            if (!hasApi || !todayKeys.size) return false;
-            return todayKeys.has(matchKey(item.match.home, item.match.away));
+            if (!hasApi || !newsKeys.size) return true;
+            return newsKeys.has(matchKey(item.match.home, item.match.away));
         })
         .sort((a, b) => a.priority - b.priority)
         .slice(0, 10);
 }
 
 function generateIdleNews() {
-    const playing = getTeamsPlayingToday();
+    const playing = getTeamsPlayingOnNewsDate();
     const hasApi = state.games.length > 0;
     const todayIds = new Set(generateNews().map(n => n.id));
 
@@ -1430,10 +1007,7 @@ function renderNews() {
     const news = generateNews();
     const list = $('news-list');
     if (!news.length) {
-        const todayGames = state.games.filter(isTodayInTaipei).length;
-        const hint = todayGames
-            ? '今日有比賽但新聞尚未更新至本日賽程，請稍後重新整理。'
-            : '今日暫無比賽，請查看「無賽事球隊動態」分頁的備戰消息。';
+        const hint = '新聞資料載入中，或請查看「無賽事球隊動態」分頁的備戰消息。';
         list.innerHTML = `<p class="text-sm text-zinc-500 py-4">${hint}</p>`;
         return;
     }
