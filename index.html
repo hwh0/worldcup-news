@@ -207,8 +207,8 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v25';
-const CACHE_KEY = 'wc_news_cache_v25';
+const APP_VERSION = 'v26';
+const CACHE_KEY = 'wc_news_cache_v26';
 const NEWS_UPDATED = '2026-07-09';
 
 /** 換版時清除舊 localStorage，避免瀏覽器沿用過期快取 */
@@ -738,12 +738,16 @@ function resolveGameTeams(game) {
     };
 }
 
+function isQuarterFinal(game) {
+    return game.type === 'qf' || game.type === 'r8' || game.group === 'QF' || game.group === 'R8';
+}
+
 function stageLabel(game) {
-    const map = { r32: '三十二強', r16: '十六強', r8: '八強', r4: '準決賽', r2: '決賽' };
+    const map = { r32: '三十二強', r16: '十六強', qf: '八強', r8: '八強', r4: '準決賽', r2: '決賽' };
     if (game.type && map[game.type]) return map[game.type];
     if (game.group === 'R32') return '三十二強';
     if (game.group === 'R16') return '十六強';
-    if (game.group === 'R8') return '八強';
+    if (game.group === 'QF' || game.group === 'R8') return '八強';
     return game.group ? `${game.group} 組` : '';
 }
 
@@ -788,7 +792,7 @@ function renderKnockoutBracket() {
     const countEl = $('knockout-qualified-count');
     const byDate = (a, b) => gameToTaipeiDate(a.local_date) - gameToTaipeiDate(b.local_date);
 
-    const r8 = state.games.filter(g => g.type === 'r8' || g.group === 'R8').sort(byDate);
+    const r8 = state.games.filter(isQuarterFinal).sort(byDate);
     const r8Done = r8.filter(isFinished).length;
 
     countEl.textContent = r8.length ? `（八強 ${r8Done}/${r8.length} 場完賽）` : '';
@@ -842,7 +846,7 @@ function renderMatches() {
         const homeTeam = state.teams[t.homeId];
         const awayTeam = state.teams[t.awayId];
         const stage = stageLabel(g);
-        const advanceNote = isFinished(g) && (g.type === 'r8' || g.group === 'R8')
+        const advanceNote = isFinished(g) && isQuarterFinal(g)
             ? '<div class="text-xs text-emerald-400/80 mt-1">晉級準決賽</div>'
             : isFinished(g) && (g.type === 'r16' || g.group === 'R16')
             ? '<div class="text-xs text-emerald-400/80 mt-1">晉級八強</div>' : '';
