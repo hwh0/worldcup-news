@@ -858,7 +858,9 @@ function renderMatches() {
         const homeTeam = state.teams[t.homeId];
         const awayTeam = state.teams[t.awayId];
         const stage = stageLabel(g);
-        const advanceNote = isFinished(g) && isQuarterFinal(g)
+        const advanceNote = isFinished(g) && isSemiFinal(g)
+            ? '<div class="text-xs text-emerald-400/80 mt-1">晉級決賽</div>'
+            : isFinished(g) && isQuarterFinal(g)
             ? '<div class="text-xs text-emerald-400/80 mt-1">晉級準決賽</div>'
             : isFinished(g) && (g.type === 'r16' || g.group === 'R16')
             ? '<div class="text-xs text-emerald-400/80 mt-1">晉級八強</div>' : '';
