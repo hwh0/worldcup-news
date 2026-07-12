@@ -207,8 +207,8 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v29';
-const CACHE_KEY = 'wc_news_cache_v29';
+const APP_VERSION = 'v30';
+const CACHE_KEY = 'wc_news_cache_v30';
 
 /** API 延遲未更新時的手動賽果（id 對應 worldcup26.ir；API 完賽後自動失效） */
 const KNOWN_RESULTS = {
@@ -441,9 +441,9 @@ const IDLE_TEAM_NEWS = [
         tags: [{ text: '挪威', cls: 'text-blue-400 bg-blue-950' }, { text: '出局', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-blue-500/30',
         meta: '挪威 · 八強出局',
-        title: '挪威 1-2 不敵英格蘭，Haaland 黑馬之旅謝幕',
-        summary: 'Schjelderup 閃擊後 Bellingham 梅開二度逆轉，Haaland 未能破門。北歐足球昂首離場。',
-        points: ['史上首闖八強。', 'Nyland 對巴西神撲成經典。', 'Haaland 7 球證明大場面能力。', 'Solbakken 獲全國致敬。'],
+        title: '挪威 1-2 不敵英格蘭，Sørloth 全力輸出仍出局',
+        summary: 'Schjelderup 36 分鐘閃擊後 Bellingham 梅開二度逆轉；Sørloth 多次內切威脅、傳球找 Haaland 未果，Haaland 本場未能破門。北歐足球昂首離場。',
+        points: ['史上首闖八強。', 'Sørloth 跑位與傳球成戰報焦點。', 'Haaland 7 球證明大場面能力。', 'Solbakken 獲全國致敬。'],
         source: 'NRK · BBC',
     },
     {
@@ -507,28 +507,28 @@ const IDLE_TEAM_NEWS = [
         source: 'Al Jazeera · ESPN',
     },
     {
-        id: 'idle-korea-son',
+        id: 'idle-sorloth-norway-out',
         priority: 8,
-        relatedTeams: ['South Korea'],
-        tags: [{ text: '南韓', cls: 'text-blue-400 bg-blue-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
+        relatedTeams: ['Norway'],
+        tags: [{ text: 'Sørloth', cls: 'text-blue-400 bg-blue-950' }, { text: '八強', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-blue-500/30',
-        meta: '南韓 · 小組賽出局',
-        title: '南韓出局後 Son 落淚致歉，韓網持續檢討',
-        summary: '亞洲球隊本屆已全部出局，孫興慜賽後鞠躬落淚片段仍被瘋傳。',
-        points: ['Son 國家隊未來去留受關注。', '亞洲足球整體反思。', '球迷呼籲勿網暴球員。'],
-        source: 'KBS · ESPN · Korea Herald',
+        meta: '挪威 · 八強出局',
+        title: 'Sørloth 八強全力輸出，出局後仍獲北歐媒體盛讚',
+        summary: '對英格蘭一役 Sørloth 多次內切威脅，遠射偏高出界、傳球找 Haaland 被 Stones 化解；出局後社群仍熱議他的跑位與搭檔話題。',
+        points: ['上半場是挪威最具威脅的進攻點。', '與 Haaland 搭檔引發「找不到人」梗。', '西甲主力身分獲 NRK、Guardian 肯定。'],
+        source: 'Guardian · NRK · ESPN',
     },
     {
-        id: 'idle-iran-var',
+        id: 'idle-sorloth-haaland',
         priority: 9,
-        relatedTeams: ['Iran'],
-        tags: [{ text: '伊朗', cls: 'text-red-400 bg-red-950' }, { text: '出局', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-red-500/30',
-        meta: '伊朗 · 第三名出局',
-        title: '伊朗 VAR 夢碎後，球迷仍討論判決',
-        summary: '三場 3 分仍不足以晉級，伊朗社群持續討論命運與規則。',
-        points: ['三場不敗卻回家的諷刺。', 'VAR 判決成亞洲球迷共同話題。', '球員回國仍獲英雄歡迎。'],
-        source: 'ESPN · SMH · Al Jazeera',
+        relatedTeams: ['Norway'],
+        tags: [{ text: 'Sørloth', cls: 'text-blue-400 bg-blue-950' }, { text: 'Haaland', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-blue-500/30',
+        meta: '挪威 · 八強出局',
+        title: 'Sørloth 傳球找 Haaland 未果，雙塔搭檔成賽後焦點',
+        summary: 'Schjelderup 閃擊先進球後，Sørloth 數次為 Haaland 創造機會卻未能轉化；網友調侃「Sørloth 找不到 Haaland」。',
+        points: ['內切後傳中遭英格蘭防線阻斷。', 'Haaland 本場零進球引發惋惜。', '雙前鋒組合仍被視為挪威最大資產。'],
+        source: 'Guardian · BBC · The Athletic',
     },
     {
         id: 'idle-colombia-out',
@@ -562,8 +562,8 @@ const X_TRENDING_TOP20 = [
     { id: 'x-ndoye-equalizer', priority: 13, hashtag: '#Switzerland', heat: '💬 討論', topic: 'Ndoye 67 分鐘扳平，瑞士一度看到希望', summary: '扳平後 #Switzerland 球迷狂歡，可惜加時落敗。', reactions: [{ tone: 'positive', text: '「差點再爆冷！」' }, { tone: 'negative', text: '「後來紅牌了…」' }, { tone: 'positive', text: '「Ndoye 踢得好。」' }] },
     { id: 'x-england-sf-hype', priority: 14, hashtag: '#England', heat: '💬 討論', topic: '英格蘭晉級四強，能終結冠軍荒？', summary: 'Bellingham 帶隊後 #England 熱議「這次不一樣」。', reactions: [{ tone: 'positive', text: '「Football\'s Coming Home！」' }, { tone: 'neutral', text: '「阿根廷不好踢。」' }, { tone: 'positive', text: '「Tuchel 有料。」' }] },
     { id: 'x-golden-boot-race', priority: 15, hashtag: '#GoldenBoot', heat: '💬 討論', topic: 'Mbappé 8 球領跑，Messi、Bellingham 緊追', summary: '四強將定金靴，#GoldenBoot 混戰持續。', reactions: [{ tone: 'positive', text: '「金靴之爭好看！」' }, { tone: 'neutral', text: '「還看誰走得遠。」' }, { tone: 'positive', text: '「Mbappé 領先。」' }] },
-    { id: 'x-iran-var', priority: 16, hashtag: '#Iran', heat: '💬 討論', topic: '伊朗 VAR 夢碎餘溫', summary: '亞洲全滅後 #Iran 仍被討論。', reactions: [{ tone: 'negative', text: '「三場不敗卻回家。」' }, { tone: 'positive', text: '「球員值得尊敬。」' }, { tone: 'neutral', text: '「規則殘酷。」' }] },
-    { id: 'x-korea-son', priority: 17, hashtag: '#SonHeungmin', heat: '💬 討論', topic: '南韓 Son 落淚片段仍被轉發', summary: '#SonHeungmin 情感帖文持續發酵。', reactions: [{ tone: 'positive', text: '「孫哥不用道歉！」' }, { tone: 'negative', text: '「亞洲足球失望。」' }, { tone: 'neutral', text: '「別網暴球員。」' }] },
+    { id: 'x-sorloth-norway', priority: 16, hashtag: '#Sorloth', heat: '💬 討論', topic: 'Sørloth 八強表現引發熱議', summary: '挪威出局後 #Sorloth 與「找不到 Haaland」梗洗版社群。', reactions: [{ tone: 'positive', text: '「Sørloth 踢得真好！」' }, { tone: 'funny', text: '「GPS 找不到 Haaland。」' }, { tone: 'neutral', text: '「英格蘭防線太穩。」' }] },
+    { id: 'x-schjelderup-flash', priority: 17, hashtag: '#Schjelderup', heat: '💬 討論', topic: 'Schjelderup 36 分鐘閃擊破網', summary: '先進球後被 Bellingham 逆轉，#Schjelderup 世界波片段瘋傳。', reactions: [{ tone: 'positive', text: '「這腳太漂亮了！」' }, { tone: 'negative', text: '「挪威就差一點…」' }, { tone: 'positive', text: '「年輕人未來可期。」' }] },
     { id: 'x-scaloni-praise', priority: 18, hashtag: '#Argentina', heat: '💬 討論', topic: 'Scaloni：這就是衛冕冠軍的耐心', summary: '加時驚險過關後 #Argentina 熱議韌性。', reactions: [{ tone: 'positive', text: '「冠軍相！」' }, { tone: 'neutral', text: '「狀態不是最好。」' }, { tone: 'positive', text: '「四強見。」' }] },
     { id: 'x-belgium-golden-end', priority: 19, hashtag: '#Belgium', heat: '💬 討論', topic: '比利時黃金世代謝幕', summary: 'Merino 絕殺後 #Belgium 惋惜聲浪。', reactions: [{ tone: 'positive', text: '「光榮退場。」' }, { tone: 'negative', text: '「就差一點…」' }, { tone: 'neutral', text: '「西班牙太穩。」' }] },
     { id: 'x-tuchel-bellingham', priority: 20, hashtag: '#Tuchel', heat: '💬 討論', topic: 'Tuchel 大讚 Bellingham：我們的領袖', summary: '逆轉挪威後 #Tuchel 與 #Bellingham 獲英媒盛讚。', reactions: [{ tone: 'positive', text: '「這支英格蘭不一樣！」' }, { tone: 'positive', text: '「四強對 Messi！」' }, { tone: 'neutral', text: '「別太樂觀。」' }] },
