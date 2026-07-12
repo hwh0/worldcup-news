@@ -207,8 +207,29 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v28';
-const CACHE_KEY = 'wc_news_cache_v28';
+const APP_VERSION = 'v29';
+const CACHE_KEY = 'wc_news_cache_v29';
+
+/** API 延遲未更新時的手動賽果（id 對應 worldcup26.ir；API 完賽後自動失效） */
+const KNOWN_RESULTS = {
+    '100': {
+        home_score: '3',
+        away_score: '1',
+        finished: 'TRUE',
+        time_elapsed: 'finished',
+        home_scorers: '{"Alexis Mac Allister 10\'","Julián Álvarez 112\'","Lautaro Martínez 120+1\'"}',
+        away_scorers: '{"Dan Ndoye 67\'"}',
+    },
+};
+
+function applyKnownResults(games) {
+    return (games || []).map(g => {
+        const patch = KNOWN_RESULTS[String(g.id)];
+        if (!patch) return g;
+        if (g.finished === 'TRUE' || g.time_elapsed === 'finished') return g;
+        return { ...g, ...patch };
+    });
+}
 const NEWS_UPDATED = '2026-07-12';
 
 /** 換版時清除舊 localStorage，避免瀏覽器沿用過期快取 */
@@ -1218,7 +1239,7 @@ async function refreshData(manual = true) {
             fetchJSON(API.teams),
         ]);
 
-        state.games = gamesRes.games || [];
+        state.games = applyKnownResults(gamesRes.games || []);
         state.groups = groupsRes.groups || [];
         state.teams = {};
         (teamsRes.teams || []).forEach(t => { state.teams[t.id] = t; });
@@ -1232,7 +1253,7 @@ async function refreshData(manual = true) {
     } catch (err) {
         const cached = loadCache();
         if (cached) {
-            state.games = cached.games;
+            state.games = applyKnownResults(cached.games);
             state.groups = cached.groups;
             state.teams = cached.teams;
             renderAll();
@@ -1271,7 +1292,7 @@ setupAutoRefresh();
 setupTabs();
 
 function applyData(data) {
-    state.games = data.games || [];
+    state.games = applyKnownResults(data.games || []);
     state.groups = data.groups || [];
     state.teams = data.teams || {};
     renderAll();
