@@ -57,18 +57,6 @@
                         <span class="mx-2 text-zinc-600">|</span>
                         <span id="last-updated" class="text-zinc-500">尚未更新</span>
                     </p>
-                    <div class="flex items-center gap-2 mt-2 flex-wrap">
-                        <label for="news-archive-select" class="text-xs text-zinc-500 shrink-0">
-                            <i class="fa-solid fa-clock-rotate-left mr-1"></i>新聞回溯
-                        </label>
-                        <select id="news-archive-select"
-                                class="text-xs bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-1.5 text-zinc-300 max-w-full md:max-w-md focus:outline-none focus:border-emerald-500">
-                        </select>
-                        <button id="btn-latest-news" type="button"
-                                class="hidden text-xs px-2.5 py-1 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800 hover:bg-emerald-900 transition-colors">
-                            回到最新
-                        </button>
-                    </div>
                 </div>
             </div>
             <div class="flex items-center gap-3 flex-wrap">
@@ -89,23 +77,6 @@
     </header>
 
     <main class="max-w-6xl mx-auto px-6 py-8">
-
-        <!-- 新聞索引 -->
-        <section id="archive-section" class="mb-8">
-            <button id="archive-toggle" type="button"
-                    class="w-full flex items-center justify-between gap-3 px-5 py-4 bg-zinc-900 border border-zinc-800 rounded-3xl text-left hover:border-zinc-600 transition-colors">
-                <span class="flex items-center gap-2 font-semibold text-sm">
-                    <i class="fa-solid fa-layer-group text-emerald-500"></i>
-                    新聞索引
-                    <span id="archive-count" class="text-xs font-normal text-zinc-500"></span>
-                </span>
-                <i id="archive-chevron" class="fa-solid fa-chevron-down text-zinc-500 text-xs transition-transform"></i>
-            </button>
-            <div id="archive-panel" class="hidden mt-3 p-4 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
-                <p class="text-xs text-zinc-500 mb-3">點選日期可回溯瀏覽當日戰報、無賽事動態與 X 熱議（共保留歷史新聞，不再因每日更新而消失）。</p>
-                <div id="archive-index-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-h-72 overflow-y-auto pr-1"></div>
-            </div>
-        </section>
 
         <!-- 錯誤提示 -->
         <div id="error-banner" class="hidden mb-6 p-4 bg-red-950/60 border border-red-500/40 rounded-2xl text-red-300 text-sm flex items-start gap-3">
@@ -229,10 +200,6 @@
     </div>
 
 <script>
-(function () {
-    const el = document.getElementById('date-label');
-    if (el) el.textContent = '啟動中…';
-})();
 const API = {
     games: 'https://worldcup26.ir/get/games',
     groups: 'https://worldcup26.ir/get/groups',
@@ -240,8 +207,8 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v32';
-const CACHE_KEY = 'wc_news_cache_v32';
+const APP_VERSION = 'v33';
+const CACHE_KEY = 'wc_news_cache_v33';
 const KNOWN_RESULTS = {
     '99': {
         home_score: '1',
@@ -271,6 +238,225 @@ function applyKnownResults(games) {
 }
 const NEWS_UPDATED = '2026-07-12';
 
+const TODAY_TOP10_NEWS = [
+    {
+        id: 'england-norway-qf',
+        priority: 1,
+        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '八強', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-blue-500/40',
+        match: { home: 'Norway', away: 'England' },
+        meta: '八強 · 英格蘭 2-1 挪威 · 台灣 7/12',
+        title: 'Bellingham 梅開二度，英格蘭 2-1 逆轉挪威晉級四強',
+        summary: 'Schjelderup 第 36 分鐘閃擊破門，Bellingham 上半場補時與全場補時連進兩球逆轉。英格蘭將對阿根廷爭決賽門票。',
+        points: [
+            'Bellingham 本屆關鍵戰再度挺身而出。',
+            'Haaland 本場未能破門，挪威黑馬之旅結束。',
+            '空拍電線爭議賽後仍被熱議。',
+            '四強 7/16 台灣時間對阿根廷。',
+        ],
+        source: 'BBC · ESPN · Sky Sports',
+    },
+    {
+        id: 'argentina-switzerland-qf',
+        priority: 2,
+        tags: [{ text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }, { text: '八強', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-sky-500/40',
+        match: { home: 'Argentina', away: 'Switzerland' },
+        meta: '八強 · 阿根廷 3-1 瑞士 · 加時 · 台灣 7/12',
+        title: 'Álvarez 加時破網，阿根廷 3-1 淘汰瑞士晉級四強',
+        summary: 'Mac Allister 10 分鐘先聲奪人，Ndoye 67 分鐘扳平。Embolo 紅牌後瑞士少一人，Álvarez 加時第 112 分鐘遠射、Lautaro 120+1 分鐘補刀。',
+        points: [
+            'Messi 本場助攻 Álvarez 加時進球。',
+            '瑞士 Embolo 兩黃下場成轉捩點。',
+            '阿根廷連續三屆世足闖入四強。',
+            '四強將對英格蘭，亞特蘭大 7/16 開踢。',
+        ],
+        source: 'ESPN · Reuters · TyC Sports',
+    },
+    {
+        id: 'bellingham-brace',
+        priority: 3,
+        tags: [{ text: 'Bellingham', cls: 'text-blue-400 bg-blue-950' }, { text: '賽後', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-blue-500/40',
+        match: { home: 'Norway', away: 'England' },
+        meta: '八強 · Bellingham 梅開二度 · 台灣 7/12',
+        title: 'Bellingham 45+2 與 93 分鐘入球，英格蘭逆轉戰神',
+        summary: '挪威領先後英格蘭圍攻不止，Bellingham 上下半場各一球完成逆轉，Tuchel 率隊重返四強。',
+        points: ['本屆多次關鍵進球。', '與 Haaland 隊友對決成焦點。', '英格蘭 1966 後再度四強。', '士氣高漲迎阿根廷。'],
+        source: 'BBC · Sky Sports',
+    },
+    {
+        id: 'haaland-norway-exit',
+        priority: 4,
+        tags: [{ text: '挪威', cls: 'text-blue-400 bg-blue-950' }, { text: '出局', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-blue-500/30',
+        match: { home: 'Norway', away: 'England' },
+        meta: '八強 · 挪威出局 · 台灣 7/12',
+        title: '挪威 1-2 不敵英格蘭，Haaland 世界盃之旅結束',
+        summary: 'Schjelderup 破門後未能守住領先，Haaland 全場受限。北歐黑馬創隊史最佳八強仍光榮出局。',
+        points: ['Nyland 數次救險。', 'Solbakken 稱已拼盡全力。', 'Haaland 本屆 7 球。', '空拍電線爭議揮之不去。'],
+        source: 'NRK · ESPN',
+    },
+    {
+        id: 'embolo-red-argentina',
+        priority: 5,
+        tags: [{ text: '瑞士', cls: 'text-red-400 bg-red-950' }, { text: '紅牌', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-red-500/30',
+        match: { home: 'Argentina', away: 'Switzerland' },
+        meta: '八強 · Embolo 紅牌 · 台灣 7/12',
+        title: 'Embolo 兩黃下場，瑞士加時少打一人落敗',
+        summary: '扳平後瑞士一度見曙光，但 Embolo 紅牌讓衛冕冠軍在加時主宰比賽，Álvarez 與 Lautaro 先後破門。',
+        points: ['少一人後防線崩潰。', '門將撲點英雄難再複製。', '歐洲代表再少一隊。', '阿根廷韌性受讚。'],
+        source: 'BBC · AP',
+    },
+    {
+        id: 'sf-preview-both',
+        priority: 6,
+        tags: [{ text: '四強預告', cls: 'text-purple-400 bg-purple-950' }],
+        border: 'border-purple-500/40',
+        match: { home: 'France', away: 'Spain' },
+        meta: '四強預告 · 法國/西班牙 · 英格蘭/阿根廷',
+        title: '四強對決出爐：法國對西班牙、英格蘭對阿根廷',
+        summary: '7/15 台灣時間法國對西班牙，7/16 英格蘭對阿根廷。兩場歐洲對南美／歐洲內戰，冠軍熱門悉數晉級。',
+        points: ['Mbappé 對 Yamal 世代對決。', 'Bellingham 再遇 Messi。', '衛冕冠軍阿根廷士氣正旺。', '英格蘭 1966 後最佳機會。'],
+        source: 'ESPN · FIFA',
+    },
+    {
+        id: 'schjelderup-opener',
+        priority: 7,
+        tags: [{ text: '挪威', cls: 'text-blue-400 bg-blue-950' }, { text: '戰術', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-blue-500/30',
+        match: { home: 'Norway', away: 'England' },
+        meta: '八強 · Schjelderup 破門 · 台灣 7/12',
+        title: 'Schjelderup 第 36 分鐘閃擊，挪威一度領先',
+        summary: '北歐快攻奏效，挪威上半場 1-0 領先英格蘭，Haaland 送出助攻，全場氣氛為之沸騰。',
+        points: ['挪威踢出本屆代表作。', '英格蘭上半場控球卻落後。', 'Tuchel 中場調整奏效。', '最終仍難阻 Bellingham。'],
+        source: 'NRK · BBC',
+    },
+    {
+        id: 'messi-assist-alvarez',
+        priority: 8,
+        tags: [{ text: 'Messi', cls: 'text-sky-400 bg-sky-950' }, { text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }],
+        border: 'border-sky-500/30',
+        match: { home: 'Argentina', away: 'Switzerland' },
+        meta: '八強 · Messi 助攻 · 台灣 7/12',
+        title: 'Messi 助攻 Álvarez 加時進球，衛冕冠軍再進四強',
+        summary: 'Mac Allister 首開紀錄，Messi 加時助攻 Álvarez 遠射破網，阿根廷展現衛冕冠軍底蘊。',
+        points: ['Messi 本屆多線參與。', '加時體能優勢明顯。', 'Lautaro 補刀鎖定勝局。', '四強對英格蘭再演經典。'],
+        source: 'ESPN · TyC Sports',
+    },
+    {
+        id: 'powerline-controversy',
+        priority: 9,
+        tags: [{ text: '挪威', cls: 'text-blue-400 bg-blue-950' }, { text: '爭議', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-blue-500/30',
+        match: { home: 'Norway', away: 'England' },
+        meta: '八強 · 空拍電線爭議 · 台灣 7/12',
+        title: 'Nyland 開球擊中空拍電線？FIFA 晶片未感應引熱議',
+        summary: '上半場補時前挪威門將開球疑似擊中場邊空拍電線，FIFA 晶片卻未判定，賽後挪威方面仍表達不滿。',
+        points: ['VAR 與晶片信任危機再起。', '挪威媒體稱「荒謬出局方式」。', '英格蘭方面稱無影響比賽。', 'FIFA 尚未正式回應。'],
+        source: 'NRK · BBC · ESPN',
+    },
+    {
+        id: 'golden-boot-race-sf',
+        priority: 10,
+        tags: [{ text: '金靴', cls: 'text-yellow-400 bg-yellow-950' }],
+        border: 'border-yellow-500/30',
+        match: { home: 'Norway', away: 'England' },
+        meta: '八強 · 金靴之爭 · 台灣 7/12',
+        title: 'Mbappé 領跑、Haaland 出局，金靴之爭四強定調',
+        summary: 'Haaland 本屆 7 球隨挪威出局，Mbappé 與 Messi 四強繼續爭奪。Bellingham 關鍵進球提升個人聲量。',
+        points: ['Mbappé 金靴領先。', 'Messi 7 球緊追。', 'Haaland 無緣再進球。', '四強每場都是關鍵戰。'],
+        source: 'ESPN · FIFA',
+    },
+];
+
+const IDLE_TEAM_NEWS = [
+    {
+        id: 'france-spain-sf-prep',
+        priority: 1,
+        relatedTeams: ['France'],
+        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '四強備戰', cls: 'text-purple-400 bg-purple-950' }],
+        border: 'border-blue-500/30',
+        meta: '法國 · 休賽 · 台灣 7/15 四強',
+        title: 'Mbappé 率法國備戰西班牙，衛冕冠軍迎巨人之戰',
+        summary: '2-0 摩洛哥後進入恢復期，7/15 四強對 36 場不敗的西班牙。',
+        points: ['德尚稱對手很強。', 'Mbappé 金靴領跑。', '台灣時間 7/15 凌晨開踢。', '衛冕之路最硬一關。'],
+        source: 'ESPN · L\'Équipe',
+    },
+    {
+        id: 'spain-france-sf-prep',
+        priority: 2,
+        relatedTeams: ['Spain'],
+        tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '四強備戰', cls: 'text-purple-400 bg-purple-950' }],
+        border: 'border-red-500/30',
+        meta: '西班牙 · 休賽 · 台灣 7/15 四強',
+        title: '西班牙備戰法國，Merino 連續絕殺後士氣高昂',
+        summary: '2-1 比利時後進入恢復期，7/15 四強對衛冕冠軍法國，Yamal 與 Mbappé 世代對決。',
+        points: ['36 場不敗紀錄持續。', '德富恩特稱巨人對決。', '台灣時間 7/15 凌晨。', '歐洲冠軍熱門內戰。'],
+        source: 'Marca · ESPN',
+    },
+    {
+        id: 'morocco-exit',
+        priority: 3,
+        relatedTeams: ['Morocco'],
+        tags: [{ text: '摩洛哥', cls: 'text-red-400 bg-red-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-red-500/30',
+        meta: '摩洛哥 · 出局後續',
+        title: '摩洛哥 0-2 不敵法國，世界盃之旅結束',
+        summary: 'Bounou 撲出 Mbappé 十二碼仍難阻法國下半場圍攻。',
+        points: ['Hakimi 與 Mbappé 互致敬意。', '非洲代表全數出局。', 'Regragui 肯定拼搏。'],
+        source: 'BBC · FIFA',
+    },
+    {
+        id: 'belgium-exit',
+        priority: 4,
+        relatedTeams: ['Belgium'],
+        tags: [{ text: '比利時', cls: 'text-yellow-400 bg-yellow-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-yellow-500/30',
+        meta: '比利時 · 出局後續',
+        title: '比利時 1-2 不敵西班牙，黃金世代謝幕',
+        summary: 'Merino 絕殺後比利時世界盃之旅結束，De Bruyne 最後一舞。',
+        points: ['Courtois 傷退成轉折。', 'Merino 再成剋星。', '歐洲代表減少。'],
+        source: 'ESPN · Het Nieuwsblad',
+    },
+    {
+        id: 'portugal-exit',
+        priority: 5,
+        relatedTeams: ['Portugal'],
+        tags: [{ text: '葡萄牙', cls: 'text-green-400 bg-green-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-green-500/30',
+        meta: '葡萄牙 · 出局後續',
+        title: '葡萄牙 0-1 不敵西班牙止步十六強',
+        summary: 'Merino 絕殺，C 羅世界盃之旅再止十六強。',
+        points: ['Yamal 成西班牙新偶像。', '葡萄牙黃金世代遺憾。'],
+        source: 'Record · ESPN',
+    },
+];
+
+const X_TRENDING_TOP20 = [
+    { id: 'bellingham-brace-x', priority: 1, hashtag: '#Bellingham', heat: '🔥 爆熱', topic: 'Bellingham 梅開二度逆轉挪威，網友：英格蘭終於硬了', summary: '45+2 與 93 分鐘入球後 #Bellingham 洗版。', reactions: [{ tone: 'positive', text: '『大心臟！』' }, { tone: 'positive', text: '『三獅醒來了？』' }, { tone: 'neutral', text: '『挪威好可惜。』' }] },
+    { id: 'argentina-sf-x', priority: 2, hashtag: '#Argentina', heat: '🔥 爆熱', topic: '阿根廷加時 3-1 瑞士，網友：Messi 還能帶多久', summary: 'Álvarez 加時破網後 #Argentina 熱議衛冕之路。', reactions: [{ tone: 'positive', text: '『GOAT 助攻！』' }, { tone: 'positive', text: '『衛冕穩了？』' }, { tone: 'neutral', text: '『瑞士 Embolo 太冤。』' }] },
+    { id: 'haaland-out-x', priority: 3, hashtag: '#Haaland', heat: '🔥 爆熱', topic: 'Haaland 世界盃出局，網友：空拍電線？', summary: '挪威落敗後 #Haaland 與空拍電線梗圖洗版。', reactions: [{ tone: 'negative', text: '『挪威太慘了。』' }, { tone: 'funny', text: '『空拍電線 MVP。』' }, { tone: 'neutral', text: '『Haaland 盡力了。』' }] },
+    { id: 'england-argentina-sf-x', priority: 4, hashtag: '#England', heat: '🔥 高熱', topic: '四強英格蘭對阿根廷，Bellingham vs Messi', summary: '7/16 對決預熱話題升溫。', reactions: [{ tone: 'positive', text: '『這場必看！』' }, { tone: 'neutral', text: '『阿根廷更穩吧？』' }, { tone: 'positive', text: '『1966 年後最佳機會。』' }] },
+    { id: 'france-spain-sf-x', priority: 5, hashtag: '#France', heat: '🔥 高熱', topic: '四強法國對西班牙，Mbappé vs Yamal', summary: '7/15 巨人之戰預熱。', reactions: [{ tone: 'positive', text: '『歐洲最強對決！』' }, { tone: 'positive', text: '『Mbappé 要破紀錄了。』' }, { tone: 'neutral', text: '『西班牙 36 場不敗。』' }] },
+    { id: 'embolo-red-x', priority: 6, hashtag: '#Switzerland', heat: '⚡ 熱議', topic: 'Embolo 紅牌後瑞士崩盘', summary: '扳平後紅牌成轉捩點，#Switzerland 遺憾出局。', reactions: [{ tone: 'negative', text: '『太可惜了…』' }, { tone: 'neutral', text: '『裁判判得對嗎？』' }, { tone: 'positive', text: '『阿根廷太強。』' }] },
+    { id: 'schjelderup-goal-x', priority: 7, hashtag: '#Norway', heat: '⚡ 熱議', topic: 'Schjelderup 閃擊，挪威一度領先', summary: '北歐快攻破門後全場歡呼。', reactions: [{ tone: 'positive', text: '『這球太漂亮！』' }, { tone: 'negative', text: '『可惜撐不住。』' }, { tone: 'positive', text: '『黑馬盡力了。』' }] },
+    { id: 'powerline-meme-x', priority: 8, hashtag: '#Norway', heat: '⚡ 熱議', topic: '空拍電線爭議，網友：FIFA 晶片呢？', summary: 'Nyland 開球爭議引發 #VAR 討論。', reactions: [{ tone: 'funny', text: '『空拍電線助攻英格蘭。』' }, { tone: 'negative', text: '『挪威運氣太差。』' }, { tone: 'neutral', text: '『規則要改了吧？』' }] },
+    { id: 'lautaro-late-x', priority: 9, hashtag: '#Lautaro', heat: '💬 討論', topic: 'Lautaro 120+1 補刀，網友：阿根廷永不放棄', summary: '加時絕殺鎖定勝局。', reactions: [{ tone: 'positive', text: '『殺手本色！』' }, { tone: 'positive', text: '『冠軍 DNA。』' }, { tone: 'neutral', text: '『瑞士已經很棒。』' }] },
+    { id: 'sf-bracket-x', priority: 10, hashtag: '#WorldCup', heat: '💬 討論', topic: '四強對決出爐，網友：冠軍已是這四隊', summary: '法國西班牙、英格蘭阿根廷，#WorldCup 熱議。', reactions: [{ tone: 'positive', text: '『每場都是決賽級！』' }, { tone: 'neutral', text: '『南美歐洲各半。』' }, { tone: 'positive', text: '『決賽預告太強。』' }] },
+    { id: 'tuchel-celebration-x', priority: 11, hashtag: '#Tuchel', heat: '💬 討論', topic: 'Tuchel 英格蘭四強，網友：這次不一樣？', summary: '逆轉挪威後三獅士氣高漲。', reactions: [{ tone: 'positive', text: '『Tuchel 有料！』' }, { tone: 'funny', text: '『英格蘭又來了…』' }, { tone: 'positive', text: '『Bellingham 帶隊。』' }] },
+    { id: 'mbappe-waiting-x', priority: 12, hashtag: '#Mbappé', heat: '💬 討論', topic: 'Mbappé 四強等對手，金靴領跑', summary: '法國休賽中 #Mbappé 話題持續。', reactions: [{ tone: 'positive', text: '『衛冕穩了？』' }, { tone: 'neutral', text: '『西班牙不好打。』' }, { tone: 'positive', text: '『20 球太瘋。』' }] },
+    { id: 'yamal-spain-x', priority: 13, hashtag: '#Yamal', heat: '💬 討論', topic: 'Yamal 備戰法國，天才少年四強見真章', summary: '西班牙四強對決預熱。', reactions: [{ tone: 'positive', text: '『未來是西班牙的。』' }, { tone: 'neutral', text: '『Mbappé 更成熟。』' }, { tone: 'positive', text: '『這場必看。』' }] },
+    { id: 'mac-allister-goal-x', priority: 14, hashtag: '#MacAllister', heat: '💬 討論', topic: 'Mac Allister 10 分鐘閃擊破門', summary: '阿根廷首開紀錄受讚。', reactions: [{ tone: 'positive', text: '『利物浦雙星！』' }, { tone: 'positive', text: '『開局完美。』' }, { tone: 'neutral', text: '『瑞士扳平過。』' }] },
+    { id: 'ndoye-equalizer-x', priority: 15, hashtag: '#Switzerland', heat: '💬 討論', topic: 'Ndoye 扳平，瑞士一度見曙光', summary: '67 分鐘扳平後士氣高漲。', reactions: [{ tone: 'positive', text: '『瑞士好強！』' }, { tone: 'negative', text: '『可惜紅牌。』' }, { tone: 'neutral', text: '『阿根廷太穩。』' }] },
+    { id: 'merino-hero-x', priority: 16, hashtag: '#Merino', heat: '💬 討論', topic: 'Merino 兩度絕殺後西班牙備戰四強', summary: '對葡萄牙比利時連絕殺成傳奇。', reactions: [{ tone: 'positive', text: '『替補殺手！』' }, { tone: 'funny', text: '『巧合之神。』' }, { tone: 'positive', text: '『四強靠他了？』' }] },
+    { id: 'golden-boot-x', priority: 17, hashtag: '#GoldenBoot', heat: '💬 討論', topic: 'Haaland 出局，Mbappé Messi 爭金靴', summary: '四強階段金靴混戰。', reactions: [{ tone: 'positive', text: '『Mbappé 要破紀錄？』' }, { tone: 'neutral', text: '『還要看誰走得遠。』' }, { tone: 'negative', text: '『Haaland 好可惜。』' }] },
+    { id: 'miami-qf-x', priority: 18, hashtag: '#WorldCup', heat: '💬 討論', topic: '邁阿密八強雙場，北美賽程密集', summary: '英格蘭挪威、阿根廷瑞士同區完賽。', reactions: [{ tone: 'neutral', text: '『賽程太密了。』' }, { tone: 'positive', text: '『兩場都精彩！』' }, { tone: 'neutral', text: '『四強見。』' }] },
+    { id: 'solbakken-proud-x', priority: 19, hashtag: '#Norway', heat: '💬 討論', topic: 'Solbakken 稱挪威光榮出局', summary: '教頭賽後肯定球員。', reactions: [{ tone: 'positive', text: '『已經很棒了！』' }, { tone: 'negative', text: '『空拍電線…』' }, { tone: 'positive', text: '『北歐驕傲。』' }] },
+    { id: 'scalfaro-argentina-x', priority: 20, hashtag: '#Messi', heat: '💬 討論', topic: 'Messi 助攻後阿根廷四強，網友：GOAT 續航', summary: '衛冕之路持續。', reactions: [{ tone: 'positive', text: '『還能奪冠！』' }, { tone: 'positive', text: '『傳奇繼續。』' }, { tone: 'neutral', text: '『英格蘭不好惹。』' }] },
+];
+
 /** 換版時清除舊 localStorage，避免瀏覽器沿用過期快取 */
 function migrateAppStorage() {
     const verKey = 'wc_app_version';
@@ -286,42 +472,12 @@ function migrateAppStorage() {
 migrateAppStorage();
 const TRENDING_LIMIT = 20;
 
-let selectedNewsDate = NEWS_UPDATED;
-
-function getActiveNewsDate() {
-    return selectedNewsDate || NEWS_UPDATED;
-}
-
-function getNewsBundle() {
-    const arch = window.NEWS_ARCHIVE;
-    const empty = { today: [], idle: [], trending: [], headline: '' };
-    if (!arch || typeof arch !== 'object') return empty;
-    return arch[getActiveNewsDate()] || arch[NEWS_UPDATED] || empty;
-}
-
-/** 比分區：瀏覽歷史新聞時對應該日；否則顯示今日台灣賽程 */
-function getScoresDate() {
-    return isViewingArchive() ? getActiveNewsDate() : getTaipeiToday();
-}
-
-function getArchiveDates() {
-    const arch = window.NEWS_ARCHIVE;
-    if (!arch || typeof arch !== 'object') return [];
-    return Object.keys(arch).sort().reverse();
-}
-
-function isArchiveReady() {
-    return getArchiveDates().length > 0;
-}
+function getScoresDate() { return getTaipeiToday(); }
 
 function isDateInTaipei(game, dateStr) {
     const taipei = gameToTaipeiDate(game.local_date);
     const tp = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(taipei);
     return tp === dateStr;
-}
-
-function isViewingArchive() {
-    return getActiveNewsDate() !== NEWS_UPDATED;
 }
 
 
@@ -393,7 +549,7 @@ function isTodayInTaipei(game) {
 function isNewsDateInTaipei(game) {
     const taipei = gameToTaipeiDate(game.local_date);
     const tp = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(taipei);
-    return tp === getActiveNewsDate();
+    return tp === NEWS_UPDATED;
 }
 
 function isLive(game) {
@@ -620,9 +776,7 @@ function renderMatches() {
         const dayLabel = activeDate.replace(/-/g, '/');
         $('no-matches').textContent = upcoming
             ? `${dayLabel} 尚有 ${upcoming} 場比賽尚未開踢，完賽後將自動顯示於此。`
-            : isViewingArchive()
-                ? `${dayLabel} 尚無已完賽或進行中的比賽紀錄。`
-                : '今日尚無已完賽或進行中的比賽。';
+            : '今日尚無已完賽或進行中的比賽。';
         return;
     }
     $('no-matches').classList.add('hidden');
@@ -724,7 +878,7 @@ function getTeamsPlayingOnNewsDate() {
 }
 
 function getIdleTeams() {
-    const playing = isViewingArchive() ? getTeamsPlayingOnNewsDate() : getTeamsPlayingToday();
+    const playing = getTeamsPlayingToday();
     return Object.values(state.teams)
         .filter(t => t.name_en && !playing.has(t.name_en))
         .sort((a, b) => (a.groups || '').localeCompare(b.groups || '') || a.name_en.localeCompare(b.name_en));
@@ -753,15 +907,9 @@ function getNewsDateMatchKeys() {
 }
 
 function generateNews() {
-    try {
-        const bundle = getNewsBundle();
-        return [...(bundle?.today || [])]
-            .sort((a, b) => a.priority - b.priority)
-            .slice(0, 10);
-    } catch (e) {
-        console.error('generateNews', e);
-        return [];
-    }
+    return [...TODAY_TOP10_NEWS]
+        .sort((a, b) => a.priority - b.priority)
+        .slice(0, 10);
 }
 
 function generateIdleNews() {
@@ -769,7 +917,7 @@ function generateIdleNews() {
     const hasApi = state.games.length > 0;
     const todayIds = new Set(generateNews().map(n => n.id));
 
-    return [...(getNewsBundle().idle || [])]
+    return [...IDLE_TEAM_NEWS]
         .filter(item => {
             if (todayIds.has(item.id)) return false;
             if (!hasApi) return true;
@@ -858,7 +1006,7 @@ function generateTrending() {
     const newsIds = new Set(generateNews().map(n => n.id));
     const newsMatchKeys = getTodayNewsMatchKeys();
 
-    return [...(getNewsBundle().trending || [])]
+    return [...X_TRENDING_TOP20]
         .filter(t => {
             if (newsIds.has(t.id)) return false;
             if (t.match?.home && t.match?.away && newsMatchKeys.has(matchKey(t.match.home, t.match.away))) return false;
@@ -934,11 +1082,7 @@ function setupTabs() {
 
 function renderAll() {
     const tp = getTaipeiToday().replace(/-/g, '/');
-    const active = getActiveNewsDate();
-    const activeLabel = active.replace(/-/g, '/');
-    $('date-label').textContent = isViewingArchive()
-        ? `瀏覽 ${activeLabel} 新聞 · 今日 ${tp} · ${APP_VERSION}`
-        : `${tp} 台灣時間 · 新聞 ${NEWS_UPDATED} · ${APP_VERSION}`;
+    $('date-label').textContent = `${tp} 台灣時間 · 新聞 ${NEWS_UPDATED} · ${APP_VERSION}`;
     renderMatches();
     renderKnockoutBracket();
     renderNews();
@@ -1062,76 +1206,6 @@ function setupAutoRefresh() {
 $('btn-refresh').addEventListener('click', () => refreshData(true));
 setupAutoRefresh();
 
-function renderArchiveIndex() {
-    const dates = getArchiveDates();
-    $('archive-count').textContent = `（${dates.length} 天）`;
-    const list = $('archive-index-list');
-    list.innerHTML = dates.map(d => {
-        const a = window.NEWS_ARCHIVE[d];
-        const active = d === getActiveNewsDate();
-        const latest = d === NEWS_UPDATED;
-        return `
-        <button type="button" data-date="${d}"
-                class="archive-date-btn text-left px-4 py-3 rounded-2xl border transition-colors ${active ? 'border-emerald-500 bg-emerald-950/40' : 'border-zinc-800 bg-zinc-950 hover:border-zinc-600'}">
-            <div class="flex items-center gap-2 mb-1">
-                <span class="text-xs font-mono text-zinc-400">${d.replace(/-/g, '/')}</span>
-                ${latest ? '<span class="text-[10px] px-1.5 py-0.5 rounded-lg bg-emerald-900 text-emerald-400">最新</span>' : ''}
-            </div>
-            <p class="text-sm text-zinc-200 leading-snug line-clamp-2">${a?.headline || ''}</p>
-        </button>`;
-    }).join('');
-    list.querySelectorAll('.archive-date-btn').forEach(btn => {
-        btn.addEventListener('click', () => selectNewsDate(btn.dataset.date));
-    });
-}
-
-function selectNewsDate(date) {
-    if (!window.NEWS_ARCHIVE?.[date]) return;
-    selectedNewsDate = date;
-    try { localStorage.setItem('wc_news_date', date); } catch {}
-    const sel = $('news-archive-select');
-    if (sel) sel.value = date;
-    $('btn-latest-news').classList.toggle('hidden', date === NEWS_UPDATED);
-    renderArchiveIndex();
-    renderAll();
-    showToast(date === NEWS_UPDATED ? '已切換至最新新聞' : `已載入 ${date.replace(/-/g, '/')} 新聞`);
-}
-
-function setupArchive() {
-    try {
-        const saved = localStorage.getItem('wc_news_date');
-        if (saved && window.NEWS_ARCHIVE?.[saved]) selectedNewsDate = saved;
-        else selectedNewsDate = NEWS_UPDATED;
-    } catch {}
-    const sel = $('news-archive-select');
-    if (sel) {
-        sel.innerHTML = getArchiveDates().map(d => {
-            const h = (window.NEWS_ARCHIVE[d]?.headline) || '';
-            const short = h.length > 28 ? h.slice(0, 28) + '…' : h;
-            return `<option value="${d}">${d.replace(/-/g, '/')} · ${short}</option>`;
-        }).join('');
-        sel.value = getActiveNewsDate();
-        sel.onchange = () => selectNewsDate(sel.value);
-    }
-    const btnLatest = $('btn-latest-news');
-    if (btnLatest) {
-        btnLatest.onclick = () => selectNewsDate(NEWS_UPDATED);
-        btnLatest.classList.toggle('hidden', getActiveNewsDate() === NEWS_UPDATED);
-    }
-    const toggle = $('archive-toggle');
-    const panel = $('archive-panel');
-    const chevron = $('archive-chevron');
-    if (toggle && panel) {
-        toggle.onclick = () => {
-            const isHidden = panel.classList.contains('hidden');
-            panel.classList.toggle('hidden');
-            if (chevron) chevron.style.transform = isHidden ? 'rotate(180deg)' : '';
-        };
-    }
-    renderArchiveIndex();
-}
-
-
 function applyData(data) {
     state.games = applyKnownResults(data.games || []);
     state.groups = data.groups || [];
@@ -1141,12 +1215,6 @@ function applyData(data) {
 
 function boot() {
     try {
-        selectedNewsDate = NEWS_UPDATED;
-        try {
-            const saved = localStorage.getItem('wc_news_date');
-            if (saved && window.NEWS_ARCHIVE?.[saved]) selectedNewsDate = saved;
-        } catch {}
-        setupArchive();
         setupTabs();
         renderAll();
         const cached = loadCache();
@@ -1163,33 +1231,7 @@ function boot() {
     }
 }
 
-function loadArchiveAndBoot() {
-    const label = $('date-label');
-    if (label) label.textContent = `載入新聞索引… · ${APP_VERSION}`;
-    if (isArchiveReady()) {
-        boot();
-        return;
-    }
-    const s = document.createElement('script');
-    s.src = 'news-archive.js?v=' + APP_VERSION;
-    s.onload = () => {
-        if (!isArchiveReady()) {
-            $('error-banner').classList.remove('hidden');
-            $('error-title').textContent = '新聞索引格式錯誤';
-            $('error-detail').textContent = 'news-archive.js 已載入但內容無法解析，請 Ctrl+Shift+R 強制重新整理。';
-            return;
-        }
-        boot();
-    };
-    s.onerror = () => {
-        $('error-banner').classList.remove('hidden');
-        $('error-title').textContent = '無法載入新聞索引';
-        $('error-detail').textContent = 'news-archive.js 載入失敗，請檢查網路後重新整理。';
-    };
-    document.body.appendChild(s);
-}
-
-loadArchiveAndBoot();
+boot();
 </script>
 </body>
 </html>
