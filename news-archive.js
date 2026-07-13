@@ -6517,4 +6517,3 @@ const IDLE_TEAM_NEWS = [
 ],
     },
 };
-const NEWS_ARCHIVE_DATES = Object.keys(NEWS_ARCHIVE).sort().reverse();

@@ -228,7 +228,7 @@
         <span id="toast-msg">更新成功</span>
     </div>
 
-<script src="news-archive.js"></script>
+<script src="news-archive.js?v=v29"></script>
 <script>
 const API = {
     games: 'https://worldcup26.ir/get/games',
@@ -237,8 +237,8 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v28';
-const CACHE_KEY = 'wc_news_cache_v28';
+const APP_VERSION = 'v29';
+const CACHE_KEY = 'wc_news_cache_v29';
 const KNOWN_RESULTS = {
     '100': {
         home_score: '3',
@@ -282,6 +282,16 @@ function getActiveNewsDate() {
 
 function getNewsBundle() {
     return NEWS_ARCHIVE[getActiveNewsDate()] || NEWS_ARCHIVE[NEWS_UPDATED];
+}
+
+/** 不依賴外部檔是否定義 NEWS_ARCHIVE_DATES */
+function getArchiveDates() {
+    if (typeof NEWS_ARCHIVE === 'undefined') return [];
+    return Object.keys(NEWS_ARCHIVE).sort().reverse();
+}
+
+function isArchiveReady() {
+    return typeof NEWS_ARCHIVE !== 'undefined' && getArchiveDates().length > 0;
 }
 
 function isDateInTaipei(game, dateStr) {
@@ -1028,9 +1038,10 @@ $('btn-refresh').addEventListener('click', () => refreshData(true));
 setupAutoRefresh();
 
 function renderArchiveIndex() {
-    $('archive-count').textContent = `（${NEWS_ARCHIVE_DATES.length} 天）`;
+    const dates = getArchiveDates();
+    $('archive-count').textContent = `（${dates.length} 天）`;
     const list = $('archive-index-list');
-    list.innerHTML = NEWS_ARCHIVE_DATES.map(d => {
+    list.innerHTML = dates.map(d => {
         const a = NEWS_ARCHIVE[d];
         const active = d === getActiveNewsDate();
         const latest = d === NEWS_UPDATED;
@@ -1067,7 +1078,7 @@ function setupArchive() {
         if (saved && NEWS_ARCHIVE[saved]) selectedNewsDate = saved;
     } catch {}
     const sel = $('news-archive-select');
-    sel.innerHTML = NEWS_ARCHIVE_DATES.map(d => {
+    sel.innerHTML = getArchiveDates().map(d => {
         const h = NEWS_ARCHIVE[d].headline || '';
         const short = h.length > 28 ? h.slice(0, 28) + '…' : h;
         return `<option value="${d}">${d.replace(/-/g, '/')} · ${short}</option>`;
@@ -1111,13 +1122,23 @@ function boot() {
     }
 }
 
-if (typeof NEWS_ARCHIVE !== 'undefined') {
-    boot();
-} else {
+function loadArchiveAndBoot() {
+    if (isArchiveReady()) {
+        boot();
+        return;
+    }
     $('date-label').textContent = '載入新聞索引中…';
     const s = document.createElement('script');
-    s.src = 'news-archive.js';
-    s.onload = boot;
+    s.src = 'news-archive.js?v=' + APP_VERSION;
+    s.onload = () => {
+        if (!isArchiveReady()) {
+            $('error-banner').classList.remove('hidden');
+            $('error-title').textContent = '新聞索引格式錯誤';
+            $('error-detail').textContent = 'news-archive.js 已載入但 NEWS_ARCHIVE 為空，請重新整理。';
+            return;
+        }
+        boot();
+    };
     s.onerror = () => {
         $('error-banner').classList.remove('hidden');
         $('error-title').textContent = '無法載入新聞索引';
@@ -1125,6 +1146,8 @@ if (typeof NEWS_ARCHIVE !== 'undefined') {
     };
     document.head.appendChild(s);
 }
+
+loadArchiveAndBoot();
 </script>
 </body>
 </html>
