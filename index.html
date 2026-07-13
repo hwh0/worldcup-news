@@ -236,9 +236,17 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v30';
-const CACHE_KEY = 'wc_news_cache_v30';
+const APP_VERSION = 'v31';
+const CACHE_KEY = 'wc_news_cache_v31';
 const KNOWN_RESULTS = {
+    '99': {
+        home_score: '1',
+        away_score: '2',
+        finished: 'TRUE',
+        time_elapsed: 'finished',
+        home_scorers: '{"Andrias Shldrvp 36'"}',
+        away_scorers: '{"Jvd Blingham 45+2'","Jvd Blingham 93'"}',
+    },
     '100': {
         home_score: '3',
         away_score: '1',
@@ -257,7 +265,7 @@ function applyKnownResults(games) {
         return { ...g, ...patch };
     });
 }
-const NEWS_UPDATED = '2026-07-11';
+const NEWS_UPDATED = '2026-07-12';
 
 /** 換版時清除舊 localStorage，避免瀏覽器沿用過期快取 */
 function migrateAppStorage() {
@@ -267,6 +275,7 @@ function migrateAppStorage() {
         Object.keys(localStorage).forEach(k => {
             if (k.startsWith('wc_news_cache_')) localStorage.removeItem(k);
         });
+        localStorage.removeItem('wc_news_date');
         localStorage.setItem(verKey, APP_VERSION);
     } catch {}
 }
@@ -281,7 +290,14 @@ function getActiveNewsDate() {
 
 function getNewsBundle() {
     const arch = window.NEWS_ARCHIVE;
-    return arch[getActiveNewsDate()] || arch[NEWS_UPDATED];
+    const empty = { today: [], idle: [], trending: [], headline: '' };
+    if (!arch || typeof arch !== 'object') return empty;
+    return arch[getActiveNewsDate()] || arch[NEWS_UPDATED] || empty;
+}
+
+/** 比分區：瀏覽歷史新聞時對應該日；否則顯示今日台灣賽程 */
+function getScoresDate() {
+    return isViewingArchive() ? getActiveNewsDate() : getTaipeiToday();
 }
 
 function getArchiveDates() {
@@ -588,7 +604,7 @@ function renderKnockoutBracket() {
 
 function renderMatches() {
     const grid = $('matches-grid');
-    const activeDate = getActiveNewsDate();
+    const activeDate = getScoresDate();
     const dayAll = state.games.filter(g => isDateInTaipei(g, activeDate));
     const todayGames = dayAll.filter(isPlayedOrLive).sort((a, b) => gameToTaipeiDate(a.local_date) - gameToTaipeiDate(b.local_date));
     const upcoming = dayAll.filter(g => !isPlayedOrLive(g)).length;
@@ -733,10 +749,15 @@ function getNewsDateMatchKeys() {
 }
 
 function generateNews() {
-    const bundle = getNewsBundle();
-    return [...(bundle.today || [])]
-        .sort((a, b) => a.priority - b.priority)
-        .slice(0, 10);
+    try {
+        const bundle = getNewsBundle();
+        return [...(bundle?.today || [])]
+            .sort((a, b) => a.priority - b.priority)
+            .slice(0, 10);
+    } catch (e) {
+        console.error('generateNews', e);
+        return [];
+    }
 }
 
 function generateIdleNews() {
@@ -886,7 +907,7 @@ function renderIdleNews() {
 }
 
 function updateTabBadges() {
-    const todayGames = state.games.filter(g => isDateInTaipei(g, getActiveNewsDate()) && isPlayedOrLive(g)).length;
+    const todayGames = state.games.filter(g => isDateInTaipei(g, getScoresDate()) && isPlayedOrLive(g)).length;
     const idleNews = generateIdleNews().length;
     const trendingCount = generateTrending().length;
     $('tab-results-badge').textContent = todayGames ? `${todayGames} 場` : '—';
@@ -1052,7 +1073,7 @@ function renderArchiveIndex() {
                 <span class="text-xs font-mono text-zinc-400">${d.replace(/-/g, '/')}</span>
                 ${latest ? '<span class="text-[10px] px-1.5 py-0.5 rounded-lg bg-emerald-900 text-emerald-400">最新</span>' : ''}
             </div>
-            <p class="text-sm text-zinc-200 leading-snug line-clamp-2">${a.headline}</p>
+            <p class="text-sm text-zinc-200 leading-snug line-clamp-2">${a?.headline || ''}</p>
         </button>`;
     }).join('');
     list.querySelectorAll('.archive-date-btn').forEach(btn => {
@@ -1076,22 +1097,33 @@ function setupArchive() {
     try {
         const saved = localStorage.getItem('wc_news_date');
         if (saved && window.NEWS_ARCHIVE?.[saved]) selectedNewsDate = saved;
+        else selectedNewsDate = NEWS_UPDATED;
     } catch {}
     const sel = $('news-archive-select');
-    sel.innerHTML = getArchiveDates().map(d => {
-        const h = window.NEWS_ARCHIVE[d].headline || '';
-        const short = h.length > 28 ? h.slice(0, 28) + '…' : h;
-        return `<option value="${d}">${d.replace(/-/g, '/')} · ${short}</option>`;
-    }).join('');
-    sel.value = getActiveNewsDate();
-    sel.addEventListener('change', () => selectNewsDate(sel.value));
-    $('btn-latest-news').addEventListener('click', () => selectNewsDate(NEWS_UPDATED));
-    $('btn-latest-news').classList.toggle('hidden', getActiveNewsDate() === NEWS_UPDATED);
-    $('archive-toggle').addEventListener('click', () => {
-        const panel = $('archive-panel');
-        const open = panel.classList.toggle('hidden');
-        $('archive-chevron').style.transform = open ? '' : 'rotate(180deg)';
-    });
+    if (sel) {
+        sel.innerHTML = getArchiveDates().map(d => {
+            const h = (window.NEWS_ARCHIVE[d]?.headline) || '';
+            const short = h.length > 28 ? h.slice(0, 28) + '…' : h;
+            return `<option value="${d}">${d.replace(/-/g, '/')} · ${short}</option>`;
+        }).join('');
+        sel.value = getActiveNewsDate();
+        sel.onchange = () => selectNewsDate(sel.value);
+    }
+    const btnLatest = $('btn-latest-news');
+    if (btnLatest) {
+        btnLatest.onclick = () => selectNewsDate(NEWS_UPDATED);
+        btnLatest.classList.toggle('hidden', getActiveNewsDate() === NEWS_UPDATED);
+    }
+    const toggle = $('archive-toggle');
+    const panel = $('archive-panel');
+    const chevron = $('archive-chevron');
+    if (toggle && panel) {
+        toggle.onclick = () => {
+            const isHidden = panel.classList.contains('hidden');
+            panel.classList.toggle('hidden');
+            if (chevron) chevron.style.transform = isHidden ? 'rotate(180deg)' : '';
+        };
+    }
     renderArchiveIndex();
 }
 
@@ -1105,6 +1137,11 @@ function applyData(data) {
 
 function boot() {
     try {
+        selectedNewsDate = NEWS_UPDATED;
+        try {
+            const saved = localStorage.getItem('wc_news_date');
+            if (saved && window.NEWS_ARCHIVE?.[saved]) selectedNewsDate = saved;
+        } catch {}
         setupArchive();
         setupTabs();
         renderAll();
