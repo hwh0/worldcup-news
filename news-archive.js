@@ -1,5 +1,5 @@
-/** 歷史新聞索引（依日期回溯瀏覽） */
-const NEWS_ARCHIVE = {
+/** 歷史新聞索引（依日期回溯瀏覽）— 掛載至 window 供主程式讀取 */
+window.NEWS_ARCHIVE = {
     '2026-07-11': {
         headline: 'Merino 再度絕殺，西班牙 2-1 比利時晉級四強',
         today: [

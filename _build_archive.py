@@ -82,7 +82,7 @@ def main():
         print(f'{date} <- {h[:8]} | {headline[:40]}')
 
     dates = sorted(archives.keys(), reverse=True)
-    lines = ['/** 歷史新聞索引（依日期回溯瀏覽） */', 'const NEWS_ARCHIVE = {']
+    lines = ['/** 歷史新聞索引（依日期回溯瀏覽）— 掛載至 window 供主程式讀取 */', 'window.NEWS_ARCHIVE = {']
     for d in dates:
         a = archives[d]
         lines.append(f"    '{d}': {{")
