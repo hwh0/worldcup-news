@@ -127,7 +127,7 @@
                     淘汰賽對陣
                     <span id="knockout-qualified-count" class="text-xs font-normal text-zinc-500"></span>
                 </h2>
-                <p class="text-sm text-zinc-400 mb-4">八強已全部完賽，以下為四強對戰表。完賽後自動填入晉級隊伍。</p>
+                <p class="text-sm text-zinc-400 mb-4">四強首戰西班牙已晉級決賽，英格蘭阿根廷明日開踢。完賽後自動填入晉級隊伍。</p>
                 <div id="knockout-container" class="space-y-8">
                     <div class="skeleton h-20 rounded-3xl"></div>
                 </div>
@@ -207,8 +207,8 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v34';
-const CACHE_KEY = 'wc_news_cache_v34';
+const APP_VERSION = 'v35';
+const CACHE_KEY = 'wc_news_cache_v35';
 const KNOWN_RESULTS = {
     '99': {
         home_score: '1',
@@ -226,6 +226,14 @@ const KNOWN_RESULTS = {
         home_scorers: '{"Alexis Mac Allister 10\'","Julián Álvarez 112\'","Lautaro Martínez 120+1\'"}',
         away_scorers: '{"Dan Ndoye 67\'"}',
     },
+    '101': {
+        home_score: '0',
+        away_score: '2',
+        finished: 'TRUE',
+        time_elapsed: 'finished',
+        home_scorers: 'null',
+        away_scorers: '{"Mikel Oyarzabal 22\' (PEN)","Pedro Porro 58\'"}',
+    },
 };
 
 function applyKnownResults(games) {
@@ -236,157 +244,221 @@ function applyKnownResults(games) {
         return { ...g, ...patch };
     });
 }
-const NEWS_UPDATED = '2026-07-14';
+const NEWS_UPDATED = '2026-07-15';
 
 const TODAY_TOP10_NEWS = [
     {
-        id: 'france-spain-sf-preview',
+        id: 'spain-france-sf-recap',
         priority: 1,
-        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '四強預告', cls: 'text-purple-400 bg-purple-950' }],
-        border: 'border-blue-500/40',
+        tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '決賽', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-red-500/40',
         match: { home: 'France', away: 'Spain' },
-        meta: '四強 · 法國 vs 西班牙 · 台灣 7/15 10:00',
-        title: '衛冕冠軍法國迎戰 36 場不敗西班牙，Mbappé 對決 Yamal',
-        summary: '四強首戰將在紐澤西開踢。法國 2-0 摩洛哥後休賽備戰，西班牙 Merino 連續絕殺士氣正旺。Mbappé 金靴領跑，Yamal 本屆最耀眼新星。',
+        meta: '四強 · 西班牙 2-0 法國 · 台灣 7/15',
+        title: '西班牙 2-0 淘汰法國，37 場不敗晉級決賽',
+        summary: 'Oyarzabal 22 分鐘十二碼、Pedro Porro 58 分鐘遠射破網，西班牙完控衛冕冠軍法國。Mbappé 全場零射正，德尚賽後承認對手更強，法國將踢季軍戰。',
         points: [
-            '德尚稱這是冠軍級對決，不容有失。',
-            '西班牙 36 場不敗，歐洲最火熱球隊。',
-            'Mbappé 本屆 8 球，距單屆紀錄一步之遙。',
-            '台灣時間 7/15 上午 10:00 開踢。',
+            'Yamal 造十二碼，Oyarzabal 本屆第 5 球。',
+            'Porro 世界波鎖定勝局，西班牙隊史第二次決賽。',
+            '西班牙本屆 7 戰僅失 1 球，6 場零封。',
+            '決賽台灣 7/20 紐澤西開踢。',
         ],
-        source: 'ESPN · L\'Équipe · Marca',
+        source: 'Marca · ESPN · The Athletic',
     },
     {
         id: 'england-argentina-sf-preview',
         priority: 2,
-        tags: [{ text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }, { text: '四強預告', cls: 'text-purple-400 bg-purple-950' }],
-        border: 'border-sky-500/40',
+        tags: [{ text: '四強', cls: 'text-purple-400 bg-purple-950' }, { text: '焦點', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-purple-500/40',
         match: { home: 'England', away: 'Argentina' },
         meta: '四強 · 英格蘭 vs 阿根廷 · 台灣 7/16 11:00',
-        title: 'Bellingham 對 Messi，英格蘭四強再遇衛冕冠軍阿根廷',
-        summary: '7/16 亞特蘭大開踢。英格蘭 Bellingham 八強梅開二度逆轉挪威，阿根廷加時 3-1 淘汰瑞士。Tuchel 與 Scaloni 戰術對決成焦點。',
+        title: '四強最後一席：英格蘭對阿根廷，Bellingham 再遇 Messi',
+        summary: '西班牙已晉級決賽，亞特蘭大明日開踢另一場四強。英格蘭 Bellingham 連場爆發，阿根廷連續三場加時過關，勝者將對西班牙爭冠。',
         points: [
-            '英格蘭 1966 年後最佳奪冠機會。',
+            '英格蘭 2-1 挪威，阿根廷 3-1 瑞士。',
             'Messi 助攻 Álvarez 加時進球，狀態仍佳。',
-            'Bellingham 本屆多次關鍵進球。',
+            'Tuchel 與 Scaloni 戰術對決成焦點。',
             '台灣時間 7/16 上午 11:00 開踢。',
         ],
         source: 'BBC · ESPN · TyC Sports',
     },
     {
-        id: 'mbappe-golden-boot-sf',
+        id: 'oyarzabal-pen-spain',
         priority: 3,
-        tags: [{ text: 'Mbappé', cls: 'text-blue-400 bg-blue-950' }, { text: '金靴', cls: 'text-yellow-400 bg-yellow-950' }],
-        border: 'border-yellow-500/30',
-        match: { home: 'France', away: 'Spain' },
-        meta: '四強備戰 · Mbappé 金靴 · 台灣 7/14',
-        title: 'Mbappé 金靴領跑，四強每場都是破紀錄機會',
-        summary: 'Haaland 隨挪威出局後，Mbappé 與 Messi 成金靴最大熱門。法國前鋒若再進球，將逼近單屆世足進球紀錄。',
-        points: ['Mbappé 對摩洛哥十二碼破網。', 'Messi 7 球緊追其後。', '四強兩場定調金靴歸屬。', '法國需要他的進球破西班牙。'],
-        source: 'ESPN · FIFA',
-    },
-    {
-        id: 'yamal-spain-sf-star',
-        priority: 4,
-        tags: [{ text: 'Yamal', cls: 'text-red-400 bg-red-950' }, { text: '西班牙', cls: 'text-red-400 bg-red-950' }],
+        tags: [{ text: 'Oyarzabal', cls: 'text-red-400 bg-red-950' }, { text: '十二碼', cls: 'text-amber-400 bg-amber-950' }],
         border: 'border-red-500/30',
         match: { home: 'France', away: 'Spain' },
-        meta: '四強備戰 · Yamal · 台灣 7/14',
-        title: 'Yamal 備戰法國，天才少年四強舞台迎最大考驗',
-        summary: '17 歲 Yamal 本屆六場創西班牙最年輕出場紀錄，對葡萄牙、比利時關鍵助攻與進球成西班牙進攻核心。',
-        points: ['與 Mbappé 世代對決話題熱度最高。', 'Pedri 傷勢好轉可出戰。', '德富恩特稱他毫無畏懼。', '西班牙左路進攻關鍵。'],
-        source: 'Marca · AS',
+        meta: '四強 · Oyarzabal · 台灣 7/15',
+        title: 'Yamal 造十二碼，Oyarzabal 破網追平隊史世足單屆進球紀錄',
+        summary: 'Digne 絆倒 Yamal 後 Oyarzabal 主罰命中，本屆 5 球追平 Villa 與 Butragueño。西班牙上半場即掌控節奏，法國全場僅 0.3 xG。',
+        points: [
+            'Oyarzabal 加時絕殺葡萄牙後再進球。',
+            'Yamal 生日願望「去紐約決賽」成真一步。',
+            '法國本屆第 6 個十二碼失誤相關爭議。',
+            '西班牙中場 Rodri、Olmo 完全主導。',
+        ],
+        source: 'AS · Opta · Reuters',
+    },
+    {
+        id: 'porro-worldie-spain',
+        priority: 4,
+        tags: [{ text: 'Porro', cls: 'text-red-400 bg-red-950' }, { text: '世界波', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-red-500/30',
+        match: { home: 'France', away: 'Spain' },
+        meta: '四強 · Pedro Porro · 台灣 7/15',
+        title: 'Pedro Porro 58 分鐘世界波，西班牙鎖定決賽門票',
+        summary: '右後衛 Porro 禁區外遠射直掛死角，法國門將無可奈何。這是他本屆第二粒關鍵進球，西班牙全隊慶祝衝向角旗區。',
+        points: [
+            'Porro 本屆多次助攻後終於破門。',
+            '法國全場僅 1 次射正。',
+            '德富恩特：「團隊踢球時我們無敵。」',
+            '西班牙連續 8 場大賽淘汰賽獲勝。',
+        ],
+        source: 'Marca · BBC · FIFA',
+    },
+    {
+        id: 'spain-final-2010',
+        priority: 5,
+        tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '決賽', cls: 'text-purple-400 bg-purple-950' }],
+        border: 'border-red-500/30',
+        match: { home: 'France', away: 'Spain' },
+        meta: '四強 · 西班牙晉級 · 台灣 7/15',
+        title: '西班牙 14 年後再闖決賽，2010 冠軍陣容見證新一代崛起',
+        summary: '普約爾、卡西、哈維、拉莫斯等 2010 冠軍成員現場觀戰。Yamal、Pedri 領銜的新世代能否重現南非榮光，決賽對手待英阿之戰揭曉。',
+        points: [
+            '隊史第二次世足決賽（2010 奪冠）。',
+            '本屆至今未在任何比賽落後。',
+            'Simón 7 戰僅失 1 球。',
+            '決賽紐澤西大都會人壽球場。',
+        ],
+        source: 'ESPN · TyC Sports',
+    },
+    {
+        id: 'mbappe-stifled-france',
+        priority: 6,
+        tags: [{ text: 'Mbappé', cls: 'text-blue-400 bg-blue-950' }, { text: '法國', cls: 'text-blue-400 bg-blue-950' }],
+        border: 'border-blue-500/30',
+        match: { home: 'France', away: 'Spain' },
+        meta: '四強 · 法國出局 · 台灣 7/15',
+        title: 'Mbappé 全場零射正，法國衛冕夢碎達拉斯',
+        summary: '西班牙防線完全限制 Mbappé，這是他 15 場世足賽中第二次全場零射正（另一次為 2022 八強對英格蘭）。金靴領跑者無法帶隊再進決賽。',
+        points: [
+            'Mbappé 本屆 8 球仍列金靴榜首。',
+            '法國三場上半場零射正，四強繳械。',
+            '德尚賽後宣布光榮卸任。',
+            '法國將踢 7/19 季軍戰。',
+        ],
+        source: 'L\'Équipe · Opta · AP',
     },
     {
         id: 'bellingham-england-sf',
-        priority: 5,
+        priority: 7,
         tags: [{ text: 'Bellingham', cls: 'text-blue-400 bg-blue-950' }, { text: '英格蘭', cls: 'text-blue-400 bg-blue-950' }],
         border: 'border-blue-500/30',
         match: { home: 'England', away: 'Argentina' },
-        meta: '四強備戰 · Bellingham · 台灣 7/14',
-        title: 'Bellingham 八強梅開二度後，英格蘭士氣達本屆高峰',
-        summary: '45+2 與 93 分鐘逆轉挪威後，Bellingham 成英格蘭新象徵。Tuchel 稱他能在關鍵時刻改寫比賽。',
-        points: ['本屆第三次決定性進球。', '對阿根廷需再次挺身而出。', '與 Messi 對決備受期待。', '三獅球迷信心回升。'],
+        meta: '四強備戰 · Bellingham · 台灣 7/15',
+        title: 'Bellingham 備戰阿根廷，英格蘭四強迎衛冕冠軍大考',
+        summary: '八強梅開二度逆轉挪威後，Bellingham 成英格蘭新象徵。Tuchel 稱他能在關鍵時刻改寫比賽，對阿根廷需再次挺身而出。',
+        points: [
+            '本屆 5 球，多次決定性進球。',
+            '與 Messi 對決備受全球關注。',
+            '英格蘭 1966 年後第四次四強。',
+            '勝者決賽對西班牙。',
+        ],
         source: 'Sky Sports · BBC',
     },
     {
         id: 'messi-argentina-sf',
-        priority: 6,
+        priority: 8,
         tags: [{ text: 'Messi', cls: 'text-sky-400 bg-sky-950' }, { text: '阿根廷', cls: 'text-sky-400 bg-sky-950' }],
         border: 'border-sky-500/30',
         match: { home: 'England', away: 'Argentina' },
-        meta: '四強備戰 · Messi · 台灣 7/14',
-        title: 'Messi 助攻 Álvarez 加時破網，阿根廷衛冕之路穩步向前',
-        summary: '39 歲 Messi 本屆仍以創造力主宰比賽，八強助攻加時進球展現冠軍底蘊。Scaloni 稱球隊已準備好迎戰英格蘭。',
-        points: ['連續三屆世足闖入四強。', 'Mac Allister 與 Enzo 中場穩定。', 'Lautaro 補刀能力受讚。', '英格蘭防線將受嚴峻考驗。'],
+        meta: '四強備戰 · Messi · 台灣 7/15',
+        title: 'Messi 率阿根廷備戰英格蘭，衛冕之路連續三場加時',
+        summary: '39 歲 Messi 本屆仍以創造力主宰比賽，八強助攻 Álvarez 加時進球。Scaloni 稱球隊已準備好，但體能隱憂成四強變數。',
+        points: [
+            '連續三屆世足闖入四強。',
+            'Mac Allister 與 Enzo 中場穩定。',
+            'Lautaro 補刀能力受讚。',
+            '勝者將對 37 場不敗西班牙。',
+        ],
         source: 'ESPN · TyC Sports',
     },
     {
-        id: 'spain-unbeaten-sf',
-        priority: 7,
-        tags: [{ text: '西班牙', cls: 'text-red-400 bg-red-950' }, { text: '數據', cls: 'text-zinc-400 bg-zinc-800' }],
+        id: 'yamal-birthday-final',
+        priority: 9,
+        tags: [{ text: 'Yamal', cls: 'text-red-400 bg-red-950' }, { text: '新星', cls: 'text-amber-400 bg-amber-950' }],
         border: 'border-red-500/30',
         match: { home: 'France', away: 'Spain' },
-        meta: '四強備戰 · 36 場不敗 · 台灣 7/14',
-        title: '西班牙 36 場不敗進四強，Merino 成替補奇兵',
-        summary: '對葡萄牙、比利時連兩場 Merino 替補絕殺，西班牙展現板凳深度與臨門一腳。對法國將是衛冕冠軍最硬考驗。',
-        points: ['Fabian Ruiz 中場狀態火熱。', 'Unai Simón 撲救穩定。', '歐洲冠軍熱門內戰。', '法國需限制 Yamal 速度。'],
-        source: 'Opta · AP',
+        meta: '四強 · Yamal · 台灣 7/15',
+        title: 'Yamal 生日願望成真：西班牙晉級紐約決賽',
+        summary: '19 歲生日前夕 Yamal 曾說想去紐約踢決賽，四強造十二碼後西班牙如願晉級。賽後他戴著洋基棒球帽走過混合區，成為本屆最耀眼新星。',
+        points: [
+            '對法國全場最活躍進攻點之一。',
+            '與 Mbappé 世代對決話題落幕。',
+            '西班牙左路進攻核心。',
+            '決賽紐澤西 7/20 開踢。',
+        ],
+        source: 'Marca · The Athletic',
     },
     {
-        id: 'tuchel-england-tactics',
-        priority: 8,
-        tags: [{ text: 'Tuchel', cls: 'text-blue-400 bg-blue-950' }, { text: '戰術', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-blue-500/30',
-        match: { home: 'England', away: 'Argentina' },
-        meta: '四強備戰 · Tuchel 戰術 · 台灣 7/14',
-        title: 'Tuchel 調整英格蘭進攻節奏，四強對阿根廷有備而來',
-        summary: '八強對挪威上半場落後後中場調整奏效，英格蘭圍攻與定位球威脅提升。對阿根廷將考驗防反應對能力。',
-        points: ['Saka 與 Foden 邊路活躍。', '定位球成重要武器。', '後防穩定性仍受質疑。', '1966 年後首次四強機會。'],
-        source: 'The Athletic · BBC',
-    },
-    {
-        id: 'sf-bracket-path',
-        priority: 9,
+        id: 'sf-final-one-spot',
+        priority: 10,
         tags: [{ text: '四強', cls: 'text-purple-400 bg-purple-950' }, { text: '賽程', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-purple-500/40',
-        match: { home: 'France', away: 'Spain' },
-        meta: '四強賽程 · 台灣 7/15、7/16',
-        title: '四強兩日連戰：法國西班牙明日開踢，英格蘭阿根廷後天接棒',
-        summary: '冠軍熱門悉數晉級，兩場歐洲內戰與歐南對決。勝者 7/19 台灣時間決賽交鋒。',
-        points: ['7/15 10:00 法國 vs 西班牙。', '7/16 11:00 英格蘭 vs 阿根廷。', '每場都是決賽級強度。', '北美賽程進入最後高潮。'],
+        match: { home: 'England', away: 'Argentina' },
+        meta: '四強賽程 · 台灣 7/16',
+        title: '西班牙已晉級決賽，英格蘭阿根廷明日爭最後席位',
+        summary: '四強首戰西班牙 2-0 法國塵埃落定，亞特蘭大明日英阿之戰定決賽對手。季軍戰 7/19、決賽 7/20 台灣時間陸續開踢。',
+        points: [
+            '7/16 11:00 英格蘭 vs 阿根廷。',
+            '西班牙等待決賽對手。',
+            '法國將踢季軍戰。',
+            '世界盃進入最後 3 場。',
+        ],
         source: 'FIFA · ESPN',
-    },
-    {
-        id: 'deschamps-france-mindset',
-        priority: 10,
-        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '賽前', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-blue-500/30',
-        match: { home: 'France', away: 'Spain' },
-        meta: '四強備戰 · 德尚 · 台灣 7/14',
-        title: '德尚：對西班牙是衛冕路上最艱難一戰',
-        summary: '法國主教練賽前記者會稱對手狀態極佳，但衛冕冠軍已準備好。Griezmann 與 Camavinga 恢復訓練。',
-        points: ['衛冕冠軍心理優勢仍在。', '防線需防西班牙傳控滲透。', 'Mbappé 身體狀況良好。', '全隊專注不談過往戰績。'],
-        source: 'L\'Équipe · Reuters',
     },
 ];
 
 const IDLE_TEAM_NEWS = [
     {
-        id: 'haaland-norway-aftermath',
+        id: 'france-semi-out',
         priority: 1,
+        relatedTeams: ['France'],
+        tags: [{ text: '法國', cls: 'text-blue-400 bg-blue-950' }, { text: '出局', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-blue-500/30',
+        meta: '法國 · 四強出局',
+        title: '法國 0-2 不敵西班牙，德尚世足執教生涯謝幕',
+        summary: '衛冕冠軍夢碎達拉斯，德尚賽後稱光榮卸任。Mbappé 零射正，巴黎街頭瀰漫失望氛圍，法國將踢季軍戰。',
+        points: ['2018 冠軍後再無決賽。', '對西班牙連續 3 場大賽四強落敗。', 'Mbappé 8 球仍列金靴榜首。', '德尚：個人榮耀不如團隊。'],
+        source: 'L\'Équipe · AFP',
+    },
+    {
+        id: 'haaland-norway-aftermath',
+        priority: 2,
         relatedTeams: ['Norway'],
         tags: [{ text: '挪威', cls: 'text-blue-400 bg-blue-950' }, { text: '賽後', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-blue-500/30',
-        meta: '挪威 · 出局後續 · 台灣 7/14',
+        meta: '挪威 · 出局後續',
         title: 'Haaland 返國，挪威媒體仍追究空拍電線爭議',
-        summary: '北歐黑馬創隊史最佳八強，Haaland 本屆 7 球收官。Nyland 開球爭議持續發酵，FIFA 尚未公布調查結果。',
+        summary: '北歐黑馬創隊史最佳八強，Haaland 本屆 7 球收官。Nyland 開球爭議持續發酵，FIFA 晶片未感應成熱議焦點。',
         points: ['Solbakken 稱已無遺憾。', 'Haaland 感謝球迷支持。', '空拍電線梗圖仍洗版。', 'Schjelderup 閃擊受讚。'],
         source: 'NRK · ESPN',
     },
     {
+        id: 'idle-sorloth-haaland',
+        priority: 3,
+        relatedTeams: ['Norway'],
+        tags: [{ text: 'Sørloth', cls: 'text-blue-400 bg-blue-950' }, { text: 'Haaland', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-blue-500/30',
+        meta: '挪威 · 八強出局',
+        title: 'Sørloth 傳球找 Haaland 未果，雙塔搭檔成賽後焦點',
+        summary: 'Schjelderup 閃擊先進球後，Sørloth 數次為 Haaland 創造機會卻未能轉化；網友調侃「Sørloth 找不到 Haaland」。',
+        points: ['內切後傳中遭英格蘭防線阻斷。', 'Haaland 本場零進球引發惋惜。', '雙前鋒組合仍被視為挪威最大資產。'],
+        source: 'Guardian · BBC · The Athletic',
+    },
+    {
         id: 'switzerland-embolo-aftermath',
-        priority: 2,
+        priority: 4,
         relatedTeams: ['Switzerland'],
         tags: [{ text: '瑞士', cls: 'text-red-400 bg-red-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-red-500/30',
@@ -398,7 +470,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'morocco-exit',
-        priority: 3,
+        priority: 5,
         relatedTeams: ['Morocco'],
         tags: [{ text: '摩洛哥', cls: 'text-red-400 bg-red-950' }, { text: '出局後續', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-red-500/30',
@@ -410,7 +482,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'belgium-golden-gen',
-        priority: 4,
+        priority: 6,
         relatedTeams: ['Belgium'],
         tags: [{ text: '比利時', cls: 'text-yellow-400 bg-yellow-950' }, { text: '謝幕', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-yellow-500/30',
@@ -422,7 +494,7 @@ const IDLE_TEAM_NEWS = [
     },
     {
         id: 'portugal-ronaldo-exit',
-        priority: 5,
+        priority: 7,
         relatedTeams: ['Portugal'],
         tags: [{ text: '葡萄牙', cls: 'text-green-400 bg-green-950' }, { text: '謝幕', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-green-500/30',
@@ -432,54 +504,66 @@ const IDLE_TEAM_NEWS = [
         points: ['Yamal 成西班牙新偶像。', 'B 費本屆表現受肯定。', 'Martínez 面臨重建。'],
         source: 'Record · ESPN',
     },
+    {
+        id: 'idle-norway-spidercam',
+        priority: 8,
+        relatedTeams: ['Norway'],
+        tags: [{ text: '空拍電線', cls: 'text-amber-400 bg-amber-950' }, { text: '爭議', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-blue-500/30',
+        meta: '挪威 · 八強出局',
+        title: '挪威抗議：門將開球擊中空拍電線，晶片卻「沒有感應」',
+        summary: 'Nyland 開球後球從空中直墜，回放顯示疑似擦過場上空拍電線；按 FIFA 規則應 drop ball，但 Connected Ball 感應器未偵測碰觸，Bellingham 隨即扳平。',
+        points: ['Solbakken 中場與 Turpin 當面交涉。', 'FIFA 聲明：空中無「球的心跳」異常峰值。', '網友質疑：髮絲能感應、電線卻不行？', '挪威球迷：「這屆最離譜一幕。」'],
+        source: 'Guardian · ESPN · AP',
+    },
+    {
+        id: 'idle-brazil-out',
+        priority: 9,
+        relatedTeams: ['Brazil'],
+        tags: [{ text: '巴西', cls: 'text-yellow-400 bg-yellow-950' }, { text: '出局', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-yellow-500/30',
+        meta: '巴西 · 十六強出局',
+        title: '巴西 1-2 不敵挪威，五冠王早早回家',
+        summary: 'Haaland 梅開二度，南美僅剩阿根廷。Neymar 補時十二碼追回一分已無法改寫結局。',
+        points: ['自 1990 年以來最早出局。', '連續六屆敗於歐洲球隊。', 'Ancelotti 首屆世足即止步。'],
+        source: 'ESPN · Globo',
+    },
+    {
+        id: 'idle-colombia-out',
+        priority: 10,
+        relatedTeams: ['Colombia'],
+        tags: [{ text: '哥倫比亞', cls: 'text-yellow-400 bg-yellow-950' }, { text: '出局', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-yellow-500/30',
+        meta: '哥倫比亞 · 十六強出局',
+        title: 'Díaz 十二碼被撲，哥倫比亞點球不敵瑞士',
+        summary: '120 分鐘 0-0 後十二碼落敗，Díaz 射失後落淚。',
+        points: ['連續三場零失球紀錄告終。', '南美僅剩阿根廷。', '哥倫比亞球迷仍給予掌聲。'],
+        source: 'ESPN · AP',
+    },
 ];
 
 const X_TRENDING_TOP20 = [
-    { id: 'mbappe-yamal-x', priority: 1, hashtag: '#Mbappé', heat: '🔥 爆熱', topic: 'Mbappé vs Yamal 四強對決，網友：世代之戰來了', summary: '7/15 法國西班牙預熱，#Mbappé 與 #Yamal 話題並列洗版。', reactions: [{ tone: 'positive', text: '『這場必看！』' }, { tone: 'positive', text: '『兩個時代碰撞。』' }, { tone: 'neutral', text: '『Mbappé 更成熟吧？』' }] },
-    { id: 'bellingham-messi-x', priority: 2, hashtag: '#Bellingham', heat: '🔥 爆熱', topic: 'Bellingham 對 Messi，英格蘭阿根廷四強預熱', summary: '7/16 對決話題升溫，網友熱議新星與 GOAT。', reactions: [{ tone: 'positive', text: '『Bellingham 能贏？』' }, { tone: 'positive', text: '『Messi 還能帶隊？』' }, { tone: 'neutral', text: '『阿根廷更穩。』' }] },
-    { id: 'france-spain-sf-x', priority: 3, hashtag: '#France', heat: '🔥 爆熱', topic: '法國西班牙四強，網友：歐洲最強對決', summary: '衛冕冠軍對 36 場不敗，#France #Spain 熱議。', reactions: [{ tone: 'positive', text: '『冠軍級！』' }, { tone: 'neutral', text: '『西班牙更熱。』' }, { tone: 'positive', text: '『Mbappé 要破紀錄了。』' }] },
-    { id: 'england-argentina-x', priority: 4, hashtag: '#England', heat: '🔥 高熱', topic: '英格蘭四強對阿根廷，網友：這次不一樣？', summary: 'Tuchel 率隊 1966 後最佳機會，#England 話題再起。', reactions: [{ tone: 'positive', text: '『三獅終於醒了！』' }, { tone: 'funny', text: '『又來了…』' }, { tone: 'positive', text: '『Bellingham 帶飛！』' }] },
-    { id: 'spain-unbeaten-x', priority: 5, hashtag: '#Spain', heat: '🔥 高熱', topic: '西班牙 36 場不敗，網友：誰能終結？', summary: '四強前 #Spain 不敗紀錄成熱議焦點。', reactions: [{ tone: 'positive', text: '『歐洲最強！』' }, { tone: 'neutral', text: '『法國不好惹。』' }, { tone: 'positive', text: '『Merino 太神。』' }] },
-    { id: 'golden-boot-sf-x', priority: 6, hashtag: '#GoldenBoot', heat: '⚡ 熱議', topic: 'Mbappé Messi 金靴四強定勝負', summary: 'Haaland 出局後金靴混戰縮至兩人。', reactions: [{ tone: 'positive', text: '『Mbappé 要破紀錄？』' }, { tone: 'neutral', text: '『還要看誰走得更遠。』' }, { tone: 'positive', text: '『Messi 7 球還能追。』' }] },
-    { id: 'powerline-meme-x', priority: 7, hashtag: '#Norway', heat: '⚡ 熱議', topic: '空拍電線梗還在洗版，挪威球迷仍不平', summary: '八強落敗後爭議餘波未了。', reactions: [{ tone: 'funny', text: '『空拍電線 MVP。』' }, { tone: 'negative', text: '『挪威太冤了。』' }, { tone: 'neutral', text: '『規則該改了。』' }] },
-    { id: 'merino-legend-x', priority: 8, hashtag: '#Merino', heat: '⚡ 熱議', topic: 'Merino 兩度絕殺，網友：替補殺手', summary: '對葡萄牙比利時連絕殺後 #Merino 成傳奇。', reactions: [{ tone: 'positive', text: '『巧合之神！』' }, { tone: 'positive', text: '『四強靠他？』' }, { tone: 'funny', text: '『西班牙專用絕殺。』' }] },
-    { id: 'tuchel-england-x', priority: 9, hashtag: '#Tuchel', heat: '⚡ 熱議', topic: 'Tuchel 英格蘭四強，網友：這教練有料', summary: '逆轉挪威後士氣高漲，#Tuchel 受讚。', reactions: [{ tone: 'positive', text: '『戰術大師！』' }, { tone: 'positive', text: '『比南門強？』' }, { tone: 'neutral', text: '『阿根廷不好打。』' }] },
-    { id: 'messi-goat-x', priority: 10, hashtag: '#Messi', heat: '💬 討論', topic: 'Messi 助攻加時進球，網友：GOAT 還在', summary: '衛冕之路持續，#Messi 話題不減。', reactions: [{ tone: 'positive', text: '『還能奪冠！』' }, { tone: 'positive', text: '『傳奇繼續。』' }, { tone: 'neutral', text: '『英格蘭防線能擋？』' }] },
-    { id: 'sf-schedule-x', priority: 11, hashtag: '#WorldCup', heat: '💬 討論', topic: '四強兩日連戰，網友：賽程太刺激', summary: '7/15、7/16 台灣時間上午開踢。', reactions: [{ tone: 'positive', text: '『每場決賽級！』' }, { tone: 'neutral', text: '『又要早起看球。』' }, { tone: 'positive', text: '『冠軍已是這四隊。』' }] },
-    { id: 'haaland-exit-x', priority: 12, hashtag: '#Haaland', heat: '💬 討論', topic: 'Haaland 世界盃結束，網友：7 球夠了嗎', summary: '挪威出局後 #Haaland 話題轉向遺憾。', reactions: [{ tone: 'negative', text: '『挪威帶不動。』' }, { tone: 'positive', text: '『盡力了。』' }, { tone: 'neutral', text: '『隊友不夠強。』' }] },
-    { id: 'embolo-red-x', priority: 13, hashtag: '#Switzerland', heat: '💬 討論', topic: 'Embolo 紅牌後瑞士崩盘，網友仍惋惜', summary: '八強加時落敗餘波。', reactions: [{ tone: 'negative', text: '『太可惜了…』' }, { tone: 'neutral', text: '『裁判對嗎？』' }, { tone: 'positive', text: '『阿根廷太強。』' }] },
-    { id: 'deschamps-quote-x', priority: 14, hashtag: '#France', heat: '💬 討論', topic: '德尚稱西班牙最難一關，網友：謙虛還是真怕', summary: '賽前記者會引發討論。', reactions: [{ tone: 'positive', text: '『衛冕穩了？』' }, { tone: 'neutral', text: '『西班牙確實強。』' }, { tone: 'positive', text: '『Mbappé 會爆。』' }] },
-    { id: 'yamal-future-x', priority: 15, hashtag: '#Yamal', heat: '💬 討論', topic: 'Yamal 四強見真章，網友：未來是西班牙的', summary: '天才少年備戰法國。', reactions: [{ tone: 'positive', text: '『17 歲太瘋！』' }, { tone: 'positive', text: '『下一個梅西？』' }, { tone: 'neutral', text: '『先過法國再說。』' }] },
-    { id: 'lautaro-clutch-x', priority: 16, hashtag: '#Lautaro', heat: '💬 討論', topic: 'Lautaro 120+1 補刀，阿根廷殺手本色', summary: '加時絕殺鎖定勝局受讚。', reactions: [{ tone: 'positive', text: '『冠軍 DNA！』' }, { tone: 'positive', text: '『殺手本色。』' }, { tone: 'neutral', text: '『英格蘭要小心。』' }] },
-    { id: 'miami-semis-x', priority: 17, hashtag: '#WorldCup', heat: '💬 討論', topic: '四強落戶紐澤西亞特蘭大，北美賽程收官', summary: '邁阿密八強後賽程北移。', reactions: [{ tone: 'neutral', text: '『賽程還行。』' }, { tone: 'positive', text: '『兩場都精彩預告！』' }, { tone: 'neutral', text: '『決賽在哪？』' }] },
-    { id: 'argentina-defend-x', priority: 18, hashtag: '#Argentina', heat: '💬 討論', topic: '阿根廷衛冕四強，網友：還能衛冕嗎', summary: '連續三屆四強底蘊受議。', reactions: [{ tone: 'positive', text: '『衛冕穩了！』' }, { tone: 'neutral', text: '『英格蘭不好惹。』' }, { tone: 'positive', text: '『Messi 最後一舞？』' }] },
-    { id: 'mac-allister-x', priority: 19, hashtag: '#MacAllister', heat: '💬 討論', topic: 'Mac Allister 八強閃擊，利物浦雙星話題', summary: '10 分鐘破門成阿根廷開局慣例。', reactions: [{ tone: 'positive', text: '『開局完美！』' }, { tone: 'positive', text: '『中場大腦。』' }, { tone: 'neutral', text: '『四強還能進？』' }] },
-    { id: 'sf-final-preview-x', priority: 20, hashtag: '#WorldCup', heat: '💬 討論', topic: '決賽對手預測，網友：法國阿根廷重演？', summary: '四強開踢前決賽組合熱議。', reactions: [{ tone: 'positive', text: '『衛冕對決！』' }, { tone: 'neutral', text: '『英格蘭黑馬？』' }, { tone: 'positive', text: '『西班牙也有機會。』' }] },
+    { id: 'x-spain-france-sf', priority: 1, hashtag: '#Spain', heat: '🔥 爆熱', topic: '西班牙 2-0 法國晉級決賽', summary: 'Oyarzabal 十二碼 + Porro 世界波，#Spain 洗版慶祝。', reactions: [{ tone: 'positive', text: '「37 場不敗太誇張！」' }, { tone: 'positive', text: '「2010 再現？」' }, { tone: 'neutral', text: '「法國太被動。」' }] },
+    { id: 'x-porro-worldie', priority: 2, hashtag: '#Porro', heat: '🔥 爆熱', topic: 'Porro 58 分鐘世界波鎖定勝局', summary: '右後衛遠射死角破網，#Porro 成西班牙英雄。', reactions: [{ tone: 'positive', text: '「這腳太瘋了！」' }, { tone: 'positive', text: '「後衛進球最帥。」' }, { tone: 'funny', text: '「法國門將放棄治療。」' }] },
+    { id: 'x-yamal-pen', priority: 3, hashtag: '#Yamal', heat: '🔥 爆熱', topic: 'Yamal 造十二碼，生日願望成真', summary: 'Digne 絆倒後 #Yamal 話題霸榜，紐約決賽在望。', reactions: [{ tone: 'positive', text: '「19 歲太狠！」' }, { tone: 'positive', text: '「下一代王者。」' }, { tone: 'neutral', text: '「Mbappé 被完封。」' }] },
+    { id: 'x-england-argentina-sf', priority: 4, hashtag: '#Messi', heat: '🔥 爆熱', topic: '明日四強：英格蘭對阿根廷', summary: '西班牙已晉級，#Messi 與 #Bellingham 明日對決。', reactions: [{ tone: 'positive', text: '「這場當決賽看！」' }, { tone: 'positive', text: '「衛冕還能繼續？」' }, { tone: 'neutral', text: '「英格蘭不好惹。」' }] },
+    { id: 'x-mbappe-blank', priority: 5, hashtag: '#Mbappe', heat: '🔥 高熱', topic: 'Mbappé 全場零射正，法國夢碎', summary: '衛冕之路終結，#Mbappe 金靴仍領跑但無法帶隊晉級。', reactions: [{ tone: 'negative', text: '「法國太依賴他了。」' }, { tone: 'neutral', text: '「西班牙防線太穩。」' }, { tone: 'positive', text: '「8 球已夠偉大。」' }] },
+    { id: 'x-spain-clean-sheets', priority: 6, hashtag: '#Spain', heat: '🔥 高熱', topic: '西班牙 6 場零封創世足紀錄', summary: '本屆 7 戰僅失 1 球，#Spain 防守話題升溫。', reactions: [{ tone: 'positive', text: '「鐵桶陣！」' }, { tone: 'positive', text: '「Simón 太穩。」' }, { tone: 'neutral', text: '「決賽對手不好踢。」' }] },
+    { id: 'x-deschamps-exit', priority: 7, hashtag: '#France', heat: '⚡ 熱議', topic: '德尚賽後宣布光榮卸任', summary: '2018 冠軍功勳主教練謝幕，#France 球迷不捨。', reactions: [{ tone: 'positive', text: '「感謝德尚！」' }, { tone: 'negative', text: '「就差一場決賽…」' }, { tone: 'neutral', text: '「該換血了。」' }] },
+    { id: 'x-oyarzabal-record', priority: 8, hashtag: '#Oyarzabal', heat: '⚡ 熱議', topic: 'Oyarzabal 本屆 5 球追平隊史紀錄', summary: '十二碼穩定入網，#Oyarzabal 決賽還能破紀錄？', reactions: [{ tone: 'positive', text: '「大場面先生！」' }, { tone: 'positive', text: '「皇社驕傲。」' }, { tone: 'neutral', text: '「決賽見真章。」' }] },
+    { id: 'x-bellingham-messi', priority: 9, hashtag: '#Bellingham', heat: '⚡ 熱議', topic: 'Bellingham 明日對 Messi，新星 vs GOAT', summary: '四強最後一席明日揭曉，#Bellingham 話題升溫。', reactions: [{ tone: 'positive', text: '「貝林能贏？」' }, { tone: 'positive', text: '「英格蘭這次不一樣！」' }, { tone: 'neutral', text: '「阿根廷更穩。」' }] },
+    { id: 'x-spain-final-nj', priority: 10, hashtag: '#WorldCup', heat: '⚡ 熱議', topic: '西班牙晉級紐約決賽，7/20 開踢', summary: '四強首戰塵埃落定，#WorldCup 決賽倒數。', reactions: [{ tone: 'positive', text: '「紐約決賽！」' }, { tone: 'neutral', text: '「英阿誰來挑戰？」' }, { tone: 'positive', text: '「這屆太好看了。」' }] },
+    { id: 'x-powerline-meme', priority: 11, hashtag: '#Norway', heat: '💬 討論', topic: '空拍電線梗還在洗版', summary: '挪威出局後爭議餘波未了，晶片沒感應仍被討論。', reactions: [{ tone: 'funny', text: '「空拍電線 MVP。」' }, { tone: 'negative', text: '「挪威太冤了。」' }, { tone: 'neutral', text: '「規則該改了。」' }] },
+    { id: 'x-sorloth-haaland', priority: 12, hashtag: '#Sorloth', heat: '💬 討論', topic: 'Sørloth 找不到 Haaland 梗仍在', summary: '挪威出局後 #Sorloth 搭檔話題持續發酵。', reactions: [{ tone: 'funny', text: '「GPS 找不到 Haaland。」' }, { tone: 'positive', text: '「Sørloth 踢得好。」' }, { tone: 'neutral', text: '「隊友不夠強。」' }] },
+    { id: 'x-argentina-aet', priority: 13, hashtag: '#Argentina', heat: '💬 討論', topic: '阿根廷連續三場加時，體能隱憂？', summary: '衛冕冠軍明日四強，#Argentina 韌性受讚。', reactions: [{ tone: 'positive', text: '「冠軍 DNA！」' }, { tone: 'neutral', text: '「體能還行嗎？」' }, { tone: 'positive', text: '「Messi 還能帶飛。」' }] },
+    { id: 'x-rodri-olmo', priority: 14, hashtag: '#Rodri', heat: '💬 討論', topic: 'Rodri + Olmo 完控法國中場', summary: '歐洲冠軍中場組合再發威，#Rodri 獲讚骨幹。', reactions: [{ tone: 'positive', text: '「中場大師！」' }, { tone: 'positive', text: '「曼城 + 巴薩。」' }, { tone: 'neutral', text: '「法國沒進狀態。」' }] },
+    { id: 'x-golden-boot-race', priority: 15, hashtag: '#GoldenBoot', heat: '💬 討論', topic: 'Mbappé 8 球領跑，Messi 緊追', summary: '法國出局後金靴懸念縮小，#GoldenBoot 仍熱議。', reactions: [{ tone: 'positive', text: '「Mbappé 穩了？」' }, { tone: 'neutral', text: '「還看決賽。」' }, { tone: 'positive', text: '「Messi 7 球還能追。」' }] },
+    { id: 'x-tuchel-england', priority: 16, hashtag: '#Tuchel', heat: '💬 討論', topic: 'Tuchel 備戰阿根廷，英格蘭四強有備而來', summary: '三獅士氣高漲，#Tuchel 戰術調整受關注。', reactions: [{ tone: 'positive', text: '「這次不一樣！」' }, { tone: 'neutral', text: '「阿根廷不好打。」' }, { tone: 'positive', text: '「Bellingham 帶飛。」' }] },
+    { id: 'x-france-paris-mood', priority: 17, hashtag: '#France', heat: '💬 討論', topic: '巴黎街頭失望，法國球迷不捨', summary: '衛冕夢碎後 #France 社群惋惜聲浪。', reactions: [{ tone: 'negative', text: '「就差一點…」' }, { tone: 'positive', text: '「2018 夠了。」' }, { tone: 'neutral', text: '「西班牙太強。」' }] },
+    { id: 'x-merino-legend', priority: 18, hashtag: '#Merino', heat: '💬 討論', topic: 'Merino 兩度絕殺後西班牙再進決賽', summary: '雖本場未進球，#Merino 仍被視為奇兵。', reactions: [{ tone: 'positive', text: '「替補殺手！」' }, { tone: 'funny', text: '「西班牙專用絕殺。」' }, { tone: 'neutral', text: '「今天 Porro 搶戲。」' }] },
+    { id: 'x-haaland-exit', priority: 19, hashtag: '#Haaland', heat: '💬 討論', topic: 'Haaland 7 球收官，挪威黑馬謝幕', summary: '北歐足球昂首離場，#Haaland 仍被致敬。', reactions: [{ tone: 'positive', text: '「已經夠偉大！」' }, { tone: 'negative', text: '「空拍電線太冤。」' }, { tone: 'positive', text: '「淘汰巴西經典。」' }] },
+    { id: 'x-final-preview', priority: 20, hashtag: '#WorldCup', heat: '💬 討論', topic: '決賽預測：西班牙 vs 英格蘭或阿根廷？', summary: '四強最後一席明日揭曉，#WorldCup 冠軍懸念。', reactions: [{ tone: 'positive', text: '「西班牙冠軍！」' }, { tone: 'neutral', text: '「阿根廷衛冕？」' }, { tone: 'positive', text: '「英格蘭黑馬！」' }] },
 ];
-
-/** 換版時清除舊 localStorage，避免瀏覽器沿用過期快取 */
-function migrateAppStorage() {
-    const verKey = 'wc_app_version';
-    if (localStorage.getItem(verKey) === APP_VERSION) return;
-    try {
-        Object.keys(localStorage).forEach(k => {
-            if (k.startsWith('wc_news_cache_')) localStorage.removeItem(k);
-        });
-        localStorage.removeItem('wc_news_date');
-        localStorage.setItem(verKey, APP_VERSION);
-    } catch {}
-}
-migrateAppStorage();
-const TRENDING_LIMIT = 20;
-
-function getScoresDate() { return getTaipeiToday(); }
-
-function isDateInTaipei(game, dateStr) {
-    const taipei = gameToTaipeiDate(game.local_date);
-    const tp = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(taipei);
-    return tp === dateStr;
-}
-
 
 const REACTION_TONE = {
     positive: { label: '支持', cls: 'text-emerald-400 bg-emerald-950', quote: 'reaction-positive' },
