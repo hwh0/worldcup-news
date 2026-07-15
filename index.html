@@ -207,8 +207,8 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v35';
-const CACHE_KEY = 'wc_news_cache_v35';
+const APP_VERSION = 'v36';
+const CACHE_KEY = 'wc_news_cache_v36';
 const KNOWN_RESULTS = {
     '99': {
         home_score: '1',
@@ -565,6 +565,21 @@ const X_TRENDING_TOP20 = [
     { id: 'x-final-preview', priority: 20, hashtag: '#WorldCup', heat: '💬 討論', topic: '決賽預測：西班牙 vs 英格蘭或阿根廷？', summary: '四強最後一席明日揭曉，#WorldCup 冠軍懸念。', reactions: [{ tone: 'positive', text: '「西班牙冠軍！」' }, { tone: 'neutral', text: '「阿根廷衛冕？」' }, { tone: 'positive', text: '「英格蘭黑馬！」' }] },
 ];
 
+/** 換版時清除舊 localStorage，避免瀏覽器沿用過期快取 */
+function migrateAppStorage() {
+    const verKey = 'wc_app_version';
+    if (localStorage.getItem(verKey) === APP_VERSION) return;
+    try {
+        Object.keys(localStorage).forEach(k => {
+            if (k.startsWith('wc_news_cache_')) localStorage.removeItem(k);
+        });
+        localStorage.removeItem('wc_news_date');
+        localStorage.setItem(verKey, APP_VERSION);
+    } catch {}
+}
+migrateAppStorage();
+const TRENDING_LIMIT = 20;
+
 const REACTION_TONE = {
     positive: { label: '支持', cls: 'text-emerald-400 bg-emerald-950', quote: 'reaction-positive' },
     negative: { label: '批評', cls: 'text-red-400 bg-red-950', quote: 'reaction-negative' },
@@ -621,6 +636,14 @@ function getTaipeiToday() {
     const now = new Date();
     const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
     return parts;
+}
+
+function getScoresDate() { return getTaipeiToday(); }
+
+function isDateInTaipei(game, dateStr) {
+    const taipei = gameToTaipeiDate(game.local_date);
+    const tp = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(taipei);
+    return tp === dateStr;
 }
 
 function isTodayInTaipei(game) {

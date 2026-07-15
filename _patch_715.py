@@ -30,7 +30,9 @@ if needle not in text:
 text = text.replace(needle, replacement)
 
 start = text.index("const TODAY_TOP10_NEWS = [")
-end = text.index("const REACTION_TONE = {")
+end = text.index("/** 換版時清除舊 localStorage")
+if end == -1:
+    end = text.index("const REACTION_TONE = {")
 NEW_DATA = open(Path(__file__).parent / "_news_715_data.js", encoding="utf-8").read()
 text = text[:start] + NEW_DATA + "\n\n" + text[end:]
 
