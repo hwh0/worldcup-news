@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="v45">
+    <meta name="app-version" content="v46">
     <title>⚽ Grok 每日世界盃新聞 · 西班牙冠軍</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -93,7 +93,7 @@
         <div class="flex gap-2 mb-8 p-1.5 bg-zinc-900 border border-zinc-800 rounded-3xl w-fit flex-wrap">
             <button id="tab-results" class="tab-btn active flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
                 <i class="fa-solid fa-futbol"></i>
-                賽果與名次
+                決賽結果
                 <span id="tab-results-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400"></span>
             </button>
             <button id="tab-idle" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
@@ -126,7 +126,7 @@
             <section class="mb-10" id="knockout-section">
                 <h2 class="section-title flex items-center gap-3">
                     <i class="fa-solid fa-sitemap text-emerald-500"></i>
-                    決賽與名次
+                    決賽結果
                     <span id="knockout-qualified-count" class="text-xs font-normal text-zinc-500"></span>
                 </h2>
                 <div id="knockout-container" class="space-y-8">
@@ -208,8 +208,8 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v45';
-const CACHE_KEY = 'wc_news_cache_v45';
+const APP_VERSION = 'v46';
+const CACHE_KEY = 'wc_news_cache_v46';
 const KNOWN_RESULTS = {
     '99': {
         home_score: '1',
