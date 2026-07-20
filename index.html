@@ -91,17 +91,17 @@
         <div class="flex gap-2 mb-8 p-1.5 bg-zinc-900 border border-zinc-800 rounded-3xl w-fit flex-wrap">
             <button id="tab-results" class="tab-btn active flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
                 <i class="fa-solid fa-futbol"></i>
-                今日賽果
+                賽果與名次
                 <span id="tab-results-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400"></span>
             </button>
             <button id="tab-idle" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
                 <i class="fa-solid fa-mug-hot"></i>
-                無賽事球隊動態
+                收官動態
                 <span id="tab-idle-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400"></span>
             </button>
             <button id="tab-trending" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
                 <i class="fa-brands fa-x-twitter"></i>
-                X 網路熱議
+                X 熱議回顧
                 <span id="tab-trending-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400">20 則</span>
             </button>
         </div>
@@ -111,7 +111,7 @@
             <section class="mb-10">
                 <h2 class="section-title flex items-center gap-3">
                     <i class="fa-solid fa-futbol text-blue-500"></i>
-                    今日比賽比分戰績
+                    今日比分
                     <span id="match-count" class="text-xs font-normal text-zinc-500"></span>
                 </h2>
                 <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -124,10 +124,10 @@
             <section class="mb-10" id="knockout-section">
                 <h2 class="section-title flex items-center gap-3">
                     <i class="fa-solid fa-sitemap text-emerald-500"></i>
-                    淘汰賽對陣
+                    決賽與名次
                     <span id="knockout-qualified-count" class="text-xs font-normal text-zinc-500"></span>
                 </h2>
-                <p class="text-sm text-zinc-400 mb-4">四強首戰西班牙已晉級決賽，英格蘭阿根廷明日開踢。完賽後自動填入晉級隊伍。</p>
+                <p id="knockout-desc" class="text-sm text-zinc-400 mb-4">2026 世界盃已落幕。西班牙加時 1-0 擊敗阿根廷奪冠；英格蘭 6-4 法國奪季軍。</p>
                 <div id="knockout-container" class="space-y-8">
                     <div class="skeleton h-20 rounded-3xl"></div>
                 </div>
@@ -136,8 +136,8 @@
             <section>
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-solid fa-newspaper text-blue-500"></i>
-                    今日賽事新聞
-                    <span class="text-xs font-normal text-zinc-500">戰報 · 賽後分析</span>
+                    決賽與賽後新聞
+                    <span class="text-xs font-normal text-zinc-500">冠軍戰報 · 收官分析</span>
                 </h2>
                 <div id="news-list" class="space-y-4">
                     <div class="skeleton h-28 rounded-3xl"></div>
@@ -151,10 +151,10 @@
             <section class="mb-8">
                 <h2 class="section-title flex items-center gap-3">
                     <i class="fa-solid fa-calendar-xmark text-purple-500"></i>
-                    今日無賽事的隊伍
+                    其他隊伍動態
                     <span id="idle-team-count" class="text-xs font-normal text-zinc-500"></span>
                 </h2>
-                <p class="text-sm text-zinc-400 mb-4">以下隊伍今日沒有比賽，但仍可能有訓練、記者會、傷病或場外新聞值得關注。</p>
+                <p class="text-sm text-zinc-400 mb-4">世界盃已結束，以下為出局球隊後續與賽後話題。</p>
                 <div id="idle-teams-grid" class="flex flex-wrap gap-2"></div>
             </section>
 
@@ -182,8 +182,8 @@
             <section>
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-brands fa-x-twitter text-zinc-200"></i>
-                    今日 X 熱議 Top 20
-                    <span class="text-xs font-normal text-zinc-500">社群討論 · 非戰報</span>
+                    決賽 X 熱議 Top 20
+                    <span class="text-xs font-normal text-zinc-500">奪冠話題 · 社群討論</span>
                 </h2>
                 <div id="trending-list" class="space-y-4">
                     <div class="skeleton h-36 rounded-3xl"></div>
@@ -207,8 +207,8 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v40';
-const CACHE_KEY = 'wc_news_cache_v40';
+const APP_VERSION = 'v41';
+const CACHE_KEY = 'wc_news_cache_v41';
 const KNOWN_RESULTS = {
     '99': {
         home_score: '1',
@@ -806,7 +806,7 @@ function renderKnockoutMatchCard(g, stage, advanceTo) {
                 ${awayTeam?.flag ? `<img src="${awayTeam.flag}" class="w-5 h-3.5 object-cover rounded-sm" alt="">` : ''}
             </span>
         </div>
-        ${win && advanceTo ? `<div class="text-xs text-emerald-400 mt-2">${win} · 晉級${advanceTo}</div>` : ''}
+        ${win && advanceTo ? `<div class="text-xs text-emerald-400 mt-2">${win} · ${advanceTo}</div>` : ''}
     </div>`;
 }
 
@@ -821,14 +821,13 @@ function isThirdPlace(game) {
 function renderKnockoutBracket() {
     const container = $('knockout-container');
     const countEl = $('knockout-qualified-count');
+    const descEl = $('knockout-desc');
     const byDate = (a, b) => gameToTaipeiDate(a.local_date) - gameToTaipeiDate(b.local_date);
 
     const qf = state.games.filter(isQuarterFinal).sort(byDate);
     const sf = state.games.filter(isSemiFinal).sort(byDate);
     const third = state.games.filter(isThirdPlace).sort(byDate);
-    const final = state.games.filter(g =>
-        g.type === 'final' || g.type === 'r2' || g.group === 'FINAL'
-    ).sort(byDate);
+    const final = state.games.filter(isFinal).sort(byDate);
     const qfDone = qf.filter(isFinished).length;
 
     const block = (title, games, stage, advanceTo) => {
@@ -842,14 +841,28 @@ function renderKnockoutBracket() {
         </div>`;
     };
 
+    const finalDone = final.length && isFinished(final[0]);
+    if (finalDone) {
+        const champ = getMatchWinner(final[0]);
+        const champName = champ ? teamZh(champ.name) : '西班牙';
+        if (descEl) {
+            descEl.textContent = `2026 世界盃已落幕。${champName}奪冠；季軍戰英格蘭 6-4 法國。以下為決賽、季軍戰與四強結果。`;
+        }
+        countEl.textContent = `（${champName}奪冠 · 賽事結束）`;
+        const parts = [];
+        parts.push(block('決賽 · 冠軍', final, '決賽', '世界盃冠軍'));
+        if (third.length) parts.push(block('季軍戰', third, '季軍戰', '季軍'));
+        if (sf.length) parts.push(block('四強', sf, '四強', '晉級決賽'));
+        container.innerHTML = parts.join('') || '<p class="text-sm text-zinc-500">載入賽果中…</p>';
+        return;
+    }
+
     if (final.length || (sf.length && sf.every(isFinished))) {
         const parts = [];
-        if (final.length) parts.push(block('決賽', final, '決賽', '冠軍'));
-        if (third.length) parts.push(block('季軍戰', third, '季軍戰', ''));
-        if (sf.length) parts.push(block('四強', sf, '四強', '決賽'));
-        countEl.textContent = final.length
-            ? (isFinished(final[0]) ? '（決賽已完賽）' : '（決賽待開踢）')
-            : `（四強 ${sf.filter(isFinished).length}/${sf.length} 場完賽）`;
+        if (final.length) parts.push(block('決賽', final, '決賽', '世界盃冠軍'));
+        if (third.length) parts.push(block('季軍戰', third, '季軍戰', '季軍'));
+        if (sf.length) parts.push(block('四強', sf, '四強', '晉級決賽'));
+        countEl.textContent = final.length ? '（決賽待開踢）' : `（四強 ${sf.filter(isFinished).length}/${sf.length} 場完賽）`;
         container.innerHTML = parts.join('') || '<p class="text-sm text-zinc-500">載入淘汰賽對陣中…</p>';
         return;
     }
@@ -857,7 +870,7 @@ function renderKnockoutBracket() {
     if (sf.length) {
         const sfDone = sf.filter(isFinished).length;
         countEl.textContent = `（四強 ${sfDone}/${sf.length} 場完賽）`;
-        container.innerHTML = block('四強', sf, '四強', '決賽');
+        container.innerHTML = block('四強', sf, '四強', '晉級決賽');
         return;
     }
 
@@ -868,7 +881,7 @@ function renderKnockoutBracket() {
         return;
     }
 
-    container.innerHTML = block('八強', qf, '八強', '四強');
+    container.innerHTML = block('八強', qf, '八強', '晉級四強');
 }
 
 function renderMatches() {
@@ -884,8 +897,8 @@ function renderMatches() {
         $('no-matches').classList.remove('hidden');
         const dayLabel = activeDate.replace(/-/g, '/');
         $('no-matches').textContent = upcoming
-            ? `${dayLabel} 尚有 ${upcoming} 場比賽尚未開踢，完賽後將自動顯示於此。`
-            : '今日尚無已完賽或進行中的比賽。';
+            ? `${dayLabel} 尚有 ${upcoming} 場比賽尚未開踢。`
+            : '2026 世界盃賽程已全部結束，今日無比賽。';
         return;
     }
     $('no-matches').classList.add('hidden');
@@ -903,7 +916,11 @@ function renderMatches() {
         const homeTeam = state.teams[t.homeId];
         const awayTeam = state.teams[t.awayId];
         const stage = stageLabel(g);
-        const advanceNote = isFinished(g) && isSemiFinal(g)
+        const advanceNote = isFinished(g) && isFinal(g)
+            ? '<div class="text-xs text-yellow-400/90 mt-1">世界盃冠軍</div>'
+            : isFinished(g) && isThirdPlace(g)
+            ? '<div class="text-xs text-amber-400/80 mt-1">季軍戰</div>'
+            : isFinished(g) && isSemiFinal(g)
             ? '<div class="text-xs text-emerald-400/80 mt-1">晉級決賽</div>'
             : isFinished(g) && isQuarterFinal(g)
             ? '<div class="text-xs text-emerald-400/80 mt-1">晉級四強</div>'
@@ -1191,7 +1208,7 @@ function setupTabs() {
 
 function renderAll() {
     const tp = getTaipeiToday().replace(/-/g, '/');
-    $('date-label').textContent = `${tp} 台灣時間 · 新聞 ${NEWS_UPDATED} · ${APP_VERSION}`;
+    $('date-label').textContent = `${tp} · 西班牙奪冠 · 新聞 ${NEWS_UPDATED} · ${APP_VERSION}`;
     renderMatches();
     renderKnockoutBracket();
     renderNews();
