@@ -127,7 +127,6 @@
                     決賽與名次
                     <span id="knockout-qualified-count" class="text-xs font-normal text-zinc-500"></span>
                 </h2>
-                <p id="knockout-desc" class="text-sm text-zinc-400 mb-4">2026 世界盃已全部完賽。西班牙奪冠，阿根廷亞軍，英格蘭季軍，法國殿軍。</p>
                 <div id="knockout-container" class="space-y-8">
                     <div class="skeleton h-20 rounded-3xl"></div>
                 </div>
@@ -207,8 +206,8 @@ const API = {
 };
 
 const AUTO_REFRESH_SEC = 60;
-const APP_VERSION = 'v43';
-const CACHE_KEY = 'wc_news_cache_v43';
+const APP_VERSION = 'v44';
+const CACHE_KEY = 'wc_news_cache_v44';
 const KNOWN_RESULTS = {
     '99': {
         home_score: '1',
@@ -821,7 +820,6 @@ function isThirdPlace(game) {
 function renderKnockoutBracket() {
     const container = $('knockout-container');
     const countEl = $('knockout-qualified-count');
-    const descEl = $('knockout-desc');
     const byDate = (a, b) => gameToTaipeiDate(a.local_date) - gameToTaipeiDate(b.local_date);
 
     const qf = state.games.filter(isQuarterFinal).sort(byDate);
@@ -845,9 +843,6 @@ function renderKnockoutBracket() {
     if (finalDone) {
         const champ = getMatchWinner(final[0]);
         const champName = champ ? teamZh(champ.name) : '西班牙';
-        if (descEl) {
-            descEl.textContent = `2026 世界盃已落幕。${champName}奪冠；季軍戰英格蘭 6-4 法國。以下為決賽、季軍戰與四強結果。`;
-        }
         countEl.textContent = `（${champName}奪冠 · 賽事結束）`;
         const parts = [];
         parts.push(block('決賽 · 冠軍', final, '決賽', '世界盃冠軍'));
