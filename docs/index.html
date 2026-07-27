@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v3">
+    <meta name="app-version" content="fw-v4">
     <title>⚽ 每周足球新聞 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -167,10 +167,10 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v3';
-const CACHE_KEY = 'weekly_football_fw_v3';
+const APP_VERSION = 'fw-v4';
+const CACHE_KEY = 'weekly_football_fw_v4';
 const NEWS_WEEK = '2026-W30';
-const NEWS_UPDATED = '2026-07-20';
+const NEWS_UPDATED = '2026-07-26';
 const TRENDING_LIMIT = 15;
 
 const FOCUS_TEAMS = [
@@ -196,7 +196,7 @@ const FOCUS_TEAMS = [
         border: 'team-card-milan',
         accent: 'text-rose-400',
         badge: 'bg-rose-950 text-rose-400',
-        blurb: '紅黑軍團 · 新賽季中場與鋒線補強焦點',
+        blurb: '阿莫林新帥 · 對凱爾特人 2-2 · 3-4-2-1 實驗中',
     },
     {
         id: 'barca',
@@ -267,17 +267,17 @@ const WEEK_FIXTURES = [
         note: '亞洲巡迴收官戰',
     },
     {
-        id: 'milan-pre1',
+        id: 'milan-celtic',
         team: 'milan',
         competition: '季前熱身',
-        home: 'AC 米蘭',
-        away: '待定',
-        homeEn: 'AC Milan',
-        awayEn: 'TBD',
-        dateLabel: '7 月底／8 月',
-        status: 'preview',
-        score: null,
-        note: '季前友善賽細節待球會公布',
+        home: '凱爾特人',
+        away: 'AC 米蘭',
+        homeEn: 'Celtic',
+        awayEn: 'AC Milan',
+        dateLabel: '7/25 格拉斯哥',
+        status: 'finished',
+        score: { home: 2, away: 2 },
+        note: '阿莫林首秀 · Camarda 梅開二度逆轉扳平',
     },
     {
         id: 'barca-pre1',
@@ -296,8 +296,42 @@ const WEEK_FIXTURES = [
 
 const WEEKLY_TOP_NEWS = [
     {
-        id: 'city-transfer-window',
+        id: 'milan-celtic-draw',
         priority: 1,
+        team: 'milan',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '賽後', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-rose-500/50',
+        meta: '季前 · 凱爾特人 2-2 米蘭 · 7/25',
+        title: '阿莫林首秀打平：Camarda 梅開二度，米蘭 2-2 凱爾特人',
+        summary: '格拉斯哥友善賽上半場因後防回傳失誤兩度落後（Duran、Forrest），下半場換上 Camarda 點球破門再頭槌扳平。阿莫林賽後開始球員評估，紅黑球迷討論兩極。',
+        points: [
+            '上半場 Pavlovic、Ricci 回傳失誤被對手懲罰。',
+            '下半場改 3-4-2-1，Chukwueze 助攻 Camarda。',
+            '世足與傷兵缺席約 12 人，陣容拼湊痕跡明顯。',
+            '熱身賽結論有限，但反擊韌性受肯定。',
+        ],
+        source: 'SempreMilan · Football Italia · Gazzetta',
+    },
+    {
+        id: 'amorim-can-he-rebuild',
+        priority: 2,
+        team: 'milan',
+        tags: [{ text: '阿莫林', cls: 'text-rose-400 bg-rose-950' }, { text: '評論', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-amber-500/40',
+        meta: '意甲 · 教練 · 本週',
+        title: '阿莫林真的能重振米蘭嗎？首秀打平後的三個觀察點',
+        summary: '葡帥 6 月上任，帶來 Sporting 時期高壓與結構清楚的 3-4-3／3-4-2-1 思維。首場友善賽暴露防守溝通與前場創造力不足，也讓 Camarda、Chukwueze 等替補成為亮點。能否重振，取決於夏窗中軸與邊翼適配度，而非單場熱身比分。',
+        points: [
+            '優勢：現代壓迫、明確球員輪廓、青訓開發經驗。',
+            '挑戰：曼聯後期爭議留在外界印象，義甲節奏需適應。',
+            '陣容：世足後主力歸隊才是真正考卷。',
+            '結論：給時間與對的補強，打平不代表失敗；沒補強則難爭冠。',
+        ],
+        source: 'AC Milan Official · The Athletic · SempreMilan',
+    },
+    {
+        id: 'city-transfer-window',
+        priority: 3,
         team: 'city',
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '轉會', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/40',
@@ -314,7 +348,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'barca-yamal-focus',
-        priority: 2,
+        priority: 4,
         team: 'barca',
         tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: 'Yamal', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-amber-500/40',
@@ -331,24 +365,24 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'milan-squad-rebuild',
-        priority: 3,
+        priority: 5,
         team: 'milan',
-        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '陣容', cls: 'text-zinc-400 bg-zinc-800' }],
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '阿莫林', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-rose-500/40',
         meta: '意甲 · 重建 · 本週',
-        title: '紅黑軍團夏窗：鋒線與中場雙線評估',
-        summary: 'AC 米蘭本週召開技術會議，檢討上季歐冠與聯賽表現。球會希望在不失財務紀律下補強進攻轉換效率。',
+        title: '對凱爾特人後：阿莫林要的邊翼與中軸，夏窗怎麼補？',
+        summary: '2-2 賽後外界焦點轉向適配 3-4-2-1 的邊翼衛與中場。Camarda 證明鋒線有解，但上半場失誤顯示後防與中場銜接仍需補強與磨合。',
         points: [
-            '鋒線輪換被視為優先課題。',
-            '青訓與外援並重的策略延續。',
-            '季前熱身將測試新陣型。',
-            '意甲開季目標：重返前四競爭。',
+            '邊路推進與回防平衡是系統關鍵。',
+            '主力世足歸隊後才是完整評估。',
+            '青訓 Camarda 成短期亮點。',
+            '開季目標：穩定前四並重建歐冠競爭力。',
         ],
-        source: 'Gazzetta · Sky Sport IT · ESPN',
+        source: 'SempreMilan · Gazzetta · Sky Sport IT',
     },
     {
         id: 'city-haaland-rest',
-        priority: 4,
+        priority: 6,
         team: 'city',
         tags: [{ text: 'Haaland', cls: 'text-sky-400 bg-sky-950' }, { text: '香港', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/30',
@@ -365,7 +399,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'barca-finance-update',
-        priority: 5,
+        priority: 7,
         team: 'barca',
         tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '財政', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-amber-500/30',
@@ -381,25 +415,25 @@ const WEEKLY_TOP_NEWS = [
         source: 'Marca · Reuters · Cadena SER',
     },
     {
-        id: 'milan-preseason',
-        priority: 6,
+        id: 'milan-camarda-hero',
+        priority: 8,
         team: 'milan',
-        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '季前', cls: 'text-emerald-400 bg-emerald-950' }],
+        tags: [{ text: 'Camarda', cls: 'text-rose-400 bg-rose-950' }, { text: '賽後', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-rose-500/30',
-        meta: '意甲 · 備戰 · 本週',
-        title: '米蘭季前備戰升溫，新援試陣與陣型實驗同步',
-        summary: '紅黑軍團本週聚焦體能與小組對抗。教練組希望在友善賽中試驗三中衛與雙前鋒變體。',
+        meta: 'AC 米蘭 · 球星 · 本週',
+        title: 'Camarda 雙響救駕：阿莫林替補牌成首秀最大贏家',
+        summary: '下半場兩分鐘內點球破門，隨後頭槌扳平，Francesco Camarda 成為格拉斯哥焦點。阿莫林賽後將其列為評估贏家之一。',
         points: [
-            '年輕球員獲得出場機會。',
-            '體能教練安排分期恢復。',
-            '夏窗進度影響首發輪廓。',
-            '意甲開季目標仍是前四。',
+            '證明可在 3-4-2-1 擔任單箭頭。',
+            'Chukwueze 傳中品質受讚。',
+            '年輕鋒線給夏窗更多彈性。',
+            '下一場友善賽仍是觀察重點。',
         ],
-        source: 'Gazzetta · Sky Sport IT',
+        source: 'Football Italia · SempreMilan',
     },
     {
         id: 'city-maresca-hk',
-        priority: 7,
+        priority: 9,
         team: 'city',
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '馬雷斯卡', cls: 'text-purple-400 bg-purple-950' }],
         border: 'border-sky-500/30',
@@ -416,7 +450,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'barca-preseason',
-        priority: 8,
+        priority: 10,
         team: 'barca',
         tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '季前', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-amber-500/30',
@@ -433,7 +467,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'three-club-calendar',
-        priority: 9,
+        priority: 11,
         team: 'all',
         tags: [{ text: '週報', cls: 'text-emerald-400 bg-emerald-950' }, { text: '賽程', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-emerald-500/30',
@@ -450,7 +484,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'transfer-market-watch',
-        priority: 10,
+        priority: 12,
         team: 'all',
         tags: [{ text: '轉會市場', cls: 'text-purple-400 bg-purple-950' }],
         border: 'border-purple-500/30',
@@ -470,7 +504,7 @@ const WEEKLY_TOP_NEWS = [
 const TEAM_NEWS = [
     {
         id: 'tn-city-1',
-        priority: 1,
+        priority: 4,
         team: 'city',
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '備戰', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/30',
@@ -482,7 +516,7 @@ const TEAM_NEWS = [
     },
     {
         id: 'tn-city-2',
-        priority: 2,
+        priority: 5,
         team: 'city',
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '轉會', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-sky-500/30',
@@ -494,31 +528,43 @@ const TEAM_NEWS = [
     },
     {
         id: 'tn-milan-1',
-        priority: 3,
+        priority: 1,
         team: 'milan',
-        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '備戰', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-rose-500/30',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '賽後', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-rose-500/40',
         meta: 'AC 米蘭 · 本週',
-        title: '米蘭訓練營：體能測試完成，戰術演練升溫',
-        summary: '紅黑軍團在義大利完成體能基線測試後，本週開始小組對抗。新援融入進度成媒體焦點。',
-        points: ['醫療組無重大傷號通報。', '季前國內集訓進行中。'],
-        source: 'Gazzetta · Milan TV',
+        title: '球迷怎麼說 2-2？上半場「災難」、下半場「有戲」',
+        summary: '社群對阿莫林首秀呈現分裂：有人批後防兒戲、有人誇 Camarda 與替補調整。多數共識是：熱身賽不能定生死，但溝通問題要快修。',
+        points: ['「0-2 是阿莫林問題還是陣容問題？」成熱議。', '下半場 3-4-2-1 被視為方向訊號。'],
+        source: 'X 球迷討論 · Gazzetta 讀者',
     },
     {
         id: 'tn-milan-2',
-        priority: 4,
+        priority: 2,
+        team: 'milan',
+        tags: [{ text: '阿莫林', cls: 'text-rose-400 bg-rose-950' }, { text: '重建', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-rose-500/30',
+        meta: 'AC 米蘭 · 本週',
+        title: '阿莫林能重振米蘭嗎：時間、補強、耐心缺一不可',
+        summary: 'Sporting 雙冠證明他能建體系；曼聯後期則提醒「大俱樂部壓力」與適配。米蘭球迷要的不是單場逆轉戲，而是穩定前四與歐冠競爭力。',
+        points: ['需要適配三中衛的邊翼與中場。', 'Camarda 是內部解方之一。', '主力歸隊後再下結論更公道。'],
+        source: 'The Athletic · SempreMilan',
+    },
+    {
+        id: 'tn-milan-3',
+        priority: 3,
         team: 'milan',
         tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '市場', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-rose-500/30',
         meta: 'AC 米蘭 · 本週',
-        title: '米蘭轉會窗：鋒線目標名單縮短，租借選項仍在桌上',
-        summary: '球會希望在八月初前釐清鋒線輪換。若直接買斷困難，租借附買斷仍是備案。',
-        points: ['財務紀律被董事會重申。', '球迷期待攻擊力升級。'],
+        title: '打平後夏窗更急？中軸與邊路成阿莫林購物清單',
+        summary: '友善賽暴露創造力與防守穩定度落差，球會在不失紀律下評估外援與租借。',
+        points: ['財務紀律被董事會重申。', '青訓與外援並重。'],
         source: 'Sky Sport IT · Calciomercato',
     },
     {
         id: 'tn-barca-1',
-        priority: 5,
+        priority: 6,
         team: 'barca',
         tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '青訓', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-amber-500/30',
@@ -530,7 +576,7 @@ const TEAM_NEWS = [
     },
     {
         id: 'tn-barca-2',
-        priority: 6,
+        priority: 7,
         team: 'barca',
         tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '西甲', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-amber-500/30',
@@ -545,15 +591,15 @@ const TEAM_NEWS = [
 const X_TRENDING = [
     { id: 'x1', priority: 1, hashtag: '#ManCity', heat: '🔥 爆熱', topic: '曼城香港行對 Internazionale，網友：馬雷斯卡首秀', summary: '亞洲巡迴香港站話題洗版 #ManCity。', reactions: [{ tone: 'positive', text: '「啟德見！」' }, { tone: 'positive', text: '「給新帥時間。」' }, { tone: 'neutral', text: '「先看熱身狀態。」' }] },
     { id: 'x2', priority: 2, hashtag: '#Yamal', heat: '🔥 爆熱', topic: '亞馬爾休整照曝光，巴薩球迷：新賽季衝歐冠', summary: '#Yamal 動態持續佔熱搜。', reactions: [{ tone: 'positive', text: '「未來是他的！」' }, { tone: 'positive', text: '「保護好他。」' }, { tone: 'neutral', text: '「別過度消耗。」' }] },
-    { id: 'x3', priority: 3, hashtag: '#ACMilan', heat: '🔥 高熱', topic: '米蘭季前備戰，網友：夏窗鋒線要動了嗎', summary: '#ACMilan 備戰話題升溫。', reactions: [{ tone: 'positive', text: '「紅黑加油！」' }, { tone: 'neutral', text: '「看新陣。」' }, { tone: 'funny', text: '「傳聞比進球多。」' }] },
+    { id: 'x3', priority: 3, hashtag: '#ACMilan', heat: '🔥 爆熱', topic: '凱爾特人 2-2 米蘭：Camarda 救駕，網友怎麼評阿莫林首秀', summary: '上半場 0-2 下半場扳平，#ACMilan 討論兩極。', reactions: [{ tone: 'positive', text: '「Camarda 太猛！」' }, { tone: 'negative', text: '「後防兒戲…」' }, { tone: 'neutral', text: '「熱身賽別急著定生死。」' }] },
     { id: 'x4', priority: 4, hashtag: '#Haaland', heat: '🔥 高熱', topic: '哈蘭德備戰香港，曼城球迷：亞洲行要進球', summary: '#Haaland 狀態討論熱絡。', reactions: [{ tone: 'positive', text: '「金靴預備！」' }, { tone: 'neutral', text: '「別受傷就好。」' }, { tone: 'funny', text: '「熱身賽也要帽子戲法。」' }] },
     { id: 'x5', priority: 5, hashtag: '#Barca', heat: '⚡ 熱議', topic: '巴薩財政與引援，網友：又是註冊名額大戰', summary: '#Barca 夏窗老話題再起。', reactions: [{ tone: 'negative', text: '「每年都這樣…」' }, { tone: 'positive', text: '「青訓能救場。」' }, { tone: 'neutral', text: '「等官方數字。」' }] },
     { id: 'x6', priority: 6, hashtag: '#HongKong', heat: '⚡ 熱議', topic: '曼城來港！啟德對 Internazionale 票務討論爆棚', summary: '香港球迷熱議亞洲巡迴。', reactions: [{ tone: 'positive', text: '「終於來了！」' }, { tone: 'funny', text: '「門票比薪資難搶。」' }, { tone: 'positive', text: '「藍月亮香港見。」' }] },
-    { id: 'x7', priority: 7, hashtag: '#SerieA', heat: '⚡ 熱議', topic: '意甲前瞻：米蘭能否重返爭冠集團？', summary: '#SerieA 夏窗討論中米蘭被高頻提及。', reactions: [{ tone: 'positive', text: '「紅黑可以！」' }, { tone: 'neutral', text: '「看引援。」' }, { tone: 'negative', text: '「中場還差一塊。」' }] },
+    { id: 'x7', priority: 7, hashtag: '#Amorim', heat: '⚡ 熱議', topic: '阿莫林能重振米蘭嗎？網友：給時間 vs 曼聯陰影', summary: '葡帥首秀打平後成熱搜。', reactions: [{ tone: 'positive', text: '「Sporting 證明他會建隊。」' }, { tone: 'negative', text: '「曼聯搞砸的能信？」' }, { tone: 'neutral', text: '「先看夏窗與主力歸隊。」' }] },
     { id: 'x8', priority: 8, hashtag: '#LaLiga', heat: '⚡ 熱議', topic: '西甲爭冠預測：巴薩皇馬馬競三強格局？', summary: '#LaLiga 開季前話題。', reactions: [{ tone: 'positive', text: '「相信巴薩！」' }, { tone: 'neutral', text: '「皇馬也強。」' }, { tone: 'positive', text: '「亞馬爾差點。」' }] },
     { id: 'x9', priority: 9, hashtag: '#EnzoMaresca', heat: '💬 討論', topic: '馬雷斯卡曼城首秀，網友：風格會是什麼', summary: '新帥香港行成熱議。', reactions: [{ tone: 'positive', text: '「給時間證明。」' }, { tone: 'neutral', text: '「先看引援。」' }, { tone: 'funny', text: '「傳控 DNA 還在嗎。」' }] },
     { id: 'x10', priority: 10, hashtag: '#TransferNews', heat: '💬 討論', topic: '三隊目標重疊？轉會記者貼文引發討論', summary: '同一中場人選被連到曼城米蘭巴薩。', reactions: [{ tone: 'neutral', text: '「先別信謠言。」' }, { tone: 'positive', text: '「誰簽到誰賺。」' }, { tone: 'funny', text: '「記者產能真高。」' }] },
-    { id: 'x11', priority: 11, hashtag: '#Milanisti', heat: '💬 討論', topic: '米蘭球迷應援影片熱傳，季前士氣高', summary: '紅黑球迷組織暖身。', reactions: [{ tone: 'positive', text: '「這群球迷太強！」' }, { tone: 'positive', text: '「Forza Milan！」' }, { tone: 'neutral', text: '「希望成績配得上。」' }] },
+    { id: 'x11', priority: 11, hashtag: '#Milanisti', heat: '💬 討論', topic: '2-2 後紅黑球迷：Camarda 萬歲，後防要補', summary: '扳平後情緒從憤怒轉為期待。', reactions: [{ tone: 'positive', text: '「Forza Milan！」' }, { tone: 'negative', text: '「上半場不能再犯。」' }, { tone: 'positive', text: '「下半場有阿莫林味道。」' }] },
     { id: 'x12', priority: 12, hashtag: '#Culers', heat: '💬 討論', topic: '巴薩球迷季前討論熱，票券與新球衣齊飛', summary: '開季前周邊熱度高。', reactions: [{ tone: 'positive', text: '「想見亞馬爾！」' }, { tone: 'funny', text: '「門票比球賽難搶。」' }, { tone: 'positive', text: '「Visca Barça！」' }] },
     { id: 'x13', priority: 13, hashtag: '#MCFC', heat: '💬 討論', topic: '曼城新客場球衣香港亮相討論，網友評分兩極', summary: '香港站球衣曝光話題。', reactions: [{ tone: 'positive', text: '「這次很好看。」' }, { tone: 'negative', text: '「太素了。」' }, { tone: 'neutral', text: '「穿上再看。」' }] },
     { id: 'x14', priority: 14, hashtag: '#Football', heat: '💬 討論', topic: '休賽期怎麼熬？三隊動態成球迷日常', summary: '休賽期內容飢渴。', reactions: [{ tone: 'funny', text: '「每天重整傳聞。」' }, { tone: 'positive', text: '「有專題網站真好。」' }, { tone: 'neutral', text: '「等八月開踢。」' }] },
