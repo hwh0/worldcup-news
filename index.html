@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v4">
+    <meta name="app-version" content="fw-v5">
     <title>⚽ 每周足球新聞 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -167,10 +167,10 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v4';
-const CACHE_KEY = 'weekly_football_fw_v4';
-const NEWS_WEEK = '2026-W30';
-const NEWS_UPDATED = '2026-07-26';
+const APP_VERSION = 'fw-v5';
+const CACHE_KEY = 'weekly_football_fw_v5';
+const NEWS_WEEK = '2026-W31';
+const NEWS_UPDATED = '2026-07-27';
 const TRENDING_LIMIT = 15;
 
 const FOCUS_TEAMS = [
@@ -196,7 +196,7 @@ const FOCUS_TEAMS = [
         border: 'team-card-milan',
         accent: 'text-rose-400',
         badge: 'bg-rose-950 text-rose-400',
-        blurb: '阿莫林新帥 · 對凱爾特人 2-2 · 3-4-2-1 實驗中',
+        blurb: '阿莫林新帥 · 凱爾特人 2-2 · 下一站澳洲對 Internazionale',
     },
     {
         id: 'barca',
@@ -208,7 +208,7 @@ const FOCUS_TEAMS = [
         border: 'team-card-barca',
         accent: 'text-amber-400',
         badge: 'bg-amber-950 text-amber-400',
-        blurb: '亞馬爾世代 · 西甲爭冠與歐冠挑戰',
+        blurb: '弗里克執教 · 7/31 伯明罕熱身 · 亞馬爾世代',
     },
 ];
 
@@ -280,17 +280,30 @@ const WEEK_FIXTURES = [
         note: '阿莫林首秀 · Camarda 梅開二度逆轉扳平',
     },
     {
-        id: 'barca-pre1',
+        id: 'barca-birmingham',
         team: 'barca',
         competition: '季前熱身',
-        home: '巴塞隆納',
-        away: '待定',
-        homeEn: 'Barcelona',
-        awayEn: 'TBD',
-        dateLabel: '7 月底／8 月',
-        status: 'preview',
+        home: '伯明罕城',
+        away: '巴塞隆納',
+        homeEn: 'Birmingham City',
+        awayEn: 'Barcelona',
+        dateLabel: '7/31 英國 19:45 當地',
+        status: 'upcoming',
         score: null,
-        note: '季前巡迴與熱身賽程持續更新',
+        note: 'St Andrew\'s · 弗里克季前首戰',
+    },
+    {
+        id: 'milan-inter-perth',
+        team: 'milan',
+        competition: '季前巡迴 · 澳洲',
+        home: 'AC 米蘭',
+        away: '國際米蘭',
+        homeEn: 'AC Milan',
+        awayEn: 'Inter',
+        dateLabel: '8/5 伯斯',
+        status: 'upcoming',
+        score: null,
+        note: '同城德比友善賽 · 阿莫林第二場公開對抗',
     },
 ];
 
@@ -302,15 +315,15 @@ const WEEKLY_TOP_NEWS = [
         tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '賽後', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-rose-500/50',
         meta: '季前 · 凱爾特人 2-2 米蘭 · 7/25',
-        title: '阿莫林首秀打平：Camarda 梅開二度，米蘭 2-2 凱爾特人',
-        summary: '格拉斯哥友善賽上半場因後防回傳失誤兩度落後（Duran、Forrest），下半場換上 Camarda 點球破門再頭槌扳平。阿莫林賽後開始球員評估，紅黑球迷討論兩極。',
+        title: '官方戰報：凱爾特人 2-2 米蘭，Camarda 下半場雙響扳平',
+        summary: '阿莫林首場季前賽在格拉斯哥結束。上半場建置失誤被 Durán、Forrest 連進兩球；中場換上 Camarda 點球破門再頭槌扳平。球會稱下半場意圖與訓練場成果已開始浮現，下一站飛往澳洲。',
         points: [
-            '上半場 Pavlovic、Ricci 回傳失誤被對手懲罰。',
-            '下半場改 3-4-2-1，Chukwueze 助攻 Camarda。',
-            '世足與傷兵缺席約 12 人，陣容拼湊痕跡明顯。',
-            '熱身賽結論有限，但反擊韌性受肯定。',
+            '官方：兩球皆因推進溝通失誤被懲罰。',
+            '八分鐘內連進兩球，氣勢回來。',
+            '多名 Milan Futuro 小將獲一隊機會。',
+            '下一場：8/5 伯斯對 Internazionale。',
         ],
-        source: 'SempreMilan · Football Italia · Gazzetta',
+        source: 'AC Milan Official · SempreMilan',
     },
     {
         id: 'amorim-can-he-rebuild',
@@ -319,15 +332,15 @@ const WEEKLY_TOP_NEWS = [
         tags: [{ text: '阿莫林', cls: 'text-rose-400 bg-rose-950' }, { text: '評論', cls: 'text-amber-400 bg-amber-950' }],
         border: 'border-amber-500/40',
         meta: '意甲 · 教練 · 本週',
-        title: '阿莫林真的能重振米蘭嗎？首秀打平後的三個觀察點',
-        summary: '葡帥 6 月上任，帶來 Sporting 時期高壓與結構清楚的 3-4-3／3-4-2-1 思維。首場友善賽暴露防守溝通與前場創造力不足，也讓 Camarda、Chukwueze 等替補成為亮點。能否重振，取決於夏窗中軸與邊翼適配度，而非單場熱身比分。',
+        title: '阿莫林能重振米蘭嗎？2-2 後的球迷與媒體觀點',
+        summary: '葡帥 6 月上任，強調「品質與勝利」。首秀打平不能定生死：上半場生疏、下半場 3-4-2-1 與替補調整有效。能否重振，關鍵在夏窗適配、主力歸隊後的防守穩定，以及義甲長賽季的身體與輪換。',
         points: [
-            '優勢：現代壓迫、明確球員輪廓、青訓開發經驗。',
-            '挑戰：曼聯後期爭議留在外界印象，義甲節奏需適應。',
-            '陣容：世足後主力歸隊才是真正考卷。',
-            '結論：給時間與對的補強，打平不代表失敗；沒補強則難爭冠。',
+            '支持面：Sporting 建隊能力、高壓與結構清楚。',
+            '疑慮面：曼聯陰影、大俱樂部壓力、首秀後防失誤。',
+            '短期指標：澳洲對 Internazionale 的結構與失誤率。',
+            '結論：值得給時間；不補強、不磨合就難談爭冠。',
         ],
-        source: 'AC Milan Official · The Athletic · SempreMilan',
+        source: 'AC Milan Official · Gazzetta · SempreMilan',
     },
     {
         id: 'city-transfer-window',
@@ -353,15 +366,15 @@ const WEEKLY_TOP_NEWS = [
         tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: 'Yamal', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-amber-500/40',
         meta: '西甲 · 核心 · 本週',
-        title: '亞馬爾休整後歸隊在即，巴薩亞洲巡迴成焦點',
-        summary: '國家隊賽程結束後，亞馬爾進入短休。巴塞隆納本週公布亞洲巡迴大名單方向，球迷期待新賽季左路繼續爆發。',
+        title: '巴薩季前首戰鎖定伯明罕城，英國集訓營開跑',
+        summary: '弗里克率隊 7/27–8/3 進駐 St George\'s Park。季前首戰 7/31 對伯明罕城（Championship），當地 19:45 開踢。亞馬爾等主力仍以恢復與負荷管理為主。',
         points: [
-            '教練組控制其訓練負荷。',
-            '拉馬西亞其他新星同步獲得機會。',
-            '轉會市場仍關注邊鋒與中衛。',
-            '西甲開幕前熱身賽程密集。',
+            '英國站是 2026/27 第一場友善賽。',
+            '青訓與輪換球員有望獲出場。',
+            '財政與註冊名額仍影響夏窗節奏。',
+            '西甲開幕前體能週期已排出。',
         ],
-        source: 'Marca · Sport · ESPN',
+        source: 'FC Barcelona Official · Marca',
     },
     {
         id: 'milan-squad-rebuild',
@@ -438,32 +451,32 @@ const WEEKLY_TOP_NEWS = [
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '馬雷斯卡', cls: 'text-purple-400 bg-purple-950' }],
         border: 'border-sky-500/30',
         meta: '英超 · 香港 · 本週',
-        title: '馬雷斯卡首秀倒數：曼城香港行對國際米蘭',
-        summary: '恩佐·馬雷斯卡接掌後，首場公開對抗將在香港啟德對國際米蘭。球會同步安排公開訓練與球迷活動。',
+        title: '馬雷斯卡香港首秀：啟德對 Internazionale 成新時代開幕',
+        summary: '曼城亞洲巡迴首戰 8/1 香港啟德對 Internazionale（英國時間 12:30）。這是馬雷斯卡接任後第一場公開對抗，球會安排公開訓練與球迷活動。',
         points: [
             '7/31 啟德公開訓練。',
-            '8/1 對 Internazionale。',
-            '其後轉戰首爾兩場。',
-            '新帥強調先求勝利再談風格。',
+            '其後首爾對 K 聯賽明星隊、馬競。',
+            'CITY+ 將轉播部分地區。',
+            '新帥重點：先贏球、再談風格延續。',
         ],
-        source: 'Man City Official · The Athletic',
+        source: 'Man City Official',
     },
     {
         id: 'barca-preseason',
         priority: 10,
         team: 'barca',
-        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '季前', cls: 'text-emerald-400 bg-emerald-950' }],
+        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '英國', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-amber-500/30',
         meta: '西甲 · 季前 · 本週',
-        title: '巴薩季前備戰與巡迴準備，商業與訓練並行',
-        summary: '球會本週完成季前後勤安排。球迷活動與熱身賽交錯，教練組希望維持訓練品質。',
+        title: '弗里克英國集訓：伯明罕城是第一張考卷',
+        summary: '藍紅軍團在 St George\'s Park 備戰，7/31 作客伯明罕。歷史上兩隊曾在城市博覽會盃交手，此役相隔六十多年再遇。',
         points: [
-            '年輕球員有望試陣。',
-            '醫療組關注恢復節奏。',
-            '新球衣曝光帶動討論。',
-            '開季前仍有熱身計畫。',
+            '球場 St Andrew\'s 近三萬席。',
+            '年輕球員有望獲出場。',
+            '亞馬爾負荷仍由教練組控管。',
+            '開季前體能與輪換是主軸。',
         ],
-        source: 'Sport · Mundo Deportivo',
+        source: 'FC Barcelona Official',
     },
     {
         id: 'three-club-calendar',
@@ -473,12 +486,12 @@ const WEEKLY_TOP_NEWS = [
         border: 'border-emerald-500/30',
         meta: '三隊 · 本週總覽',
         title: '本週三隊共通主題：恢復、熱身、夏窗',
-        summary: '英超曼城、意甲米蘭、西甲巴薩皆處於休賽轉接期。本站本週以轉會進度、季前巡迴與核心球星狀態為主軸。',
+        summary: '本週三隊焦點：米蘭 2-2 凱爾特人後飛澳洲；曼城備戰香港對 Internazionale；巴薩英國集訓對伯明罕。',
         points: [
-            '正式聯賽多在八月陸續開打。',
-            '國家隊賽事後的恢復期至關重要。',
-            '下週將視熱身賽結果更新戰報。',
-            '歡迎每週回來查看三隊專題。',
+            '米蘭：阿莫林首秀打平，Camarda 雙響。',
+            '曼城：8/1 香港啟德馬雷斯卡公開首秀。',
+            '巴薩：7/31 伯明罕城友善賽。',
+            '持續每周更新三隊專題。',
         ],
         source: 'Grok 每周足球新聞編輯部',
     },
