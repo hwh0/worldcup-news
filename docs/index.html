@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v6">
+    <meta name="app-version" content="fw-v7">
     <title>⚽ 每周足球新聞 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -95,6 +95,11 @@
                 三隊動態
                 <span id="tab-teams-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400"></span>
             </button>
+            <button id="tab-transfer" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
+                <i class="fa-solid fa-right-left"></i>
+                轉會速報
+                <span id="tab-transfer-badge" class="text-xs px-2 py-0.5 rounded-xl bg-zinc-800 text-zinc-400"></span>
+            </button>
             <button id="tab-trending" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-zinc-400">
                 <i class="fa-brands fa-x-twitter"></i>
                 X 熱議
@@ -114,11 +119,20 @@
                 <p id="no-fixtures" class="hidden text-zinc-500 text-sm mt-3">本週三隊尚無正式聯賽場次（夏窗／季前階段）。</p>
             </section>
 
+            <section class="mb-10">
+                <h2 class="section-title flex items-center gap-3 mb-5">
+                    <i class="fa-solid fa-right-left text-emerald-400"></i>
+                    轉會速報
+                    <span class="text-xs font-normal text-zinc-500">官宣 · 續約 · 動向</span>
+                </h2>
+                <div id="transfer-list" class="space-y-4"></div>
+            </section>
+
             <section>
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-solid fa-fire text-orange-500"></i>
                     本週十大新聞
-                    <span class="text-xs font-normal text-zinc-500">戰報 · 轉會 · 備戰</span>
+                    <span class="text-xs font-normal text-zinc-500">戰報 · 備戰 · 延伸</span>
                 </h2>
                 <div id="news-list" class="space-y-4"></div>
             </section>
@@ -140,6 +154,22 @@
                     <span class="text-xs font-normal text-zinc-500">曼城 · 米蘭 · 巴薩</span>
                 </h2>
                 <div id="team-news-list" class="space-y-4"></div>
+            </section>
+        </div>
+
+        <!-- 轉會 -->
+        <div id="panel-transfer" class="tab-panel">
+            <section class="mb-6">
+                <p class="text-sm text-zinc-400 leading-relaxed">
+                    曼城、AC 米蘭、巴塞隆納本週轉會速報：官宣、續約與市場動向（以官方為準）。
+                </p>
+            </section>
+            <section>
+                <h2 class="section-title flex items-center gap-3 mb-5">
+                    <i class="fa-solid fa-right-left text-emerald-400"></i>
+                    三隊轉會一覽
+                </h2>
+                <div id="transfer-list-tab" class="space-y-4"></div>
             </section>
         </div>
 
@@ -167,10 +197,10 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v6';
-const CACHE_KEY = 'weekly_football_fw_v6';
+const APP_VERSION = 'fw-v7';
+const CACHE_KEY = 'weekly_football_fw_v7';
 const NEWS_WEEK = '2026-W31';
-const NEWS_UPDATED = '2026-07-28';
+const NEWS_UPDATED = '2026-07-29';
 const TRENDING_LIMIT = 15;
 
 const FOCUS_TEAMS = [
@@ -307,178 +337,326 @@ const WEEK_FIXTURES = [
     },
 ];
 
-const WEEKLY_TOP_NEWS = [
+/** 轉會速報（官宣優先） */
+const TRANSFER_NEWS = [
     {
-        id: 'milan-celtic-official',
+        id: 'tr-ramos',
         priority: 1,
         team: 'milan',
-        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '2-2', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-rose-500/50',
-        meta: '季前 · 格拉斯哥 · 7/25',
-        title: '官方戰報：凱爾特人 2-2 米蘭，Camarda 下半場八分鐘雙響',
-        summary: '阿莫林首場季前賽上半場兩度因建置失誤落後（11\' Durán、28\' Forrest）。中場大換人後 Camarda 47\' 點球、53\' 頭槌扳平。球會稱「有鼓勵訊號」，下一站澳洲對 Internazionale。',
+        status: '官宣',
+        statusCls: 'bg-emerald-950 text-emerald-400',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '官宣', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-emerald-500/40',
+        meta: '轉入 · PSG → 米蘭',
+        title: '拉莫斯破隊史轉會費加盟！阿莫林時代第一槍、合約至 2031',
+        summary: 'Gonçalo Ramos 自巴黎聖日耳曼轉投 AC 米蘭，據報約 7400 萬歐元，打破萊奧當年自里爾加盟的紀錄。葡鋒將成鋒線核心，與阿莫林系統高度契合。',
         points: [
-            '開場含 Comotto、Kostić、Ossola 等 Milan Futuro 小將。',
-            '下半場 Chukwueze 兩度傳中製造殺機。',
-            '阿莫林：「像一堂好訓練課，我們想改變一點身份。」',
-            'Gila 肌肉不適提前下場，教練稱應不嚴重。',
+            'PSG 期間助隊多座法甲與歐冠。',
+            '同鄉萊奧有意離隊，鋒線重組進行中。',
+            '合約至 2031 年。',
+            '阿莫林首個重磅引援。',
         ],
-        source: 'AC Milan Official · Gazzetta',
+        source: 'SI · Transfermarkt · 媒體彙整',
     },
     {
-        id: 'amorim-camarda-stay',
+        id: 'tr-adeyemi',
         priority: 2,
-        team: 'milan',
-        tags: [{ text: '阿莫林', cls: 'text-rose-400 bg-rose-950' }, { text: 'Camarda', cls: 'text-amber-400 bg-amber-950' }],
-        border: 'border-amber-500/40',
-        meta: '意甲 · 合約 · 本週',
-        title: '阿莫林定調：Camarda 本季留隊！續約至 2031 後梅開二度',
-        summary: '續約消息公布後 24 小時內，Camarda 在友善賽連進兩球。阿莫林賽後明言：「我強烈相信他，他會整季留在一隊。」租借計畫擱置，他將與 Ramos 競爭輪換。',
+        team: 'barca',
+        status: '官宣',
+        statusCls: 'bg-emerald-950 text-emerald-400',
+        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '官宣', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-emerald-500/40',
+        meta: '轉入 · 多特蒙德 → 巴薩',
+        title: '官宣：阿德耶米加盟巴薩，合約至 2031，再聚弗里克',
+        summary: '巴塞隆納與多特蒙德達成協議，Karim Adeyemi 加盟至 2031。慕尼黑出生邊鋒可踢兩翼與中鋒，弗里克曾提拔他進入德國隊。',
         points: [
-            '已有 33 場意甲、4 場歐冠經驗。',
-            '可列 List B（U21＋青訓年限）。',
-            '本人：「為心愛的球衣拼命。」',
-            '媒體比喻：能否複製上季 Pio Esposito 劇本？',
+            '上季歐冠曾對陣巴薩。',
+            '世足決賽名單落選，完整備戰季前。',
+            '已在英國集訓 30 人大名單中。',
+            '球會第二筆 2026/27 夏窗引援。',
         ],
-        source: 'Gazzetta dello Sport · AC Milan',
+        source: 'FC Barcelona Official · Reuters',
     },
     {
-        id: 'amorim-tactics-press',
+        id: 'tr-gila',
         priority: 3,
         team: 'milan',
-        tags: [{ text: '阿莫林', cls: 'text-rose-400 bg-rose-950' }, { text: '戰術', cls: 'text-purple-400 bg-purple-950' }],
-        border: 'border-purple-500/40',
-        meta: '意甲 · 風格 · 本週',
-        title: '阿莫林談 2-2：全場壓迫要學、後場出球要穩',
-        summary: '葡帥指出丟球正因「想改變踢法」；他要全場追球與更長時間控球，與過去更保守的思路不同。首秀下半場 3-4-2-1 與替補調整被視為方向訊號。',
+        status: '官宣',
+        statusCls: 'bg-emerald-950 text-emerald-400',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '官宣', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-emerald-500/40',
+        meta: '轉入 · 拉齊奧 → 米蘭',
+        title: '吉拉加盟紅黑！阿莫林補強三中衛，皇馬分得利潤',
+        summary: 'Mario Gila 正式加盟 AC 米蘭，加強中後場輪換。此前任職拉齊奧，皇馬因追溯條款分得轉會費。他已在對凱爾特人戰出場。',
         points: [
-            '「壓迫心態還沒完全內化，但概念在。」',
-            '承認門前處理仍需改進。',
-            '下一考：澳洲對 Internazionale。',
-            '球迷：給時間，但後防溝通要快修。',
+            '適配阿莫林 3-4-2-1 中軸。',
+            '對凱爾特人曾因肌肉不適下場。',
+            '教練稱傷勢應不嚴重。',
+            '後防深度明顯提升。',
         ],
-        source: 'Gazzetta · AC Milan 賽後',
+        source: 'AC Milan Official · AS',
     },
     {
-        id: 'city-asia-squad',
+        id: 'tr-camarda',
         priority: 4,
-        team: 'city',
-        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '香港', cls: 'text-emerald-400 bg-emerald-950' }],
+        team: 'milan',
+        status: '續約',
+        statusCls: 'bg-sky-950 text-sky-400',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '續約', cls: 'text-sky-400 bg-sky-950' }],
         border: 'border-sky-500/40',
-        meta: '英超 · 亞洲巡迴 · 本週',
-        title: '馬雷斯卡公布亞洲巡迴 28 人：Foden、Donnarumma 隨行',
-        summary: '曼城啟程香港／首爾三場熱身。世足八強以後球員多數不隨隊休息；部分十六強球員稍後會合。大名單含 Reijnders、Gvardiol、Semenyo、Khusanov 與多位青訓。',
+        meta: '續約 · 至 2031',
+        title: 'Camarda 續約至 2031，阿莫林：本季整季留一隊',
+        summary: '青訓前鋒完成續約後，在對凱爾特人友善賽梅開二度。阿莫林賽後確認不會再租借，他將與拉莫斯組成鋒線輪換。',
         points: [
-            '8/1 香港啟德對 Internazionale（馬雷斯卡公開首秀）。',
-            '8/5 首爾對 K 聯賽明星隊、8/9 對馬競。',
-            'Rodri 另有傷勢最新通報。',
-            'CITY+ 將轉播部分地區。',
+            '已有 33 場意甲經驗。',
+            '可列 U21 List B。',
+            '本人：「為心愛球衣拼命。」',
+            '租借計畫擱置。',
+        ],
+        source: 'Gazzetta · AC Milan',
+    },
+    {
+        id: 'tr-gvardiol',
+        priority: 5,
+        team: 'city',
+        status: '續約',
+        statusCls: 'bg-sky-950 text-sky-400',
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '續約', cls: 'text-sky-400 bg-sky-950' }],
+        border: 'border-sky-500/40',
+        meta: '續約 · 至 2031',
+        title: '官宣：瓜爾迪奧續約五年，綁至 2031',
+        summary: 'Josko Gvardiol 與曼城續約五年。自萊比錫加盟以來已為隊出戰逾百場，可司中衛與左衛。足球總監維亞納稱其為「世界級後衛」之一。',
+        points: [
+            '曼城生涯已進 13 球。',
+            '曾當選隊內年度最佳。',
+            '亞巡名單在列。',
+            '球會策略：鎖定核心長約。',
         ],
         source: 'Man City Official',
     },
     {
-        id: 'city-hk-inter-preview',
-        priority: 5,
-        team: 'city',
-        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: 'Inter', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-sky-500/30',
-        meta: '英超 · 8/1 香港',
-        title: '香港足球節：曼城 vs 國際米蘭，新帥對義甲冠軍',
-        summary: '藍月亮亞洲巡迴首戰對上 Chivu 執教的 Internazionale。兩隊 2023 歐冠決賽有過交手，此役是馬雷斯卡接任後第一場公開對抗。',
-        points: [
-            '開踢：英國時間 12:30／香港傍晚。',
-            '場地：啟德體育園。',
-            '前有公開訓練與球迷活動。',
-            '其後轉戰首爾兩場。',
-        ],
-        source: 'Man City Official · Kai Tak Sports Park',
-    },
-    {
-        id: 'barca-birmingham-squad',
+        id: 'tr-gordon',
         priority: 6,
         team: 'barca',
-        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '英國', cls: 'text-emerald-400 bg-emerald-950' }],
+        status: '接近',
+        statusCls: 'bg-amber-950 text-amber-400',
+        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '接近', cls: 'text-amber-400 bg-amber-950' }],
         border: 'border-amber-500/40',
-        meta: '西甲 · 7/31 伯明罕',
-        title: '弗里克帶 30 人赴英國：對伯明罕城是季前首戰',
-        summary: '巴薩結束本土訓練後進駐 St George\'s Park（至 8/3）。大名單含 Frenkie de Jong、Araujo、Balde、Adeyemi、Fermín 與大批拉馬西亞小將；7/31 對伯明罕城可在 Barça Play 觀看。',
+        meta: '轉入 · 紐卡索 → 巴薩？',
+        title: '戈登？媒體：巴薩與紐卡索接近達協議',
+        summary: 'Sky Sports 等媒體報導，巴薩就 Anthony Gordon 與紐卡索接近達成協議。若成行將再補強邊路，惟仍須以官方公告為準。',
         points: [
-            '西甲首戰預計 8/23 對埃爾切。',
-            '亞馬爾等主力仍以恢復節奏為主。',
-            '英國站檢驗輪換與體能。',
-            '財政與註冊仍牽動夏窗。',
+            '英格蘭國腳翼鋒。',
+            '與阿德耶米形成邊路競爭。',
+            '註冊與薪資結構仍是關鍵。',
+            '未官宣前僅作市場動向。',
+        ],
+        source: 'Sky Sports · 媒體報導',
+    },
+    {
+        id: 'tr-leao',
+        priority: 7,
+        team: 'milan',
+        status: '動向',
+        statusCls: 'bg-zinc-800 text-zinc-300',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '動向', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-zinc-600/40',
+        meta: '可能轉出 · 萊奧',
+        title: '萊奧新篇章？鋒線重組下紅黑邊路前途未明',
+        summary: '拉莫斯加盟後鋒線重組加速。媒體指萊奧有意新挑戰，熱刺等隊曾被連結，惟一切仍待球員與球會決定。',
+        points: [
+            '上季進球效率受質疑。',
+            '阿莫林體系下角色待定。',
+            '出售可釋放薪資與額度。',
+            '以官方聲明為準。',
+        ],
+        source: 'Goal · 媒體彙整',
+    },
+    {
+        id: 'tr-city-window',
+        priority: 8,
+        team: 'city',
+        status: '動向',
+        statusCls: 'bg-zinc-800 text-zinc-300',
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '夏窗', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-sky-500/30',
+        meta: '動向 · 進出',
+        title: '曼城夏窗：Semenyo 等新援已在亞巡，進出仍有後續',
+        summary: '亞洲巡迴名單已見 Semenyo、Khusanov、Ait-Nouri 等身影。門將 Trafford 與其他位置仍有進出傳聞，球會續以鎖定核心＋適度輪換為策略。',
+        points: [
+            'Gvardiol 續約釋放穩定訊號。',
+            '馬雷斯卡要即戰力邊路。',
+            '世足主力歸隊後陣容再定裝。',
+            '未完成簽約勿當真。',
+        ],
+        source: 'Man City Official · Sky Sports',
+    },
+];
+
+const WEEKLY_TOP_NEWS = [
+    {
+        id: 'transfer-roundup',
+        priority: 1,
+        team: 'all',
+        tags: [{ text: '轉會', cls: 'text-emerald-400 bg-emerald-950' }, { text: '週報', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-emerald-500/50',
+        meta: '三隊 · 夏窗最新',
+        title: '轉會速覽：拉莫斯破紀錄、阿德耶米官宣、瓜爾迪奧續約',
+        summary: '本週三隊市場最熱：米蘭以隊史級轉會費拿下拉莫斯並簽吉拉；巴薩官宣阿德耶米；曼城綁定瓜爾迪奧至 2031。詳見上方「轉會速報」。',
+        points: [
+            '米蘭：Ramos（官宣）+ Gila（官宣）+ Camarda 續約。',
+            '巴薩：Adeyemi（官宣）· Gordon 接近。',
+            '曼城：Gvardiol 續約 · 亞巡整合新援。',
+            '萊奧等轉出仍待明朗。',
+        ],
+        source: '各隊官方 · Sky · Gazzetta',
+    },
+    {
+        id: 'milan-celtic-official',
+        priority: 2,
+        team: 'milan',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '2-2', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-rose-500/40',
+        meta: '季前 · 7/25',
+        title: '阿莫林首秀 2-2：Camarda 雙響，拉莫斯體系開始成型',
+        summary: '凱爾特人戰上半場兩度失誤落後，下半場 Camarda 點球＋頭槌扳平。鋒線已有拉莫斯＋Camarda 輪換雛形，下一站澳洲對 Internazionale。',
+        points: [
+            '阿莫林確認 Camarda 整季留隊。',
+            '吉拉已登場，後防補強到位。',
+            '8/5 伯斯同城德比再驗系統。',
+        ],
+        source: 'AC Milan · Gazzetta',
+    },
+    {
+        id: 'amorim-rebuild',
+        priority: 3,
+        team: 'milan',
+        tags: [{ text: '阿莫林', cls: 'text-rose-400 bg-rose-950' }, { text: '重建', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-amber-500/40',
+        meta: '意甲 · 評論',
+        title: '有拉莫斯、吉拉之後：阿莫林重振米蘭的籌碼變多了嗎？',
+        summary: '破紀錄中鋒＋中衛補強，顯示紅鳥願意砸錢。挑戰仍在邊翼適配、萊奧去留與義甲長賽季。首秀打平只是起點。',
+        points: [
+            '進攻已有明確核心。',
+            '三中衛輪換開始有牌。',
+            '夏窗下半段仍關鍵。',
+        ],
+        source: 'SI · SempreMilan',
+    },
+    {
+        id: 'barca-adeyemi',
+        priority: 4,
+        team: 'barca',
+        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: 'Adeyemi', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-amber-500/40',
+        meta: '西甲 · 官宣',
+        title: '阿德耶米加盟：速度型邊路到位，英國集訓已跟隊',
+        summary: '自多特轉投巴薩至 2031，與弗里克再聚。已列入伯明罕集訓 30 人，有望在對伯明罕城熱身賽亮相。',
+        points: [
+            '可踢兩翼與偽九號。',
+            '戈登傳聞若成真邊路更卷。',
+            '註冊名額仍要精算。',
         ],
         source: 'FC Barcelona Official',
     },
     {
-        id: 'camarda-ramos-plan',
-        priority: 7,
-        team: 'milan',
-        tags: [{ text: 'Camarda', cls: 'text-rose-400 bg-rose-950' }, { text: '鋒線', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-rose-500/30',
-        meta: 'AC 米蘭 · 陣容',
-        title: '阿莫林的鋒線藍圖：Ramos 先發、Camarda 當「內部 Esposito」',
-        summary: '媒體分析葡帥將 Gonçalo Ramos 視為箭頭，Camarda 則是可信賴的替補與輪換。歐聯賽程密度可能給年輕人穩定出場。',
-        points: [
-            '續約至 2031 顯示球會誠意。',
-            '青訓 List B 有利註冊。',
-            '友善賽進球只是起點。',
-            '下一場澳洲德比再驗成色。',
-        ],
-        source: 'Gazzetta dello Sport',
-    },
-    {
-        id: 'city-new-signings-tour',
-        priority: 8,
+        id: 'city-gvardiol',
+        priority: 5,
         team: 'city',
-        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '新援', cls: 'text-emerald-400 bg-emerald-950' }],
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: 'Gvardiol', cls: 'text-sky-400 bg-sky-950' }],
+        border: 'border-sky-500/40',
+        meta: '英超 · 續約',
+        title: '瓜爾迪奧續約 2031：馬雷斯卡時代先鎖後防核心',
+        summary: '克羅埃西亞國腳新約五年。球會在新帥上任後優先綁定多位置後衛，亞洲巡迴他已在 28 人大名單中。',
+        points: [
+            '可中衛／左衛切換。',
+            '維亞納：要留住最好的人才。',
+            '與香港／首爾備戰同步。',
+        ],
+        source: 'Man City Official',
+    },
+    {
+        id: 'city-asia-squad',
+        priority: 6,
+        team: 'city',
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '香港', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/30',
-        meta: '英超 · 亞洲巡迴',
-        title: '亞洲行觀察名單：Semenyo、Khusanov、Echeverri 誰能站穩？',
-        summary: '隨隊 28 人中不乏新援與青訓。馬雷斯卡需要在三場熱身找出邊路與中後場輪換答案，香港對 Inter 是第一張成績單。',
+        meta: '英超 · 亞巡',
+        title: '28 人出征香港：Foden、Donnarumma、Semenyo 隨行',
+        summary: '馬雷斯卡亞洲巡迴名單公布。8/1 啟德對 Internazionale 是新帥公開首秀；世足走遠主力多數休息。',
         points: [
-            'Foden 隨隊提供創造力。',
-            'Donnarumma 門線經驗受關注。',
-            '世足主力稍後歸隊再整合。',
-            '開季前仍可能有轉會動作。',
+            'Reijnders、Gvardiol、Khusanov 在列。',
+            '其後首爾兩場。',
+            'Rodri 另有傷情更新。',
         ],
-        source: 'Man City Official · MEN',
+        source: 'Man City Official',
     },
     {
-        id: 'barca-flick-preseason',
-        priority: 9,
+        id: 'barca-birmingham',
+        priority: 7,
         team: 'barca',
-        tags: [{ text: '弗里克', cls: 'text-amber-400 bg-amber-950' }, { text: '備戰', cls: 'text-zinc-400 bg-zinc-800' }],
+        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '熱身', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-amber-500/30',
-        meta: '西甲 · 季前',
-        title: '弗里克英國集訓：高位逼搶節奏如何在熱身賽落地',
-        summary: '在 St George\'s Park 的一週，教練組目標是把高位壓迫與轉換節奏重新拉起來。伯明罕城一戰將檢驗輪換與跑動距離。',
+        meta: '西甲 · 7/31',
+        title: '30 人英國營：弗里克季前首戰伯明罕城',
+        summary: 'St George\'s Park 集訓至 8/3，7/31 對伯明罕。Frenkie、Araujo、Adeyemi 等隨行，Barça Play 轉播。',
         points: [
-            'Adeyemi 等新援融入進度成焦點。',
-            'Frenkie de Jong 健康狀態受關注。',
-            '拉馬西亞多人跟隊。',
-            '開季對埃爾切前還有熱身。',
+            '西甲首戰預告對埃爾切。',
+            '青訓多人跟隊。',
+            '亞馬爾負荷控管中。',
         ],
-        source: 'FC Barcelona · Mundo Deportivo',
+        source: 'FC Barcelona Official',
     },
     {
-        id: 'three-club-week',
+        id: 'gordon-watch',
+        priority: 8,
+        team: 'barca',
+        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '傳聞', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-zinc-600/40',
+        meta: '動向 · Gordon',
+        title: '戈登接近？媒體稱巴薩紐卡索談妥架構',
+        summary: 'Sky 等報導巴薩與紐卡索就 Anthony Gordon 接近協議。若加盟將與阿德耶米、亞馬爾形成邊路集團，但仍須官宣與註冊確認。',
+        points: [
+            '未官宣前僅作動向。',
+            '薪資與攤銷是關鍵。',
+            '英格蘭國腳即戰力。',
+        ],
+        source: 'Sky Sports',
+    },
+    {
+        id: 'leao-exit-watch',
+        priority: 9,
+        team: 'milan',
+        tags: [{ text: '萊奧', cls: 'text-rose-400 bg-rose-950' }, { text: '動向', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-zinc-600/40',
+        meta: '動向 · 可能離隊',
+        title: '萊奧前途：拉莫斯到位後紅黑邊路怎麼排？',
+        summary: '隊史級中鋒加盟後，萊奧角色與去留成焦點。熱刺等隊被連結，阿莫林體系下邊路需求也可能改變。',
+        points: [
+            '以球員與球會官方為準。',
+            '出售可助薪資結構。',
+            '若留隊需重新定義職責。',
+        ],
+        source: 'Goal · 媒體彙整',
+    },
+    {
+        id: 'three-club-transfer-week',
         priority: 10,
         team: 'all',
         tags: [{ text: '週報', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-emerald-500/30',
-        meta: '三隊 · 本週總覽',
-        title: '本週必看：米蘭已開踢、曼城香港倒數、巴薩英國集訓',
-        summary: '紅黑軍團 2-2 凱爾特人後飛澳洲；藍月亮備戰 8/1 啟德對 Inter；藍紅軍團 7/31 對伯明罕。三隊都在「新帥／新賽季」節奏中。',
+        meta: '三隊 · 轉會週',
+        title: '本週轉會關鍵字：破紀錄、續約、接近成交',
+        summary: '米蘭砸錢建鋒線、巴薩補速度、曼城鎖後防。三隊都在新帥／新賽季週期裡動市場。',
         points: [
-            '米蘭：Camarda 留隊成最大新聞之一。',
-            '曼城：馬雷斯卡公開首秀在即。',
-            '巴薩：30 人英國營啟動。',
-            '下週將依熱身賽結果再更新。',
+            '米蘭：Ramos + Gila + Camarda。',
+            '巴薩：Adeyemi 成軍，Gordon 待定。',
+            '曼城：Gvardiol 長約，亞巡整合。',
         ],
         source: 'Grok 每周足球新聞',
     },
 ];
+
 
 const TEAM_NEWS = [
     {
@@ -568,21 +746,21 @@ const TEAM_NEWS = [
 ];
 
 const X_TRENDING = [
-    { id: 'x1', priority: 1, hashtag: '#ACMilan', heat: '🔥 爆熱', topic: '2-2 凱爾特人：Camarda 雙響，阿莫林首秀怎麼評？', summary: '紅黑社群從怒吼上半場到稱讚替補調整。', reactions: [{ tone: 'positive', text: '「Camarda 續約值了！」' }, { tone: 'negative', text: '「後防回傳悲劇。」' }, { tone: 'neutral', text: '「熱身賽給時間。」' }] },
-    { id: 'x2', priority: 2, hashtag: '#Camarda', heat: '🔥 爆熱', topic: 'Camarda 留隊整季！網友：終於相信青訓了？', summary: '阿莫林公開挺人後 #Camarda 爆熱。', reactions: [{ tone: 'positive', text: '「自己人進球最爽。」' }, { tone: 'positive', text: '「2031 合約誠意滿滿。」' }, { tone: 'neutral', text: '「聯賽進球再說。」' }] },
-    { id: 'x3', priority: 3, hashtag: '#Amorim', heat: '🔥 高熱', topic: '阿莫林能重振米蘭嗎？Sporting 神蹟 vs 曼聯陰影', summary: '首秀打平後辯論白熱化。', reactions: [{ tone: 'positive', text: '「會建體系的教練。」' }, { tone: 'negative', text: '「曼聯搞砸過。」' }, { tone: 'neutral', text: '「看夏窗與主力歸隊。」' }] },
-    { id: 'x4', priority: 4, hashtag: '#ManCity', heat: '🔥 高熱', topic: '亞洲巡迴 28 人出爐，Foden 領銜香港行', summary: '#ManCity 大名單討論。', reactions: [{ tone: 'positive', text: '「Foden 該當核心。」' }, { tone: 'neutral', text: '「世足主力休息合理。」' }, { tone: 'funny', text: '「名單比陣容還長。」' }] },
-    { id: 'x5', priority: 5, hashtag: '#HongKong', heat: '⚡ 熱議', topic: '曼城 vs Inter 啟德倒數，香港球迷嗨了', summary: '亞洲巡迴票務與觀賽討論。', reactions: [{ tone: 'positive', text: '「啟德見藍月亮！」' }, { tone: 'funny', text: '「門票地獄。」' }, { tone: 'positive', text: '「馬雷斯卡首秀！」' }] },
-    { id: 'x6', priority: 6, hashtag: '#Barca', heat: '⚡ 熱議', topic: '30 人赴英國！弗里克伯明罕首戰來了', summary: '#Barca 季前名單公布。', reactions: [{ tone: 'positive', text: '「Frenkie 健康就好。」' }, { tone: 'neutral', text: '「亞馬爾會上場嗎？」' }, { tone: 'positive', text: '「青訓跟隊真多。」' }] },
-    { id: 'x7', priority: 7, hashtag: '#EnzoMaresca', heat: '⚡ 熱議', topic: '馬雷斯卡首秀對手是 Inter，網友：壓力開局', summary: '新帥香港戰成話題。', reactions: [{ tone: 'positive', text: '「給他時間。」' }, { tone: 'neutral', text: '「先看控球與轉換。」' }, { tone: 'funny', text: '「別一開場就歐冠決賽回憶殺。」' }] },
-    { id: 'x8', priority: 8, hashtag: '#Chukwueze', heat: '💬 討論', topic: 'Chukwueze 兩助攻級傳中，米蘭右路有解？', summary: '下半場表現被剪輯洗版。', reactions: [{ tone: 'positive', text: '「這腳外腳背絕了。」' }, { tone: 'positive', text: '「該重用。」' }, { tone: 'neutral', text: '「聯賽對抗再說。」' }] },
-    { id: 'x9', priority: 9, hashtag: '#Haaland', heat: '💬 討論', topic: '哈蘭德會不會香港登場？球迷兩極', summary: '世足後休息政策成討論。', reactions: [{ tone: 'positive', text: '「養好再戰英超。」' }, { tone: 'neutral', text: '「熱身賽想看他。」' }, { tone: 'funny', text: '「沒他進球榜誰來扛。」' }] },
-    { id: 'x10', priority: 10, hashtag: '#SerieA', heat: '💬 討論', topic: '意甲前瞻：阿莫林米蘭能進前四嗎', summary: '開季預測貼文增加。', reactions: [{ tone: 'positive', text: '「體系起來就穩。」' }, { tone: 'negative', text: '「後防要補。」' }, { tone: 'neutral', text: '「先看澳洲德比。」' }] },
-    { id: 'x11', priority: 11, hashtag: '#LaLiga', heat: '💬 討論', topic: '巴薩開季對埃爾切？球迷已在數日子', summary: '西甲賽程討論。', reactions: [{ tone: 'positive', text: '「衝聯賽！」' }, { tone: 'neutral', text: '「先過熱身。」' }, { tone: 'positive', text: '「弗里克第二季。」' }] },
-    { id: 'x12', priority: 12, hashtag: '#Inter', heat: '💬 討論', topic: '一週兩次看到 Internazionale？曼城香港、米蘭澳洲', summary: '兩隊熱身賽程撞名熱議。', reactions: [{ tone: 'funny', text: '「Inter 也太忙。」' }, { tone: 'positive', text: '「想看雙米蘭。」' }, { tone: 'neutral', text: '「熱身賽而已。」' }] },
-    { id: 'x13', priority: 13, hashtag: '#Milanisti', heat: '💬 討論', topic: 'Forza Milan：2-2 後士氣回來了嗎', summary: '球迷二創與應援影片。', reactions: [{ tone: 'positive', text: '「Camarda 是自己人！」' }, { tone: 'negative', text: '「上半場別再犯。」' }, { tone: 'positive', text: '「阿莫林加油。」' }] },
-    { id: 'x14', priority: 14, hashtag: '#MCFC', heat: '💬 討論', topic: '亞洲巡迴轉播與時差，球迷熬夜討論串', summary: '時差與 CITY+ 話題。', reactions: [{ tone: 'funny', text: '「又要計算時差。」' }, { tone: 'positive', text: '「香港場一定追。」' }, { tone: 'neutral', text: '「看精華也行。」' }] },
-    { id: 'x15', priority: 15, hashtag: '#UCL', heat: '💬 討論', topic: '新賽季歐冠：曼城巴薩米蘭誰更有戲', summary: '休賽期歐冠預測回流。', reactions: [{ tone: 'positive', text: '「曼城底蘊在。」' }, { tone: 'positive', text: '「巴薩有年輕人。」' }, { tone: 'neutral', text: '「米蘭先穩聯賽。」' }] },
+    { id: 'x1', priority: 1, hashtag: '#ACMilan', heat: '🔥 爆熱', topic: '拉莫斯破隊史轉會費！阿莫林第一槍', summary: '7400 萬歐元級報導洗版紅黑社群。', reactions: [{ tone: 'positive', text: '「終於有真中鋒！」' }, { tone: 'positive', text: '「阿莫林有錢砸。」' }, { tone: 'neutral', text: '「萊奧怎麼辦？」' }] },
+    { id: 'x2', priority: 2, hashtag: '#Barca', heat: '🔥 爆熱', topic: '阿德耶米官宣加盟巴薩至 2031', summary: '多特邊鋒轉投藍紅，再聚弗里克。', reactions: [{ tone: 'positive', text: '「速度有了！」' }, { tone: 'positive', text: '「弗里克自己人。」' }, { tone: 'neutral', text: '「註冊過得了嗎？」' }] },
+    { id: 'x3', priority: 3, hashtag: '#Camarda', heat: '🔥 高熱', topic: 'Camarda 續約＋梅開二度＋整季留隊', summary: '72 小時三連擊成迷因。', reactions: [{ tone: 'positive', text: '「青訓之光！」' }, { tone: 'positive', text: '「阿莫林識貨。」' }, { tone: 'funny', text: '「續約buff 加持。」' }] },
+    { id: 'x4', priority: 4, hashtag: '#ManCity', heat: '🔥 高熱', topic: '瓜爾迪奧續約 2031，曼城先鎖後防', summary: '長約消息與亞巡同步發酵。', reactions: [{ tone: 'positive', text: '「世界級後衛！」' }, { tone: 'positive', text: '「該留的都留。」' }, { tone: 'neutral', text: '「進攻還要補嗎？」' }] },
+    { id: 'x5', priority: 5, hashtag: '#Gordon', heat: '⚡ 熱議', topic: '戈登去巴薩？紐卡索談判接近', summary: 'Sky 報導後 #Gordon 暴漲。', reactions: [{ tone: 'positive', text: '「英超即戰力。」' }, { tone: 'neutral', text: '「先等官宣。」' }, { tone: 'funny', text: '「邊路要排隊。」' }] },
+    { id: 'x6', priority: 6, hashtag: '#RafaLeao', heat: '⚡ 熱議', topic: '萊奧要走？拉莫斯來了之後', summary: '轉出傳聞不止。', reactions: [{ tone: 'negative', text: '「該換人了。」' }, { tone: 'positive', text: '「給他一個位置。」' }, { tone: 'neutral', text: '「看報價。」' }] },
+    { id: 'x7', priority: 7, hashtag: '#Amorim', heat: '⚡ 熱議', topic: '有錢有人：阿莫林重建開始了？', summary: '拉莫斯＋吉拉＋Camarda 組合討論。', reactions: [{ tone: 'positive', text: '「這才像大隊。」' }, { tone: 'neutral', text: '「還要邊翼。」' }, { tone: 'positive', text: '「給時間。」' }] },
+    { id: 'x8', priority: 8, hashtag: '#HongKong', heat: '💬 討論', topic: '曼城香港戰 Inter 倒數，新援會先發嗎', summary: '亞巡＋新援磨合話題。', reactions: [{ tone: 'positive', text: '「想看 Semenyo。」' }, { tone: 'neutral', text: '「熱身賽輪換。」' }, { tone: 'positive', text: '「啟德見。」' }] },
+    { id: 'x9', priority: 9, hashtag: '#Adeyemi', heat: '💬 討論', topic: '阿德耶米會在伯明罕首秀嗎', summary: '巴薩英國營討論。', reactions: [{ tone: 'positive', text: '「期待速度！」' }, { tone: 'neutral', text: '「適應期。」' }, { tone: 'positive', text: '「弗里克熟。」' }] },
+    { id: 'x10', priority: 10, hashtag: '#TransferNews', heat: '💬 討論', topic: '三隊夏窗成績單：誰最賺？', summary: '球迷互相比轉會。', reactions: [{ tone: 'positive', text: '「米蘭中鋒值。」' }, { tone: 'positive', text: '「巴薩補速度。」' }, { tone: 'neutral', text: '「曼城偏穩。」' }] },
+    { id: 'x11', priority: 11, hashtag: '#Gvardiol', heat: '💬 討論', topic: '2031！瓜爾迪奧長約粉專洗版', summary: '續約圖海報瘋傳。', reactions: [{ tone: 'positive', text: '「鎖死！」' }, { tone: 'positive', text: '「防守核心。」' }, { tone: 'funny', text: '「 optimus 後衛。」' }] },
+    { id: 'x12', priority: 12, hashtag: '#SerieA', heat: '💬 討論', topic: '米蘭砸錢後能回前四嗎', summary: '意甲爭四預測更新。', reactions: [{ tone: 'positive', text: '「拉莫斯差點。」' }, { tone: 'neutral', text: '「還看邊路。」' }, { tone: 'negative', text: '「光中鋒不夠。」' }] },
+    { id: 'x13', priority: 13, hashtag: '#LaLiga', heat: '💬 討論', topic: '巴薩夏窗：阿德耶米之後還有誰', summary: '戈登與財政討論並行。', reactions: [{ tone: 'neutral', text: '「註冊呢？」' }, { tone: 'positive', text: '「速度有了。」' }, { tone: 'funny', text: '「每年都說還有大魚。」' }] },
+    { id: 'x14', priority: 14, hashtag: '#MCFC', heat: '💬 討論', topic: '馬雷斯卡＋長約核心，曼城夏窗風格是穩', summary: '續約多於引援的討論。', reactions: [{ tone: 'positive', text: '「先穩更衣室。」' }, { tone: 'neutral', text: '「中場還要嗎？」' }, { tone: 'positive', text: '「亞巡再看。」' }] },
+    { id: 'x15', priority: 15, hashtag: '#UCL', heat: '💬 討論', topic: '有新援之後，歐冠更有戲的是誰', summary: '三隊引援後預測。', reactions: [{ tone: 'positive', text: '「曼城底蘊。」' }, { tone: 'positive', text: '「巴薩年輕人。」' }, { tone: 'neutral', text: '「米蘭看阿莫林。」' }] },
 ];
 
 const REACTION_TONE = {
@@ -699,6 +877,36 @@ function generateWeekNews() {
     return [...WEEKLY_TOP_NEWS].sort((a, b) => a.priority - b.priority).slice(0, 10);
 }
 
+function generateTransfers() {
+    return [...TRANSFER_NEWS].sort((a, b) => a.priority - b.priority);
+}
+
+function renderTransferCard(n, i) {
+    const st = n.status ? `<span class="text-xs font-bold px-2.5 py-0.5 rounded-xl ${n.statusCls || 'bg-zinc-800 text-zinc-300'}">${n.status}</span>` : '';
+    return `
+        <article class="news-card fade-in bg-zinc-900 border ${n.border} rounded-3xl p-6 md:p-7">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="text-xs font-bold text-zinc-500 tabular-nums">#${i + 1}</span>
+                ${st}
+                ${(n.tags || []).map(t => `<span class="text-xs font-bold px-3 py-1 rounded-2xl ${t.cls}">${t.text}</span>`).join('')}
+                ${n.meta ? `<span class="text-xs text-zinc-500 ml-auto">${n.meta}</span>` : ''}
+            </div>
+            <h3 class="font-bold text-lg md:text-xl leading-snug">${n.title}</h3>
+            <p class="text-sm md:text-base text-zinc-300 mt-3 leading-relaxed">${n.summary}</p>
+            ${n.points?.length ? `<ul class="news-points mt-4 space-y-2 text-sm text-zinc-400 pl-5">${n.points.map(p => `<li class="leading-relaxed">${p}</li>`).join('')}</ul>` : ''}
+            ${n.source ? `<p class="text-xs text-zinc-600 mt-4 pt-3 border-t border-zinc-800"><i class="fa-solid fa-link mr-1"></i>參考來源：${n.source}</p>` : ''}
+        </article>`;
+}
+
+function renderTransfers() {
+    const items = generateTransfers();
+    const htmlCards = items.map((n, i) => renderTransferCard(n, i)).join('');
+    const el = $('transfer-list');
+    const el2 = $('transfer-list-tab');
+    if (el) el.innerHTML = htmlCards;
+    if (el2) el2.innerHTML = htmlCards;
+}
+
 function generateTeamNews() {
     return [...TEAM_NEWS].sort((a, b) => a.priority - b.priority);
 }
@@ -755,11 +963,13 @@ function renderTrending() {
 function updateTabBadges() {
     $('tab-week-badge').textContent = `${generateWeekNews().length} 則`;
     $('tab-teams-badge').textContent = `${generateTeamNews().length} 則`;
+    const tr = $('tab-transfer-badge');
+    if (tr) tr.textContent = `${generateTransfers().length} 則`;
     $('tab-trending-badge').textContent = `${generateTrending().length} 則`;
 }
 
 function switchTab(tab) {
-    ['week', 'teams', 'trending'].forEach(t => {
+    ['week', 'teams', 'transfer', 'trending'].forEach(t => {
         $(`tab-${t}`).classList.toggle('active', t === tab);
         $(`panel-${t}`).classList.toggle('active', t === tab);
     });
@@ -768,6 +978,7 @@ function switchTab(tab) {
 function setupTabs() {
     $('tab-week').addEventListener('click', () => switchTab('week'));
     $('tab-teams').addEventListener('click', () => switchTab('teams'));
+    $('tab-transfer').addEventListener('click', () => switchTab('transfer'));
     $('tab-trending').addEventListener('click', () => switchTab('trending'));
 }
 
@@ -777,6 +988,7 @@ function renderAll() {
     renderFocusTeams();
     renderTeamsDetail();
     renderFixtures();
+    renderTransfers();
     renderNews();
     renderTeamNews();
     renderTrending();
