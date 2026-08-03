@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v7">
+    <meta name="app-version" content="fw-v8">
     <title>⚽ 每周足球新聞 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -197,10 +197,10 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v7';
-const CACHE_KEY = 'weekly_football_fw_v7';
+const APP_VERSION = 'fw-v8';
+const CACHE_KEY = 'weekly_football_fw_v8';
 const NEWS_WEEK = '2026-W31';
-const NEWS_UPDATED = '2026-07-29';
+const NEWS_UPDATED = '2026-08-01';
 const TRENDING_LIMIT = 15;
 
 const FOCUS_TEAMS = [
@@ -252,23 +252,11 @@ const WEEK_FIXTURES = [
         away: '國際米蘭',
         homeEn: 'Manchester City',
         awayEn: 'Inter',
-        dateLabel: '8/1 香港 19:30',
-        status: 'upcoming',
-        score: null,
-        note: '啟德體育園 · 馬雷斯卡首場公開賽',
-    },
-    {
-        id: 'city-hk-training',
-        team: 'city',
-        competition: '公開訓練',
-        home: '曼城',
-        away: '開放訓練',
-        homeEn: 'Manchester City',
-        awayEn: 'Open Training',
-        dateLabel: '7/31 香港 19:30',
-        status: 'preview',
-        score: null,
-        note: '啟德體育園 · 球迷可觀訓',
+        dateLabel: '8/1 香港啟德',
+        status: 'finished',
+        score: { home: 1, away: 1 },
+        pens: '1-3',
+        note: '90 分鐘 1-1 · 點球 1-3 負 · Mubama 進球 · Pavard 扳平 · 馬雷斯卡首秀',
     },
     {
         id: 'city-seoul-kl',
@@ -495,8 +483,25 @@ const TRANSFER_NEWS = [
 
 const WEEKLY_TOP_NEWS = [
     {
-        id: 'transfer-roundup',
+        id: 'city-inter-hk-result',
         priority: 1,
+        team: 'city',
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '賽果', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-sky-500/50',
+        meta: '香港啟德 · 8/1 · 1-1（點球 1-3）',
+        title: '馬雷斯卡首秀：曼城 1-1 國際米蘭，點球大戰落敗',
+        summary: '啟德體育園 4.2 萬觀眾見證。Semenyo 助攻 Mubama 14\' 先開紀錄，Pavard 約 20\' 扳平。90 分鐘維持 1-1，點球 1-3 不敵 Inter（Ait-Nouri、Khusanov、Nico 罰失，Echeverri 罰進）。',
+        points: [
+            '馬雷斯卡：「表現滿意，兩週後正式賽事，腿部與身體準備最重要。」',
+            'Semenyo 獲評全場亮點，多次衝擊邊路。',
+            '青訓 McAidoo 下半場兩度威脅。',
+            '下一站首爾：8/5 K 聯賽明星隊、8/9 馬競。',
+        ],
+        source: 'Man City Official · ESPN',
+    },
+    {
+        id: 'transfer-roundup',
+        priority: 3,
         team: 'all',
         tags: [{ text: '轉會', cls: 'text-emerald-400 bg-emerald-950' }, { text: '週報', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-emerald-500/50',
@@ -711,13 +716,13 @@ const TEAM_NEWS = [
         id: 'tn-city-hk',
         priority: 5,
         team: 'city',
-        tags: [{ text: '香港', cls: 'text-sky-400 bg-sky-950' }, { text: '熱身', cls: 'text-zinc-400 bg-zinc-800' }],
-        border: 'border-sky-500/30',
-        meta: '曼城 · 8/1',
-        title: '啟德倒數：曼城對 Internazionale 觀賽與轉播資訊',
-        summary: '香港足球節焦點戰將至。球會公布公開訓練、球衣亮相與 CITY+ 轉播說明，本地球迷討論熱絡。',
-        points: ['英國時間 12:30 開踢。', '其後轉戰首爾兩場。'],
-        source: 'Man City Official · Kai Tak',
+        tags: [{ text: '香港', cls: 'text-sky-400 bg-sky-950' }, { text: '賽後', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-sky-500/40',
+        meta: '曼城 · 8/1 已完賽',
+        title: '賽後速覽：1-1 進點球，Inter 3-1 勝出 Asahi 獎盃',
+        summary: 'Mubama 破門、Pavard 扳平；點球大戰 City 僅 Echeverri 罰進。馬雷斯卡肯定表現與出場時間，下週首爾繼續熱身。',
+        points: ['Semenyo 獲評全場之星。', '4.2 萬觀眾 · 藍月亮球迷佔多數。'],
+        source: 'Man City Official',
     },
     {
         id: 'tn-barca-brum',
@@ -753,7 +758,7 @@ const X_TRENDING = [
     { id: 'x5', priority: 5, hashtag: '#Gordon', heat: '⚡ 熱議', topic: '戈登去巴薩？紐卡索談判接近', summary: 'Sky 報導後 #Gordon 暴漲。', reactions: [{ tone: 'positive', text: '「英超即戰力。」' }, { tone: 'neutral', text: '「先等官宣。」' }, { tone: 'funny', text: '「邊路要排隊。」' }] },
     { id: 'x6', priority: 6, hashtag: '#RafaLeao', heat: '⚡ 熱議', topic: '萊奧要走？拉莫斯來了之後', summary: '轉出傳聞不止。', reactions: [{ tone: 'negative', text: '「該換人了。」' }, { tone: 'positive', text: '「給他一個位置。」' }, { tone: 'neutral', text: '「看報價。」' }] },
     { id: 'x7', priority: 7, hashtag: '#Amorim', heat: '⚡ 熱議', topic: '有錢有人：阿莫林重建開始了？', summary: '拉莫斯＋吉拉＋Camarda 組合討論。', reactions: [{ tone: 'positive', text: '「這才像大隊。」' }, { tone: 'neutral', text: '「還要邊翼。」' }, { tone: 'positive', text: '「給時間。」' }] },
-    { id: 'x8', priority: 8, hashtag: '#HongKong', heat: '💬 討論', topic: '曼城香港戰 Inter 倒數，新援會先發嗎', summary: '亞巡＋新援磨合話題。', reactions: [{ tone: 'positive', text: '「想看 Semenyo。」' }, { tone: 'neutral', text: '「熱身賽輪換。」' }, { tone: 'positive', text: '「啟德見。」' }] },
+    { id: 'x8', priority: 8, hashtag: '#ManCity', heat: '🔥 爆熱', topic: '1-1 後點球輸 Inter！馬雷斯卡首秀討論炸了', summary: 'Mubama 進球、點球 1-3 落敗，#ManCity 洗版。', reactions: [{ tone: 'positive', text: '「Semenyo 太強！」' }, { tone: 'neutral', text: '「熱身賽重在出場時間。」' }, { tone: 'negative', text: '「點球太差…」' }] },
     { id: 'x9', priority: 9, hashtag: '#Adeyemi', heat: '💬 討論', topic: '阿德耶米會在伯明罕首秀嗎', summary: '巴薩英國營討論。', reactions: [{ tone: 'positive', text: '「期待速度！」' }, { tone: 'neutral', text: '「適應期。」' }, { tone: 'positive', text: '「弗里克熟。」' }] },
     { id: 'x10', priority: 10, hashtag: '#TransferNews', heat: '💬 討論', topic: '三隊夏窗成績單：誰最賺？', summary: '球迷互相比轉會。', reactions: [{ tone: 'positive', text: '「米蘭中鋒值。」' }, { tone: 'positive', text: '「巴薩補速度。」' }, { tone: 'neutral', text: '「曼城偏穩。」' }] },
     { id: 'x11', priority: 11, hashtag: '#Gvardiol', heat: '💬 討論', topic: '2031！瓜爾迪奧長約粉專洗版', summary: '續約圖海報瘋傳。', reactions: [{ tone: 'positive', text: '「鎖死！」' }, { tone: 'positive', text: '「防守核心。」' }, { tone: 'funny', text: '「 optimus 後衛。」' }] },
@@ -828,7 +833,8 @@ function renderFixtures() {
         const score = f.score
             ? `<span class="text-emerald-400 tabular-nums font-bold">${f.score.home}</span>
                <span class="text-zinc-600 mx-1">-</span>
-               <span class="text-red-400 tabular-nums font-bold">${f.score.away}</span>`
+               <span class="text-red-400 tabular-nums font-bold">${f.score.away}</span>
+               ${f.pens ? `<span class="text-xs text-amber-400 ml-2">（點球 ${f.pens}）</span>` : ''}`
             : `<span class="text-zinc-500 text-sm">vs</span>`;
         return `
         <div class="match-card fade-in bg-zinc-900 border ${t ? t.border : 'border-zinc-700'} rounded-3xl p-5">
