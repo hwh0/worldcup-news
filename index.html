@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v10">
-    <title>⚽ 每周足球新聞 · fw-v10 · 曼城 · AC 米蘭 · 巴塞隆納</title>
+    <meta name="app-version" content="fw-v11">
+    <title>⚽ 每周足球新聞 · fw-v11 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -197,10 +197,10 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v10';
-const CACHE_KEY = 'weekly_football_fw_v10';
+const APP_VERSION = 'fw-v11';
+const CACHE_KEY = 'weekly_football_fw_v11';
 const NEWS_WEEK = '2026-W32';
-const NEWS_UPDATED = '2026-08-07';
+const NEWS_UPDATED = '2026-08-08';
 const TRENDING_LIMIT = 15;
 
 const FOCUS_TEAMS = [
@@ -282,7 +282,7 @@ const WEEK_FIXTURES = [
         dateLabel: '8/9 首爾 12:00 UK',
         status: 'upcoming',
         score: null,
-        note: '亞洲巡迴收官戰 · CITY+ 轉播（部分地區除外）',
+        note: '亞巡收官 · 明日開踢 · CITY+（韓／西除外）',
     },
     {
         id: 'milan-chelsea-jkt',
@@ -292,10 +292,10 @@ const WEEK_FIXTURES = [
         away: 'AC 米蘭',
         homeEn: 'Chelsea',
         awayEn: 'AC Milan',
-        dateLabel: '8/8 雅加達',
+        dateLabel: '8/8 雅加達 · 今日',
         status: 'upcoming',
         score: null,
-        note: 'Gelora Bung Karno · 伯斯德比後下一站',
+        note: 'Indonesia Super Cup · Gelora Bung Karno · 比分完賽後再更',
     },
     {
         id: 'milan-celtic',
@@ -345,10 +345,10 @@ const WEEK_FIXTURES = [
         away: '諾丁漢森林',
         homeEn: 'Barcelona',
         awayEn: 'Nottingham Forest',
-        dateLabel: '8/8 烏迪內 21:00 西',
+        dateLabel: '8/8 烏迪內 20:00 UK · 今日',
         status: 'upcoming',
         score: null,
-        note: 'Bluenergy Stadium · 英國營後義大利站',
+        note: 'Friuli 盃 · 45 分鐘制錦標賽 · 比分完賽後再更',
     },
     {
         id: 'barca-gamper-ahly',
@@ -381,8 +381,26 @@ const WEEK_FIXTURES = [
 /** 轉會速報（官宣優先） */
 const TRANSFER_NEWS = [
     {
-        id: 'tr-trafford',
+        id: 'tr-rulli',
         priority: 1,
+        team: 'city',
+        status: '接近',
+        statusCls: 'bg-amber-950 text-amber-400',
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '接近', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-amber-500/40',
+        meta: '轉入 · 馬賽 → 曼城？',
+        title: '媒體：城隊與馬賽就 Rulli 達協議，補特拉福德空缺',
+        summary: 'Foot Mercato 等指曼城與馬賽就阿根廷門將 Gerónimo Rulli（34）接近成交，作 Donnarumma 副手。初報約 200 萬歐遭拒，後提高報價獲接受；細節與官宣仍待完成。',
+        points: [
+            'Trafford 離隊後優先找第二門將。',
+            'Rulli 馬賽約 73 場，合約最後一年。',
+            '未官宣前僅作市場動向。',
+        ],
+        source: 'Foot Mercato · Tribal Football',
+    },
+    {
+        id: 'tr-trafford',
+        priority: 2,
         team: 'city',
         status: '官宣',
         statusCls: 'bg-emerald-950 text-emerald-400',
@@ -395,13 +413,13 @@ const TRANSFER_NEWS = [
             '青訓出身，2023 曾赴伯恩利。',
             '兩度英格蘭國腳，世足名單入選未出場。',
             '維亞納：里茲得到高品質門將。',
-            'Donnarumma 體系下出場空間有限。',
+            '球會據報物色 Rulli 補位。',
         ],
         source: 'Man City Official · Leeds United',
     },
     {
         id: 'tr-gordon',
-        priority: 2,
+        priority: 3,
         team: 'barca',
         status: '官宣',
         statusCls: 'bg-emerald-950 text-emerald-400',
@@ -420,7 +438,7 @@ const TRANSFER_NEWS = [
     },
     {
         id: 'tr-ramos',
-        priority: 3,
+        priority: 4,
         team: 'milan',
         status: '官宣',
         statusCls: 'bg-emerald-950 text-emerald-400',
@@ -439,7 +457,7 @@ const TRANSFER_NEWS = [
     },
     {
         id: 'tr-adeyemi',
-        priority: 4,
+        priority: 5,
         team: 'barca',
         status: '官宣',
         statusCls: 'bg-emerald-950 text-emerald-400',
@@ -458,7 +476,7 @@ const TRANSFER_NEWS = [
     },
     {
         id: 'tr-gila',
-        priority: 5,
+        priority: 6,
         team: 'milan',
         status: '官宣',
         statusCls: 'bg-emerald-950 text-emerald-400',
@@ -477,7 +495,7 @@ const TRANSFER_NEWS = [
     },
     {
         id: 'tr-camarda',
-        priority: 6,
+        priority: 7,
         team: 'milan',
         status: '續約',
         statusCls: 'bg-sky-950 text-sky-400',
@@ -496,7 +514,7 @@ const TRANSFER_NEWS = [
     },
     {
         id: 'tr-gvardiol',
-        priority: 7,
+        priority: 8,
         team: 'city',
         status: '續約',
         statusCls: 'bg-sky-950 text-sky-400',
@@ -515,7 +533,7 @@ const TRANSFER_NEWS = [
     },
     {
         id: 'tr-rodri',
-        priority: 8,
+        priority: 9,
         team: 'city',
         status: '傷情',
         statusCls: 'bg-amber-950 text-amber-400',
@@ -533,7 +551,7 @@ const TRANSFER_NEWS = [
     },
     {
         id: 'tr-leao',
-        priority: 9,
+        priority: 10,
         team: 'milan',
         status: '動向',
         statusCls: 'bg-zinc-800 text-zinc-300',
@@ -552,45 +570,61 @@ const TRANSFER_NEWS = [
     },
     {
         id: 'tr-city-window',
-        priority: 10,
+        priority: 11,
         team: 'city',
         status: '動向',
         statusCls: 'bg-zinc-800 text-zinc-300',
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '夏窗', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-sky-500/30',
         meta: '動向 · 進出',
-        title: '曼城夏窗：特拉福德離隊，亞巡整合新援',
-        summary: 'Trafford 轉投里茲後門將線以 Donnarumma 為主。Semenyo、Ait-Nouri 等已在亞巡磨合；Rodri 復健中，中場深度仍受關注。',
+        title: '曼城夏窗：門將進出＋亞巡收官前夕',
+        summary: 'Trafford 已走；Rulli 協議接近中。Semenyo、Ait-Nouri 亞巡高光；Rodri 復健，明日馬競為亞洲巡迴最後一戰。',
         points: [
             'Gvardiol 續約至 2031。',
-            '8/9 馬競為亞巡收官。',
-            '世足主力歸隊後陣容再定裝。',
+            '8/9 馬競 UK 12:00。',
+            '未官宣引援勿當真。',
         ],
-        source: 'Man City Official · Sky Sports',
+        source: 'Man City Official · 媒體彙整',
     },
 ];
 
 const WEEKLY_TOP_NEWS = [
     {
-        id: 'weekend-preview',
+        id: 'matchday-0808',
         priority: 1,
         team: 'all',
-        tags: [{ text: '本週末', cls: 'text-emerald-400 bg-emerald-950' }, { text: '預告', cls: 'text-sky-400 bg-sky-950' }],
-        border: 'border-emerald-500/50',
-        meta: '8/8–8/9 · 三隊都有戲',
-        title: '週末熱身：米蘭戰切爾西、巴薩義大利站、曼城收官馬競',
-        summary: '8/8 雅加達：切爾西 vs AC 米蘭；同日巴薩在烏迪內對諾丁漢森林。8/9 首爾：曼城 vs 馬德里競技（UK 12:00）亞巡最後一戰。',
+        tags: [{ text: '今日', cls: 'text-rose-400 bg-rose-950' }, { text: '比賽日', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-rose-500/50',
+        meta: '2026-08-08 · 更新時尚未完賽',
+        title: '今日雙線：切爾西 vs 米蘭（雅加達）、巴薩 vs 森林（烏迪內）',
+        summary: '本站為手動更新、無即時 API。截稿時兩場尚未踢完／未開踢，比分上線後會再 RENEW。明日 8/9 曼城亞巡收官對馬競（UK 12:00）。',
         points: [
-            '米蘭：伯斯 1-1 後轉戰印尼，Ramos 磨合加速。',
-            '巴薩：英國營點球負後，義大利再測輪換。',
-            '曼城：3-1 明星隊後對陣馬競，CITY+ 可看。',
-            '更新日：2026-08-07。',
+            '米蘭：Indonesia Super Cup · Gelora Bung Karno。',
+            '巴薩：Friuli 盃（三隊 45 分鐘制）對諾丁漢森林。',
+            '曼城：明日首爾 vs 馬競 · CITY+。',
+            '完賽比分請稍後再開本頁或等下一版。',
         ],
-        source: '各隊官方賽程',
+        source: '各隊官方 · FOX · Sports Mole',
+    },
+    {
+        id: 'rulli-watch',
+        priority: 2,
+        team: 'city',
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '門將', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-amber-500/50',
+        meta: '動向 · Rulli',
+        title: '接班特拉福德？媒體指城隊與馬賽就 Rulli 達協議',
+        summary: 'Trafford 赴里茲後，阿根廷門將 Gerónimo Rulli 被點名補 Donnarumma 身後。球會間報價據報已談攏，個人條款與官宣仍待確認。',
+        points: [
+            '年齡 34 · 馬賽合約末年。',
+            '作第二門將定位。',
+            '以官方公告為準。',
+        ],
+        source: 'Foot Mercato · 媒體彙整',
     },
     {
         id: 'trafford-leeds',
-        priority: 2,
+        priority: 3,
         team: 'city',
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '轉會', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/50',
@@ -606,7 +640,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'gordon-done',
-        priority: 3,
+        priority: 4,
         team: 'barca',
         tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '官宣', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-amber-500/50',
@@ -622,7 +656,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'city-seoul-kl-result',
-        priority: 4,
+        priority: 5,
         team: 'city',
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '3-1', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/50',
@@ -638,7 +672,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'milan-inter-perth-result',
-        priority: 5,
+        priority: 6,
         team: 'milan',
         tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '1-1', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-rose-500/50',
@@ -836,40 +870,40 @@ const WEEKLY_TOP_NEWS = [
 
 const TEAM_NEWS = [
     {
-        id: 'tn-city-atleti',
-        priority: 1,
-        team: 'city',
-        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '預告', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-sky-500/40',
-        meta: '曼城 · 8/9 首爾',
-        title: '亞巡收官：曼城 vs 馬競，UK 中午 12:00',
-        summary: '3-1 明星隊後最後一戰。CITY+ 全球轉播（韓、西除外）。Trafford 離隊、Rodri 復健是週邊焦點。',
-        points: ['馬雷斯卡 8/8 記者會。', '同一首爾世界盃球場。'],
-        source: 'Man City Official',
-    },
-    {
         id: 'tn-milan-chelsea',
-        priority: 2,
+        priority: 1,
         team: 'milan',
-        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '雅加達', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-rose-500/40',
-        meta: 'AC 米蘭 · 8/8',
-        title: '下一站雅加達：切爾西 vs 米蘭',
-        summary: '伯斯 1-1 國米後飛印尼。阿莫林再測 Ramos／Modric 組合，面對同為歐冠級對手。',
-        points: ['Gelora Bung Karno。', '8/15 再戰曼聯（波蘭）。'],
-        source: 'AC Milan Official',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '今日', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-rose-500/50',
+        meta: 'AC 米蘭 · 8/8 雅加達',
+        title: '比賽日：切爾西 vs 米蘭 · Indonesia Super Cup',
+        summary: '伯斯 1-1 後挑戰藍軍。Mudryk 已於切爾西季前復出，Caicedo 亦有出場；阿莫林側看 Ramos 磨合。比分完賽後更新。',
+        points: ['主場 Gelora Bung Karno。', '下一站 8/15 波蘭戰曼聯。'],
+        source: 'Chelsea FC · AC Milan',
     },
     {
         id: 'tn-barca-italy',
-        priority: 3,
+        priority: 2,
         team: 'barca',
-        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '預告', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-amber-500/40',
+        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '今日', cls: 'text-rose-400 bg-rose-950' }],
+        border: 'border-amber-500/50',
         meta: '巴薩 · 8/8 烏迪內',
-        title: '義大利站：對諾丁漢森林，Gordon 邊路成軍',
-        summary: '英國營點球負後轉義大利。8/19 岡佩爾盃主場對阿爾阿赫利，重開諾坎普。',
-        points: ['Adeyemi＋Gordon 邊路。', 'Gamper 20:00 CEST。'],
-        source: 'FC Barcelona Official',
+        title: '比賽日：Friuli 盃對諾丁漢森林（45 分鐘制）',
+        summary: '首屆 Friuli Venezia Giulia 盃：森林、烏迪內、巴薩各踢 45 分鐘場次。英國時間 20:00 對森林；另有 vs 烏迪內。比分完賽後更新。',
+        points: ['Gordon＋Adeyemi 邊路成軍。', '8/19 岡佩爾盃阿爾阿赫利。'],
+        source: 'Sports Mole · FCB 賽程',
+    },
+    {
+        id: 'tn-city-atleti',
+        priority: 3,
+        team: 'city',
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '明日', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-sky-500/40',
+        meta: '曼城 · 8/9 首爾',
+        title: '明日亞巡收官：曼城 vs 馬競，UK 12:00',
+        summary: '3-1 明星隊後最後一戰。CITY+ 轉播（韓、西除外）。Rulli 傳聞、Rodri 復健是週邊焦點。',
+        points: ['馬雷斯卡賽前記者會。', '同一首爾世界盃球場。'],
+        source: 'Man City Official',
     },
     {
         id: 'tn-city-seoul',
@@ -922,13 +956,13 @@ const TEAM_NEWS = [
 ];
 
 const X_TRENDING = [
-    { id: 'x1', priority: 1, hashtag: '#ManCity', heat: '🔥 爆熱', topic: '特拉福德官宣加盟里茲！青訓門將離隊', summary: '雙盃功臣轉投里茲，門將線討論炸了。', reactions: [{ tone: 'positive', text: '「祝他好！」' }, { tone: 'neutral', text: '「Donnarumma 一號。」' }, { tone: 'negative', text: '「又賣青訓…」' }] },
-    { id: 'x2', priority: 2, hashtag: '#ACMilan', heat: '🔥 爆熱', topic: '週末雅加達！切爾西 vs 米蘭', summary: '伯斯平手後挑戰藍軍。', reactions: [{ tone: 'positive', text: '「Ramos 先發？」' }, { tone: 'neutral', text: '「熱身而已。」' }, { tone: 'positive', text: '「阿莫林大考。」' }] },
-    { id: 'x3', priority: 3, hashtag: '#ManCity', heat: '🔥 高熱', topic: '週日馬競首爾收官：誰先排主力？', summary: '亞巡最後一戰。', reactions: [{ tone: 'positive', text: '「想看 Foden。」' }, { tone: 'neutral', text: '「負荷管理。」' }, { tone: 'positive', text: '「Semenyo 該先發。」' }] },
-    { id: 'x4', priority: 4, hashtag: '#Gordon', heat: '🔥 高熱', topic: '戈登已是巴薩人！不是「接近」是官宣', summary: '五年約至 2031，邊路成軍。', reactions: [{ tone: 'positive', text: '「英超即戰力！」' }, { tone: 'positive', text: '「Catch me if you can。」' }, { tone: 'funny', text: '「西語還行。」' }] },
-    { id: 'x5', priority: 5, hashtag: '#Barca', heat: '🔥 高熱', topic: '8/8 義大利對森林 · 8/19 岡佩爾盃阿爾阿赫利', summary: '諾坎普重開倒數。', reactions: [{ tone: 'positive', text: '「回家了！」' }, { tone: 'neutral', text: '「先看熱身。」' }, { tone: 'positive', text: '「Gamper 必看。」' }] },
-    { id: 'x6', priority: 6, hashtag: '#ManCity', heat: '⚡ 熱議', topic: '首爾 3-1 後再戰馬競 · Rodri 小手術', summary: '亞巡首勝＋中場傷情雙線。', reactions: [{ tone: 'positive', text: '「上半場三球！」' }, { tone: 'negative', text: '「Rodri 又傷…」' }, { tone: 'neutral', text: '「短復健就好。」' }] },
-    { id: 'x7', priority: 7, hashtag: '#ACMilan', heat: '⚡ 熱議', topic: '伯斯 1-1 國米：Nkunku 點球、紀念 Baresi', summary: '同城德比平手。', reactions: [{ tone: 'positive', text: '「Nkunku 關鍵！」' }, { tone: 'positive', text: '「六號永遠。」' }, { tone: 'neutral', text: '「機會太多沒進。」' }] },
+    { id: 'x1', priority: 1, hashtag: '#ACMilan', heat: '🔥 爆熱', topic: '今日雅加達！切爾西 vs 米蘭開踢', summary: 'Indonesia Super Cup，比分完賽再更。', reactions: [{ tone: 'positive', text: '「Ramos 先發？」' }, { tone: 'neutral', text: '「熱身而已。」' }, { tone: 'positive', text: '「阿莫林大考。」' }] },
+    { id: 'x2', priority: 2, hashtag: '#Barca', heat: '🔥 爆熱', topic: '今日烏迪內 Friuli 盃 vs 森林', summary: '45 分鐘制錦標賽，英超對手。', reactions: [{ tone: 'positive', text: '「Gordon 上場？」' }, { tone: 'neutral', text: '「45 分鐘難評。」' }, { tone: 'positive', text: '「輪換磨合。」' }] },
+    { id: 'x3', priority: 3, hashtag: '#ManCity', heat: '🔥 高熱', topic: 'Rulli 要來補門將？馬賽協議接近', summary: 'Trafford 走後第二門將傳聞。', reactions: [{ tone: 'positive', text: '「經驗派。」' }, { tone: 'neutral', text: '「先等官宣。」' }, { tone: 'negative', text: '「34 歲？短約吧。」' }] },
+    { id: 'x4', priority: 4, hashtag: '#ManCity', heat: '🔥 高熱', topic: '明日馬競首爾收官：誰先排主力？', summary: '亞巡最後一戰 UK 12:00。', reactions: [{ tone: 'positive', text: '「想看 Foden。」' }, { tone: 'neutral', text: '「負荷管理。」' }, { tone: 'positive', text: '「Semenyo 該先發。」' }] },
+    { id: 'x5', priority: 5, hashtag: '#Chelsea', heat: '⚡ 熱議', topic: 'Mudryk 復出後再戰米蘭', summary: '對尤文替補登場後的第二站。', reactions: [{ tone: 'positive', text: '「回來了！」' }, { tone: 'neutral', text: '「節奏要找回。」' }, { tone: 'funny', text: '「別再傷了。」' }] },
+    { id: 'x6', priority: 6, hashtag: '#Gordon', heat: '⚡ 熱議', topic: '戈登已是巴薩人 · 義大利站首秀？', summary: '五年約至 2031。', reactions: [{ tone: 'positive', text: '「英超即戰力！」' }, { tone: 'positive', text: '「Catch me if you can。」' }, { tone: 'funny', text: '「邊路排隊。」' }] },
+    { id: 'x7', priority: 7, hashtag: '#ACMilan', heat: '⚡ 熱議', topic: '伯斯 1-1 國米後轉戰印尼', summary: 'Nkunku 點球、紀念 Baresi。', reactions: [{ tone: 'positive', text: '「Nkunku 關鍵！」' }, { tone: 'positive', text: '「六號永遠。」' }, { tone: 'neutral', text: '「機會太多沒進。」' }] },
     { id: 'x8', priority: 8, hashtag: '#Adeyemi', heat: '⚡ 熱議', topic: '阿德耶米＋戈登：巴薩邊路太卷？', summary: '雙邊鋒夏窗成軍。', reactions: [{ tone: 'positive', text: '「速度有了！」' }, { tone: 'funny', text: '「亞馬爾旁邊要排隊。」' }, { tone: 'neutral', text: '「註冊呢？」' }] },
     { id: 'x9', priority: 9, hashtag: '#RafaLeao', heat: '💬 討論', topic: '萊奧伯斯登場，去留意仍熱', summary: '與 Ramos 聯手試射。', reactions: [{ tone: 'positive', text: '「給他位置。」' }, { tone: 'negative', text: '「該換人了。」' }, { tone: 'neutral', text: '「看報價。」' }] },
     { id: 'x10', priority: 10, hashtag: '#TransferNews', heat: '💬 討論', topic: '三隊夏窗：誰成績單最漂亮？', summary: '米蘭中鋒、巴薩邊路、曼城穩。', reactions: [{ tone: 'positive', text: '「米蘭中鋒值。」' }, { tone: 'positive', text: '「巴薩補速度。」' }, { tone: 'neutral', text: '「曼城偏穩。」' }] },
