@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v13">
-    <title>⚽ 每周足球新聞 · fw-v13 · 曼城 · AC 米蘭 · 巴塞隆納</title>
+    <meta name="app-version" content="fw-v14">
+    <title>⚽ 每周足球新聞 · fw-v14 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -197,10 +197,10 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v13';
-const CACHE_KEY = 'weekly_football_fw_v13';
-const NEWS_WEEK = '2026-W33';
-const NEWS_UPDATED = '2026-08-15';
+const APP_VERSION = 'fw-v14';
+const CACHE_KEY = 'weekly_football_fw_v14';
+const NEWS_WEEK = '2026-W34';
+const NEWS_UPDATED = '2026-08-17';
 const TRENDING_LIMIT = 15;
 
 const FOCUS_TEAMS = [
@@ -371,10 +371,10 @@ const WEEK_FIXTURES = [
         away: '兵工廠',
         homeEn: 'Manchester City',
         awayEn: 'Arsenal',
-        dateLabel: '8/16 卡地夫 15:00 BST',
-        status: 'upcoming',
-        score: null,
-        note: '社區盾 · 千禧球場（非溫布利）· 兵工廠為主隊',
+        dateLabel: '8/16 卡地夫',
+        status: 'finished',
+        score: { home: 0, away: 3 },
+        note: '社區盾負 · Calafiori 24 秒 · Havertz · Ødegaard · 千禧球場',
     },
     {
         id: 'barca-basel',
@@ -384,10 +384,10 @@ const WEEK_FIXTURES = [
         away: '巴塞隆納',
         homeEn: 'FC Basel',
         awayEn: 'Barcelona',
-        dateLabel: '8/16 16:30 西',
-        status: 'upcoming',
-        score: null,
-        note: 'St. Jakob-Park · 岡佩爾盃前最後熱身',
+        dateLabel: '8/16 巴塞爾',
+        status: 'finished',
+        score: { home: 2, away: 5 },
+        note: 'Adeyemi 首發首球 · Yamal 點球＋助攻 · Bisiwu 梅開二度 · Gordon 首秀',
     },
     {
         id: 'barca-gamper-ahly',
@@ -410,10 +410,10 @@ const WEEK_FIXTURES = [
         away: 'AC 米蘭',
         homeEn: 'Manchester United',
         awayEn: 'AC Milan',
-        dateLabel: '8/15 16:45 中歐 · 今日',
-        status: 'upcoming',
-        score: null,
-        note: '弗羅茨瓦夫 · Sky／DAZN · 比分完賽後再更',
+        dateLabel: '8/15 弗羅茨瓦夫',
+        status: 'finished',
+        score: { home: 2, away: 4 },
+        note: '逆轉勝 · Chukwueze／Cissé／Ramos／Loftus-Cheek · 費南德斯點球被撲',
     },
 ];
 
@@ -665,25 +665,58 @@ const TRANSFER_NEWS = [
 
 const WEEKLY_TOP_NEWS = [
     {
-        id: 'weekend-0815',
+        id: 'shield-result',
         priority: 1,
-        team: 'all',
-        tags: [{ text: '本週末', cls: 'text-rose-400 bg-rose-950' }, { text: '比賽日', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-rose-500/50',
-        meta: '2026-08-15 · 米蘭今夜 · 明日雙線',
-        title: '今夜曼聯 vs 米蘭；明日社區盾＋巴薩戰巴塞爾',
-        summary: '截稿時波蘭場尚未開踢（16:45 中歐）。明日：兵工廠 vs 曼城社區盾（卡地夫千禧球場 15:00 BST，非溫布利）；巴塞爾 vs 巴薩（16:30 西）。比分完賽後再 RENEW。',
+        team: 'city',
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '0-3', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-sky-500/50',
+        meta: '卡地夫千禧球場 · 8/16 · 社區盾',
+        title: '兵工廠 3-0 曼城：24 秒失球，馬雷斯卡首冠落空',
+        summary: 'Calafiori 開場 24 秒破門（自 1968 以來社區盾最快），Havertz 頭槌、Ødegaard 假動作再下一城。Tzolis 兩助攻。哈蘭德兩次良機未進；英超 8/23 主場對伯恩茅斯。',
         points: [
-            '米蘭：0-3 切爾西後對阿莫林前東家。',
-            '曼城：Rulli 官宣、Doku 續約；Reijnders 據報將走。',
-            '巴薩：岡佩爾盃前最後一場熱身。',
-            '社區盾因溫布利檔期改卡地夫。',
+            '進球：Calafiori 1\' · Havertz 27\' · Ødegaard 48\'。',
+            'Donnarumma 三度失守。',
+            '世足主力剛歸隊，節奏明顯落後。',
+            '兵工廠第 18 座社區盾。',
         ],
-        source: '各隊官方 · ESPN',
+        source: 'Al Jazeera · 各媒體',
+    },
+    {
+        id: 'milan-united-result',
+        priority: 2,
+        team: 'milan',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '4-2', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-rose-500/50',
+        meta: '弗羅茨瓦夫 · 8/15 · 熱身收官',
+        title: '米蘭 4-2 曼聯：阿莫林打爆前東家，Ramos 破門',
+        summary: '兩度落後後逆轉。Chukwueze 助攻串聯，Cissé、Ramos、Loftus-Cheek 連進。費南德斯點球被撲。雅加達 0-3 後熱身最後一場大勝。',
+        points: [
+            '進球：Maguire 2\' · Chukwueze 37\' · Dorgu 51\' · Cissé 57\' · Ramos 68\' · RLC 71\'。',
+            'Chukwueze 右路拆穿曼聯。',
+            'Rashford 20 個月後替補復出紅魔。',
+            '熱身：平、平、負、勝。',
+        ],
+        source: 'Sky Sports',
+    },
+    {
+        id: 'barca-basel-result',
+        priority: 3,
+        team: 'barca',
+        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '5-2', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-amber-500/50',
+        meta: '巴塞爾 · 8/16 · 熱身',
+        title: '巴塞爾 2-5 巴薩：Adeyemi 首球、Yamal 回歸、Bisiwu 雙響',
+        summary: 'Gordon 首秀。Adeyemi 34\' 首發首球，Abdelkarim 再進；Yamal 世足後首秀點球＋助攻，Bisiwu 89\'、補時連進兩球。8/19 岡佩爾盃對阿爾阿赫利。',
+        points: [
+            '進球：Adeyemi、Abdelkarim、Yamal（點）、Bisiwu×2；巴塞爾 Doucouré、Olaigbe 點球。',
+            'Gordon 英格蘭四強後首場紅藍。',
+            '弗里克輪換＋世足主力合流。',
+        ],
+        source: 'FC Barcelona Official',
     },
     {
         id: 'doku-rulli',
-        priority: 2,
+        priority: 4,
         team: 'city',
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '官宣', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/50',
@@ -725,7 +758,7 @@ const WEEKLY_TOP_NEWS = [
         points: [
             '進球：Domínguez（ATM）· Marmoush×2 · Ait-Nouri。',
             'Semenyo 邊路 MVP。',
-            '社區盾改卡地夫千禧球場。',
+            '社區盾已 0-3 負兵工廠。',
         ],
         source: 'Man City Official · Al Jazeera',
     },
@@ -1027,39 +1060,39 @@ const WEEKLY_TOP_NEWS = [
 
 const TEAM_NEWS = [
     {
-        id: 'tn-milan-united',
+        id: 'tn-city-shield',
         priority: 1,
-        team: 'milan',
-        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '今日', cls: 'text-rose-400 bg-rose-950' }],
-        border: 'border-rose-500/50',
-        meta: 'AC 米蘭 · 8/15 弗羅茨瓦夫',
-        title: '比賽日：曼聯 vs 米蘭 · 16:45 中歐 · Sky／DAZN',
-        summary: '雅加達 0-3 後對阿莫林前東家。Ferragosto 熱身，比分完賽後更新。',
-        points: ['Ramos 能否先發成看點。', '熱身成績：平、平、負。'],
-        source: 'AC Milan Official',
+        team: 'city',
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '0-3', cls: 'text-zinc-400 bg-zinc-800' }],
+        border: 'border-sky-500/50',
+        meta: '曼城 · 8/16 社區盾',
+        title: '卡地夫慘敗：24 秒失球，馬雷斯卡首秀吃悶棍',
+        summary: 'Calafiori、Havertz、Ødegaard 各進一球。哈蘭德兩次良機未把握。英超 8/23 主場伯恩茅斯。',
+        points: ['Rodri 仍復健缺陣。', '世足主力剛歸隊節奏差。'],
+        source: 'Al Jazeera',
     },
     {
-        id: 'tn-city-shield',
+        id: 'tn-milan-united',
         priority: 2,
-        team: 'city',
-        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '明日', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-sky-500/50',
-        meta: '曼城 · 8/16 卡地夫',
-        title: '社區盾：兵工廠 vs 曼城 · 千禧球場 15:00 BST',
-        summary: '溫布利檔期衝突改卡地夫。馬雷斯卡：全員健康；世足走遠主力剛歸隊兩天。哈蘭德腳跟無礙，Rodri 仍復健。',
-        points: ['足總盃冠 vs 英超冠。', 'TNT Sports／HBO Max 英國轉播。'],
-        source: 'Man City Official',
+        team: 'milan',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '4-2', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-rose-500/50',
+        meta: 'AC 米蘭 · 8/15 已完賽',
+        title: '打爆曼聯：Chukwueze 拆邊，Ramos 破門',
+        summary: '兩度落後逆轉。熱身收官大勝前東家，阿莫林出了一口氣。',
+        points: ['Cissé、Ramos、RLC 連進。', '費南德斯點球被撲。'],
+        source: 'Sky Sports',
     },
     {
         id: 'tn-barca-basel',
         priority: 3,
         team: 'barca',
-        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '明日', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-amber-500/40',
-        meta: '巴薩 · 8/16 巴塞爾',
-        title: '明日熱身：巴塞爾 vs 巴薩 · 16:30 西',
-        summary: 'St. Jakob-Park。岡佩爾盃前最後一場；此地曾辦 1979 優勝者盃決賽。',
-        points: ['8/19 諾坎普 vs 阿爾阿赫利。', '西甲 8/23 埃爾切。'],
+        tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '5-2', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-amber-500/50',
+        meta: '巴薩 · 8/16 已完賽',
+        title: '瑞士 5-2：Adeyemi 首球、Yamal 回歸、Gordon 首秀',
+        summary: 'Bisiwu 替補雙響鎖定勝局。週三岡佩爾盃回家對阿爾阿赫利。',
+        points: ['Yamal 點球＋助攻。', '西甲 8/23 埃爾切。'],
         source: 'FC Barcelona Official',
     },
     {
@@ -1069,9 +1102,9 @@ const TEAM_NEWS = [
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '3-1', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/40',
         meta: '曼城 · 8/9',
-        title: '亞巡回顧：逆轉馬競，Marmoush＋Semenyo',
-        summary: '落後後連進三球。社區盾見兵工廠。',
-        points: ['Semenyo 兩助攻。', 'Rulli／Doku 本週官宣。'],
+        title: '亞巡回顧：逆轉馬競後社區盾失手',
+        summary: '熱身順、正式盃賽 0-3。馬雷斯卡需加快整合。',
+        points: ['Semenyo 亞巡高光。', '英超下周開踢。'],
         source: 'Man City Official',
     },
     {
@@ -1081,10 +1114,10 @@ const TEAM_NEWS = [
         tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '0-3', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-rose-500/40',
         meta: 'AC 米蘭 · 8/8',
-        title: '雅加達吃蛋後：今夜要找回節奏',
-        summary: 'João Pedro 雙響、Caicedo 世界波。阿莫林半場大換人後連丟。',
-        points: ['對曼聯是第四場熱身。', 'Ramos 磨合繼續。'],
-        source: 'Chelsea FC Official',
+        title: '雅加達吃蛋後波蘭復仇',
+        summary: '0-3 切爾西後 4-2 曼聯，熱身以勝收官。',
+        points: ['邊路 Chukwueze 回勇。', 'Ramos 開始進球。'],
+        source: 'Chelsea FC · Sky',
     },
     {
         id: 'tn-barca-italy',
@@ -1093,9 +1126,9 @@ const TEAM_NEWS = [
         tags: [{ text: '巴塞隆納', cls: 'text-amber-400 bg-amber-950' }, { text: '賽後', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-amber-500/40',
         meta: '巴薩 · 8/8',
-        title: 'Friuli 一勝一負後轉戰瑞士',
-        summary: '1-0 森林、0-1 烏迪內斯。明日巴塞爾再測輪換。',
-        points: ['Raphinha 點球。', 'Adeyemi 有威脅。'],
+        title: 'Friuli 亞軍後瑞士大勝',
+        summary: '三角盃一勝一負，巴塞爾 5-2 找回進球手感。',
+        points: ['Adeyemi 正式開張。', '岡佩爾盃倒數。'],
         source: 'Barca Blaugranes',
     },
     {
@@ -1105,22 +1138,22 @@ const TEAM_NEWS = [
         tags: [{ text: 'Rodri', cls: 'text-sky-400 bg-sky-950' }, { text: '傷情', cls: 'text-amber-400 bg-amber-950' }],
         border: 'border-amber-500/30',
         meta: '曼城 · 傷情',
-        title: '羅德里已回基地復健，社區盾缺陣',
-        summary: '馬雷斯卡：手術後復健中，何時合練仍是問題。巴薩傳聞與傷情並行。',
-        points: ['McAidoo 肩部小傷已跟隊。', '哈蘭德可出戰。'],
+        title: '羅德里仍復健：社區盾缺陣，開季成疑',
+        summary: '馬雷斯卡：何時合練仍是問題。中場深度與巴薩傳聞並行。',
+        points: ['哈蘭德已出戰社區盾。', 'Reijnders 據報將走。'],
         source: 'Man City Official',
     },
 ];
 
 const X_TRENDING = [
-    { id: 'x1', priority: 1, hashtag: '#ACMilan', heat: '🔥 爆熱', topic: '今夜弗羅茨瓦夫！曼聯 vs 米蘭', summary: '阿莫林對前東家，0-3 後要找回面子。', reactions: [{ tone: 'positive', text: '「Ramos 先發！」' }, { tone: 'neutral', text: '「熱身而已。」' }, { tone: 'negative', text: '「又要被打？」' }] },
-    { id: 'x2', priority: 2, hashtag: '#ManCity', heat: '🔥 爆熱', topic: '多庫續約 2031！Rulli 官宣加盟', summary: '一留一進，社區盾前好消息。', reactions: [{ tone: 'positive', text: '「Doku 該留！」' }, { tone: 'positive', text: '「門將補上了。」' }, { tone: 'neutral', text: '「Reijnders 呢？」' }] },
-    { id: 'x3', priority: 3, hashtag: '#CommunityShield', heat: '🔥 高熱', topic: '明日卡地夫！不是溫布利：兵工廠 vs 曼城', summary: '千禧球場 15:00 BST。', reactions: [{ tone: 'positive', text: '「哈蘭德出戰？」' }, { tone: 'funny', text: '「威爾斯社區盾。」' }, { tone: 'neutral', text: '「世足主力剛回。」' }] },
-    { id: 'x4', priority: 4, hashtag: '#Reijnders', heat: '🔥 高熱', topic: '5200 萬鎊去沙特？僅踢一季就要走', summary: 'ESPN：與卡迪西亞達協議。', reactions: [{ tone: 'negative', text: '「又賣中場…」' }, { tone: 'neutral', text: '「先等官宣。」' }, { tone: 'funny', text: '「Rodgers 再執教。」' }] },
-    { id: 'x5', priority: 5, hashtag: '#Barca', heat: '⚡ 熱議', topic: '明日巴塞爾 · 週三岡佩爾盃回家', summary: '熱身最後一站瑞士。', reactions: [{ tone: 'positive', text: '「想看 Gordon。」' }, { tone: 'positive', text: '「諾坎普倒數。」' }, { tone: 'neutral', text: '「輪換為主。」' }] },
-    { id: 'x6', priority: 6, hashtag: '#ManCity', heat: '⚡ 熱議', topic: '3-1 馬競後迎社區盾', summary: 'Marmoush 雙響、Semenyo 兩助攻。', reactions: [{ tone: 'positive', text: '「埃及法老！」' }, { tone: 'neutral', text: '「正式賽才算。」' }, { tone: 'positive', text: '「Semenyo 該先發。」' }] },
-    { id: 'x7', priority: 7, hashtag: '#ACMilan', heat: '⚡ 熱議', topic: '雅加達 0-3 陰影還在', summary: 'João Pedro 雙響記憶猶新。', reactions: [{ tone: 'negative', text: '「半場換人太糟。」' }, { tone: 'positive', text: '「給阿莫林時間。」' }, { tone: 'neutral', text: '「熱身而已。」' }] },
-    { id: 'x8', priority: 8, hashtag: '#Gamper', heat: '⚡ 熱議', topic: '8/19 諾坎普重開 vs 阿爾阿赫利', summary: '岡佩爾盃＋隊徽發表。', reactions: [{ tone: 'positive', text: '「回家了！」' }, { tone: 'positive', text: '「Gamper 必看。」' }, { tone: 'funny', text: '「門票呢。」' }] },
+    { id: 'x1', priority: 1, hashtag: '#ManCity', heat: '🔥 爆熱', topic: '社區盾 0-3！24 秒就被打穿', summary: 'Calafiori／Havertz／Ødegaard，馬雷斯卡首冠落空。', reactions: [{ tone: 'negative', text: '「世足還沒醒？」' }, { tone: 'neutral', text: '「熱身盃而已。」' }, { tone: 'negative', text: '「哈蘭德隱形。」' }] },
+    { id: 'x2', priority: 2, hashtag: '#ACMilan', heat: '🔥 爆熱', topic: '4-2 打爆曼聯！阿莫林復仇前東家', summary: 'Ramos 破門、Chukwueze 拆邊。', reactions: [{ tone: 'positive', text: '「總算贏了！」' }, { tone: 'positive', text: '「中鋒有了！」' }, { tone: 'funny', text: '「Carrick 怎麼看。」' }] },
+    { id: 'x3', priority: 3, hashtag: '#Barca', heat: '🔥 高熱', topic: '巴塞爾 5-2！Yamal 回歸、Adeyemi 首球', summary: 'Gordon 首秀，Bisiwu 替補雙響。', reactions: [{ tone: 'positive', text: '「亞馬爾回來了！」' }, { tone: 'positive', text: '「德國火箭！」' }, { tone: 'funny', text: '「邊路要排隊。」' }] },
+    { id: 'x4', priority: 4, hashtag: '#CommunityShield', heat: '🔥 高熱', topic: '兵工廠第 18 座社區盾 · 衛冕宣言', summary: 'Tzolis 兩助攻，Guimarães 中場站穩。', reactions: [{ tone: 'positive', text: '「層級不一樣。」' }, { tone: 'neutral', text: '「開季再看。」' }, { tone: 'funny', text: '「卡地夫也封王。」' }] },
+    { id: 'x5', priority: 5, hashtag: '#Gamper', heat: '⚡ 熱議', topic: '週三諾坎普重開 vs 阿爾阿赫利', summary: '熱身大勝後回家發表。', reactions: [{ tone: 'positive', text: '「回家了！」' }, { tone: 'positive', text: '「Yamal 會先發？」' }, { tone: 'funny', text: '「門票呢。」' }] },
+    { id: 'x6', priority: 6, hashtag: '#ManCity', heat: '⚡ 熱議', topic: '8/23 伯恩茅斯：英超開季能找回場嗎', summary: '社區盾後首場聯賽。', reactions: [{ tone: 'neutral', text: '「給馬雷斯卡時間。」' }, { tone: 'negative', text: '「中場太空。」' }, { tone: 'positive', text: '「Semenyo 該先發。」' }] },
+    { id: 'x7', priority: 7, hashtag: '#Reijnders', heat: '⚡ 熱議', topic: '5200 萬鎊去沙特？社區盾後更吵', summary: 'ESPN 協議說仍未官宣。', reactions: [{ tone: 'negative', text: '「又賣中場…」' }, { tone: 'neutral', text: '「先等官宣。」' }, { tone: 'funny', text: '「Rodgers 再執教。」' }] },
+    { id: 'x8', priority: 8, hashtag: '#GoncaloRamos', heat: '⚡ 熱議', topic: '對曼聯破門：破紀錄中鋒開張', summary: '阿莫林第一槍開始進球。', reactions: [{ tone: 'positive', text: '「值了！」' }, { tone: 'positive', text: '「終於有真中鋒。」' }, { tone: 'neutral', text: '「熱身賽。」' }] },
     { id: 'x9', priority: 9, hashtag: '#RafaLeao', heat: '💬 討論', topic: '萊奧伯斯登場，去留意仍熱', summary: '與 Ramos 聯手試射。', reactions: [{ tone: 'positive', text: '「給他位置。」' }, { tone: 'negative', text: '「該換人了。」' }, { tone: 'neutral', text: '「看報價。」' }] },
     { id: 'x10', priority: 10, hashtag: '#TransferNews', heat: '💬 討論', topic: '三隊夏窗：誰成績單最漂亮？', summary: '米蘭中鋒、巴薩邊路、曼城穩。', reactions: [{ tone: 'positive', text: '「米蘭中鋒值。」' }, { tone: 'positive', text: '「巴薩補速度。」' }, { tone: 'neutral', text: '「曼城偏穩。」' }] },
     { id: 'x11', priority: 11, hashtag: '#Gvardiol', heat: '💬 討論', topic: '2031！瓜爾迪奧長約', summary: '續約圖仍在粉專流傳。', reactions: [{ tone: 'positive', text: '「鎖死！」' }, { tone: 'positive', text: '「防守核心。」' }, { tone: 'funny', text: '「後防定海神針。」' }] },
