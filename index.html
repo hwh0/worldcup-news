@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v14">
-    <title>⚽ 每周足球新聞 · fw-v14 · 曼城 · AC 米蘭 · 巴塞隆納</title>
+    <meta name="app-version" content="fw-v15">
+    <title>⚽ 每周足球新聞 · fw-v15 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -197,8 +197,8 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v14';
-const CACHE_KEY = 'weekly_football_fw_v14';
+const APP_VERSION = 'fw-v15';
+const CACHE_KEY = 'weekly_football_fw_v15';
 const NEWS_WEEK = '2026-W34';
 const NEWS_UPDATED = '2026-08-17';
 const TRENDING_LIMIT = 15;
@@ -214,7 +214,7 @@ const FOCUS_TEAMS = [
         border: 'team-card-city',
         accent: 'text-sky-400',
         badge: 'bg-sky-950 text-sky-400',
-        blurb: '英超豪門 · 馬雷斯卡新帥時代 · 亞洲巡迴香港／首爾',
+        blurb: '英超 · 馬雷斯卡新帥 · 8/23 主場開季對伯恩茅斯',
     },
     {
         id: 'milan',
@@ -226,7 +226,7 @@ const FOCUS_TEAMS = [
         border: 'team-card-milan',
         accent: 'text-rose-400',
         badge: 'bg-rose-950 text-rose-400',
-        blurb: '阿莫林新帥 · 凱爾特人 2-2 · 下一站澳洲對 Internazionale',
+        blurb: '意甲 · 阿莫林新帥 · 8/23 客場都靈開季',
     },
     {
         id: 'barca',
@@ -238,11 +238,11 @@ const FOCUS_TEAMS = [
         border: 'team-card-barca',
         accent: 'text-amber-400',
         badge: 'bg-amber-950 text-amber-400',
-        blurb: '弗里克執教 · 7/31 伯明罕熱身 · 亞馬爾世代',
+        blurb: '西甲 · 弗里克 · 8/19 岡佩爾盃 · 8/23 客場埃爾切開季',
     },
 ];
 
-/** 本週賽程（季前／熱身為主；正式聯賽開打後每週更新） */
+/** 本週賽程（八月熱身＋聯賽開季；七月場次已下架） */
 const WEEK_FIXTURES = [
     {
         id: 'city-hk-inter',
@@ -296,33 +296,6 @@ const WEEK_FIXTURES = [
         status: 'finished',
         score: { home: 3, away: 0 },
         note: 'João Pedro 雙響 · Caicedo 外腳背 · 觀眾 4 萬+ · 印尼超盃',
-    },
-    {
-        id: 'milan-celtic',
-        team: 'milan',
-        competition: '季前熱身',
-        home: '凱爾特人',
-        away: 'AC 米蘭',
-        homeEn: 'Celtic',
-        awayEn: 'AC Milan',
-        dateLabel: '7/25 格拉斯哥',
-        status: 'finished',
-        score: { home: 2, away: 2 },
-        note: '阿莫林首秀 · Camarda 梅開二度逆轉扳平',
-    },
-    {
-        id: 'barca-birmingham',
-        team: 'barca',
-        competition: '季前熱身',
-        home: '伯明罕城',
-        away: '巴塞隆納',
-        homeEn: 'Birmingham City',
-        awayEn: 'Barcelona',
-        dateLabel: '7/31 伯明罕',
-        status: 'finished',
-        score: { home: 2, away: 2 },
-        pens: '3-2',
-        note: '90 分鐘 2-2 · 點球 3-2 負 · Abdelkarim 雙響',
     },
     {
         id: 'milan-inter-perth',
@@ -414,6 +387,45 @@ const WEEK_FIXTURES = [
         status: 'finished',
         score: { home: 2, away: 4 },
         note: '逆轉勝 · Chukwueze／Cissé／Ramos／Loftus-Cheek · 費南德斯點球被撲',
+    },
+    {
+        id: 'city-pl-bournemouth',
+        team: 'city',
+        competition: '英超 · 第 1 輪',
+        home: '曼城',
+        away: '伯恩茅斯',
+        homeEn: 'Manchester City',
+        awayEn: 'Bournemouth',
+        dateLabel: '8/23 伊蒂哈德',
+        status: 'upcoming',
+        score: null,
+        note: '2026/27 英超開季 · 社區盾後首場聯賽',
+    },
+    {
+        id: 'milan-sa-torino',
+        team: 'milan',
+        competition: '意甲 · 第 1 輪',
+        home: '都靈',
+        away: 'AC 米蘭',
+        homeEn: 'Torino',
+        awayEn: 'AC Milan',
+        dateLabel: '8/23 20:45 中歐',
+        status: 'upcoming',
+        score: null,
+        note: '阿莫林意甲首戰 · DAZN／Sky',
+    },
+    {
+        id: 'barca-ll-elche',
+        team: 'barca',
+        competition: '西甲 · 第 1 輪',
+        home: '埃爾切',
+        away: '巴塞隆納',
+        homeEn: 'Elche',
+        awayEn: 'Barcelona',
+        dateLabel: '8/23 客場',
+        status: 'upcoming',
+        score: null,
+        note: '2026/27 西甲開季 · 岡佩爾盃後首場聯賽',
     },
 ];
 
