@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v23">
-    <title>⚽ 每周足球新聞 · fw-v23 · 曼城 · AC 米蘭 · 巴塞隆納</title>
+    <meta name="app-version" content="fw-v24">
+    <title>⚽ 每周足球新聞 · fw-v24 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -119,15 +119,6 @@
                 <p id="no-fixtures" class="hidden text-zinc-500 text-sm mt-3">本週三隊尚無正式聯賽場次（夏窗／季前階段）。</p>
             </section>
 
-            <section class="mb-10">
-                <h2 class="section-title flex items-center gap-3 mb-5">
-                    <i class="fa-solid fa-right-left text-emerald-400"></i>
-                    轉會速報
-                    <span class="text-xs font-normal text-zinc-500">官宣 · 續約 · 動向</span>
-                </h2>
-                <div id="transfer-list" class="space-y-4"></div>
-            </section>
-
             <section>
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-solid fa-fire text-orange-500"></i>
@@ -161,13 +152,14 @@
         <div id="panel-transfer" class="tab-panel">
             <section class="mb-6">
                 <p class="text-sm text-zinc-400 leading-relaxed">
-                    曼城、AC 米蘭、巴塞隆納本週轉會速報：官宣、續約與市場動向（以官方為準）。
+                    夏窗已關，本週無新官宣。以下是今夏引援／離隊的上場現況，不是截止日重播。
                 </p>
             </section>
             <section>
                 <h2 class="section-title flex items-center gap-3 mb-5">
                     <i class="fa-solid fa-right-left text-emerald-400"></i>
-                    三隊轉會一覽
+                    夏窗現況
+                    <span class="text-xs font-normal text-zinc-500">已上場 · 已開張 · 輪換</span>
                 </h2>
                 <div id="transfer-list-tab" class="space-y-4"></div>
             </section>
@@ -197,8 +189,8 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v23';
-const CACHE_KEY = 'weekly_football_fw_v23';
+const APP_VERSION = 'fw-v24';
+const CACHE_KEY = 'weekly_football_fw_v24';
 const NEWS_WEEK = '2026-W39';
 const NEWS_UPDATED = '2026-09-24';
 const TRENDING_LIMIT = 15;
@@ -362,40 +354,39 @@ const WEEK_FIXTURES = [
         note: '馬佩伊球場 · 10/15 再客場薩爾茨堡歐聯',
     },
 ];
-/** 轉會速報（截止日後最新官宣） */
+/** 夏窗現況（窗已關：寫上場進度，不重播官宣） */
 const TRANSFER_NEWS = [
     {
         id: 'tr-enzo',
         priority: 1,
         team: 'city',
-        status: '官宣',
+        status: '已開張',
         statusCls: 'bg-emerald-950 text-emerald-400',
-        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '官宣', cls: 'text-emerald-400 bg-emerald-950' }],
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '已開張', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-emerald-500/50',
-        meta: '轉入 · 切爾西 → 曼城 · 1.25 億鎊',
-        title: '官宣：Enzo Fernández 加盟，追平英倫轉會費紀錄',
-        summary: '阿根廷中場五年約至 2031。與 Isak 並列英國史上最貴。馬雷斯卡切爾西舊將重聚。Guardian：中場今夏已砸約 3.27 億鎊（Anderson、Bouaddi、Enzo）。',
+        meta: '切爾西 → 曼城 · 1.25 億鎊 · 至 2031',
+        title: 'Enzo 已是主力：考文垂首秀到桑德蘭處子球',
+        summary: 'O\'Reilly 熱身受傷後直接首發，之後波爾圖、德比、桑德蘭都踢。9/20 近角抽射打進加盟首球，與 Anderson 組成新雙中場。不是新聞，是現況。',
         points: [
-            '切爾西官網短訊宣布離隊。',
-            '本人：「這家球會為成功而生。」',
-            '維亞納：完整中場，能控球也能反擊。',
+            '馬雷斯卡舊部，進球後仍嫌當天丟三球。',
+            '國家隊週後下一場：安菲爾德。',
         ],
-        source: 'Man City Official · The Guardian',
+        source: 'Man City Official',
     },
     {
         id: 'tr-ndiaye',
         priority: 2,
         team: 'city',
-        status: '官宣',
-        statusCls: 'bg-emerald-950 text-emerald-400',
-        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '官宣', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-emerald-500/40',
-        meta: '轉入 · 愛華頓 → 曼城 · 上看 6500 萬鎊',
-        title: '官宣：Ndiaye 加盟，截止日第二筆',
-        summary: '塞內加爾邊鋒 Iliman Ndiaye 完成轉會。本人：「心裡一直是曼城。」同日還有 Enzo。Grealish 再租愛華頓。',
+        status: '已首發',
+        statusCls: 'bg-sky-950 text-sky-400',
+        tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '已首發', cls: 'text-sky-400 bg-sky-950' }],
+        border: 'border-sky-500/40',
+        meta: '愛華頓 → 曼城 · 上看 6500 萬鎊',
+        title: 'Ndiaye 已進輪換：考文垂、桑德蘭都首發',
+        summary: '截止日進來後沒有坐板凳。左路壓制、逼搶，桑德蘭之夜參與進攻轉換。Grealish 反向租回愛華頓已成定局。',
         points: [
-            '官方已發歡迎稿。',
-            '補強進攻寬度。',
+            '與 Semenyo、Cherki 搶邊路分鐘。',
+            '聯賽盃輪換夜未先發。',
         ],
         source: 'Man City Official',
     },
@@ -403,70 +394,52 @@ const TRANSFER_NEWS = [
         id: 'tr-jesus',
         priority: 3,
         team: 'barca',
-        status: '官宣',
+        status: '已進球',
         statusCls: 'bg-emerald-950 text-emerald-400',
-        tags: [{ text: '巴薩', cls: 'text-amber-400 bg-amber-950' }, { text: '官宣', cls: 'text-emerald-400 bg-emerald-950' }],
-        border: 'border-emerald-500/50',
-        meta: '轉入 · 兵工廠 → 巴薩 · 至 2029',
-        title: '官宣：Gabriel Jesus 加盟，合約至 2029',
-        summary: '巴薩與兵工廠達成協議，西媒報約 1000 萬歐。9/1 諾坎普亮相。Alvarez 未成，他說「不當備案冒犯」。Flick：風格契合，謝謝 Deco。',
+        tags: [{ text: '巴薩', cls: 'text-amber-400 bg-amber-950' }, { text: '已進球', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-amber-500/50',
+        meta: '兵工廠 → 巴薩 · 至 2029',
+        title: 'Jesus 已進球：瓦倫西亞處子秀，歐冠與聯賽都開張',
+        summary: '9/6 梅斯塔利亞替補首秀，9/9 費耶諾德打進加盟首球，9/16 7-2 桑坦德再進。輪換 9 號，不是剛亮相。Raphinha 仍是進球機器。',
         points: [
-            '補 Lewandowski、Ferran 走後的中鋒位。',
-            '膝傷已恢復：「身體沒問題。」',
-            '夏窗第 7 筆：Gordon、Adeyemi、Bisiwu、Cancelo、Rodri、Livakovic、Jesus。',
+            'Alvarez 沒來已是舊聞。',
+            'Livaković 也完成處子秀（塞維利亞）。',
         ],
-        source: 'FC Barcelona · Arsenal Official · AFP',
-    },
-    {
-        id: 'tr-leao',
-        priority: 4,
-        team: 'milan',
-        status: '轉出',
-        statusCls: 'bg-rose-950 text-rose-400',
-        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '轉出', cls: 'text-rose-400 bg-rose-950' }],
-        border: 'border-rose-500/40',
-        meta: '轉出 · 米蘭 → 加拉塔薩雷 · 3800 萬歐',
-        title: '官宣：萊奧七年後離隊，赴土耳其',
-        summary: '固定 3800 萬歐＋米蘭保留 20% 轉售。年薪淨 1000 萬歐。291 場紅黑、2022 金靴級 MVP、意甲冠軍。阿斯頓維拉談不攏。',
-        points: [
-            '穿 27 號，搭 Osimhen。',
-            '合約本至 2028。',
-        ],
-        source: 'AC Milan Official · Football Italia',
+        source: 'FC Barcelona · Wikipedia',
     },
     {
         id: 'tr-hutchinson',
-        priority: 5,
+        priority: 4,
         team: 'milan',
-        status: '官宣',
-        statusCls: 'bg-emerald-950 text-emerald-400',
-        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '租借', cls: 'text-sky-400 bg-sky-950' }],
+        status: '輪換中',
+        statusCls: 'bg-sky-950 text-sky-400',
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '替補', cls: 'text-sky-400 bg-sky-950' }],
         border: 'border-sky-500/40',
-        meta: '租借 · 諾丁漢森林 → 米蘭',
-        title: '官宣：Hutchinson 租借加盟，可買斷 4000 萬歐',
-        summary: 'Omari Hutchinson 租至 2027 年 6 月，租借費 400 萬歐，買斷約 4000 萬歐後可簽至 2030。穿 20 號。切爾西青訓出身。',
+        meta: '森林租借 · 可買斷 4000 萬歐 · 20 號',
+        title: 'Hutchinson：來了，但還不是萊奧替代品',
+        summary: '尤文未上場。聯賽有替補分鐘，歐聯本菲卡沒踢。邊路眼下是 Moreira 在進球（拉齊奧雙響、萊切再下一城）。',
         points: [
-            '補萊奧走後的邊路。',
-            '上季效力森林。',
+            '租至 2027 年 6 月。',
+            '阿莫林還沒把他放進先發骨架。',
         ],
-        source: 'AC Milan Official · Goal',
+        source: 'AC Milan · Wikipedia',
     },
     {
-        id: 'tr-alvarez',
-        priority: 6,
-        team: 'barca',
-        status: '未成',
+        id: 'tr-leao',
+        priority: 5,
+        team: 'milan',
+        status: '已離隊',
         statusCls: 'bg-zinc-800 text-zinc-300',
-        tags: [{ text: 'Alvarez', cls: 'text-amber-400 bg-amber-950' }, { text: '未成', cls: 'text-zinc-400 bg-zinc-800' }],
+        tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '已離隊', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-zinc-600/40',
-        meta: '夏窗關閉 · 留在馬競技',
-        title: 'Alvarez 未加盟：馬競技拒談，巴薩改簽 Jesus',
-        summary: '窗關。董事會曾聲明零談判。阿根廷前鋒留西甲衛冕對手。',
+        meta: '米蘭 → 加拉塔薩雷 · 3800 萬歐＋20% 轉售',
+        title: '萊奧已在伊斯坦堡：紅黑邊路換人踢',
+        summary: '七年紅黑結束。巴薩 10/13 歐冠客場加拉塔薩雷可能碰上。米蘭這邊 Moreira 暫扛產出。',
         points: [
-            '巴薩最終選擇低價輪換中鋒。',
-            'Raphinha 西甲七輪已 12 球。',
+            '291 場、2022 金靴級 MVP。',
+            '不是本週新聞。',
         ],
-        source: 'AFP · 馬競技聲明',
+        source: 'AC Milan Official',
     },
 ];
 
@@ -766,9 +739,7 @@ function renderTransferCard(n, i) {
 function renderTransfers() {
     const items = generateTransfers();
     const htmlCards = items.map((n, i) => renderTransferCard(n, i)).join('');
-    const el = $('transfer-list');
     const el2 = $('transfer-list-tab');
-    if (el) el.innerHTML = htmlCards;
     if (el2) el2.innerHTML = htmlCards;
 }
 
