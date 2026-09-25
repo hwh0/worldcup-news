@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v24">
-    <title>⚽ 每周足球新聞 · fw-v24 · 曼城 · AC 米蘭 · 巴塞隆納</title>
+    <meta name="app-version" content="fw-v25">
+    <title>⚽ 每周足球新聞 · fw-v25 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -79,7 +79,7 @@
                 專注三支豪門：<span class="text-sky-400 font-semibold">曼城</span>（英超）·
                 <span class="text-rose-400 font-semibold">AC 米蘭</span>（意甲）·
                 <span class="text-amber-400 font-semibold">巴塞隆納</span>（西甲）。
-                每週更新戰報、轉會、備戰與社群熱議。
+                每週更新戰報、轉會、備戰與社群熱議。國家隊週加進歐國聯。
             </p>
             <div id="focus-teams" class="flex flex-wrap gap-2 mt-4"></div>
         </section>
@@ -189,10 +189,10 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v24';
-const CACHE_KEY = 'weekly_football_fw_v24';
+const APP_VERSION = 'fw-v25';
+const CACHE_KEY = 'weekly_football_fw_v25';
 const NEWS_WEEK = '2026-W39';
-const NEWS_UPDATED = '2026-09-24';
+const NEWS_UPDATED = '2026-09-25';
 const TRENDING_LIMIT = 15;
 
 const FOCUS_TEAMS = [
@@ -206,7 +206,7 @@ const FOCUS_TEAMS = [
         border: 'team-card-city',
         accent: 'text-sky-400',
         badge: 'bg-sky-950 text-sky-400',
-        blurb: '英超 5/5 · 15 分獨走 · 國家隊週後客場安菲爾德',
+        blurb: '歐國聯 · Haaland 雙響 3-2 丹麥 · 週日再戰葡萄牙',
     },
     {
         id: 'milan',
@@ -218,7 +218,7 @@ const FOCUS_TEAMS = [
         border: 'team-card-milan',
         accent: 'text-rose-400',
         badge: 'bg-rose-950 text-rose-400',
-        blurb: '意甲 · 主場 3-0 萊切 · 歐聯 0-2 本菲卡',
+        blurb: '歐國聯 · 今晚法國 · 週六克羅埃西亞有 Modrić',
     },
     {
         id: 'barca',
@@ -230,12 +230,116 @@ const FOCUS_TEAMS = [
         border: 'team-card-barca',
         accent: 'text-amber-400',
         badge: 'bg-amber-950 text-amber-400',
-        blurb: '西甲 7/7 · Raphinha 一周兩帽 · 10/10 主場赫塔費',
+        blurb: '歐國聯 · 週六英格蘭對西班牙 · Yamal、Pedri、Rodri',
     },
 ];
 
-/** 本週賽程（只留最近一週） */
+/** 本週賽程：歐國聯優先，俱樂部只留最近一週 */
 const WEEK_FIXTURES = [
+    {
+        id: 'nl-nor-den',
+        team: 'nl',
+        competition: '歐國聯 A4 · 第 1 輪',
+        home: '挪威',
+        away: '丹麥',
+        homeEn: 'Norway',
+        awayEn: 'Denmark',
+        dateLabel: '9/24 奧斯陸',
+        status: 'finished',
+        score: { home: 3, away: 2 },
+        note: 'Haaland 雙響（18\'、74\'）· Bobb 先開 · Højlund 扳平 · 補時 Wolfe 兩黃',
+    },
+    {
+        id: 'nl-por-wal',
+        team: 'nl',
+        competition: '歐國聯 A4 · 第 1 輪',
+        home: '葡萄牙',
+        away: '威爾斯',
+        homeEn: 'Portugal',
+        awayEn: 'Wales',
+        dateLabel: '9/24 里斯本',
+        status: 'finished',
+        score: { home: 1, away: 0 },
+        note: 'Felix 22\' 折射 · C 羅進球被 VAR 吹掉，67\' 換下 · 週日對挪威',
+    },
+    {
+        id: 'nl-ned-ger',
+        team: 'nl',
+        competition: '歐國聯 A2 · 第 1 輪',
+        home: '荷蘭',
+        away: '德國',
+        homeEn: 'Netherlands',
+        awayEn: 'Germany',
+        dateLabel: '9/24 阿姆斯特丹',
+        status: 'finished',
+        score: { home: 1, away: 1 },
+        note: 'Nmecha 先開 · Gakpo 補時抽射絕平 · 克洛普德國首秀未勝',
+    },
+    {
+        id: 'nl-ita-bel',
+        team: 'nl',
+        competition: '歐國聯 A1 · 第 1 輪',
+        home: '義大利',
+        away: '比利時',
+        homeEn: 'Italy',
+        awayEn: 'Belgium',
+        dateLabel: '9/25 20:45 中歐',
+        status: 'upcoming',
+        score: null,
+        note: 'Donnarumma 對 Doku · 曼城國腳對決',
+    },
+    {
+        id: 'nl-tur-fra',
+        team: 'nl',
+        competition: '歐國聯 A1 · 第 1 輪',
+        home: '土耳其',
+        away: '法國',
+        homeEn: 'Türkiye',
+        awayEn: 'France',
+        dateLabel: '9/25 20:45 中歐',
+        status: 'upcoming',
+        score: null,
+        note: 'Cherki、Maignan、Rabiot 隨法國',
+    },
+    {
+        id: 'nl-eng-esp',
+        team: 'nl',
+        competition: '歐國聯 A3 · 第 1 輪',
+        home: '英格蘭',
+        away: '西班牙',
+        homeEn: 'England',
+        awayEn: 'Spain',
+        dateLabel: '9/26 20:45 中歐',
+        status: 'upcoming',
+        score: null,
+        note: 'Yamal、Pedri、Rodri、Gordon 對 Foden、Anderson',
+    },
+    {
+        id: 'nl-cze-cro',
+        team: 'nl',
+        competition: '歐國聯 A3 · 第 1 輪',
+        home: '捷克',
+        away: '克羅埃西亞',
+        homeEn: 'Czechia',
+        awayEn: 'Croatia',
+        dateLabel: '9/26 20:45 中歐',
+        status: 'upcoming',
+        score: null,
+        note: 'Modrić、Livaković、Gvardiol',
+    },
+    {
+        id: 'nl-nor-por',
+        team: 'nl',
+        competition: '歐國聯 A4 · 第 2 輪',
+        home: '挪威',
+        away: '葡萄牙',
+        homeEn: 'Norway',
+        awayEn: 'Portugal',
+        dateLabel: '9/27 20:45 中歐',
+        status: 'upcoming',
+        score: null,
+        note: 'Haaland 對 C 羅 · 小組直接對話',
+    },
     {
         id: 'city-pl-sunderland',
         team: 'city',
@@ -445,8 +549,38 @@ const TRANSFER_NEWS = [
 
 const WEEKLY_TOP_NEWS = [
     {
-        id: 'city-sunderland',
+        id: 'nl-haaland',
         priority: 1,
+        team: 'city',
+        tags: [{ text: '歐國聯', cls: 'text-indigo-300 bg-indigo-950' }, { text: '雙響', cls: 'text-emerald-400 bg-emerald-950' }],
+        border: 'border-indigo-400/50',
+        meta: '9/24 · 挪威 3-2 丹麥 · 奧斯陸',
+        title: 'Haaland 歐國聯雙響：挪威 3-2 掀翻丹麥',
+        summary: 'Bobb 先開，Haaland 18\' 擴大，Damsgaard、Højlund 追平，74\' 短角球第一時間再進鎖定。挪威補時少打一人。週日主場再戰葡萄牙。',
+        points: [
+            '曼城前鋒國家隊直接續火。',
+            '葡萄牙前一晚 1-0 威爾斯，C 羅進球被吹。',
+        ],
+        source: 'RTE · UEFA',
+    },
+    {
+        id: 'nl-eng-esp',
+        priority: 2,
+        team: 'barca',
+        tags: [{ text: '歐國聯', cls: 'text-indigo-300 bg-indigo-950' }, { text: '英西', cls: 'text-amber-400 bg-amber-950' }],
+        border: 'border-amber-500/40',
+        meta: '9/26 · 20:45 中歐',
+        title: '英格蘭對西班牙：Yamal、Pedri、Rodri 對上曼城國腳',
+        summary: 'A 組揭幕戰。巴薩中前場對 Foden、Anderson，Gordon 則穿英格蘭。同晚捷克對克羅埃西亞，Modrić、Livaković、Gvardiol。',
+        points: [
+            '今晚先踢：義大利對比利時（Donnarumma、Doku）、土耳其對法國（Cherki、Maignan、Rabiot）。',
+            '9/27 挪威對葡萄牙，Haaland 對 C 羅。',
+        ],
+        source: 'UEFA',
+    },
+    {
+        id: 'city-sunderland',
+        priority: 3,
         team: 'city',
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '5-3', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/50',
@@ -462,7 +596,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'barca-sevilla',
-        priority: 2,
+        priority: 4,
         team: 'barca',
         tags: [{ text: '巴薩', cls: 'text-amber-400 bg-amber-950' }, { text: '3-1', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-amber-500/50',
@@ -477,7 +611,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'milan-lecce',
-        priority: 3,
+        priority: 5,
         team: 'milan',
         tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '3-0', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-rose-500/50',
@@ -492,7 +626,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'barca-racing',
-        priority: 4,
+        priority: 6,
         team: 'barca',
         tags: [{ text: '巴薩', cls: 'text-amber-400 bg-amber-950' }, { text: '7-2', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-amber-500/40',
@@ -507,7 +641,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'city-norwich',
-        priority: 5,
+        priority: 7,
         team: 'city',
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '5-0', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/30',
@@ -522,7 +656,7 @@ const WEEKLY_TOP_NEWS = [
     },
     {
         id: 'milan-benfica',
-        priority: 6,
+        priority: 8,
         team: 'milan',
         tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '0-2', cls: 'text-zinc-400 bg-zinc-800' }],
         border: 'border-rose-500/30',
@@ -589,11 +723,11 @@ const TEAM_NEWS = [
 ];
 
 const X_TRENDING = [
-    { id: 'x1', priority: 1, hashtag: '#Raphinha', heat: '🔥 爆熱', topic: '四天兩帽：7-2 再完美帽子戲法', summary: '左腳右腳頭槌，西甲七輪 12 球。', reactions: [{ tone: 'positive', text: '「金球級。」' }, { tone: 'neutral', text: '「Yamal 都讓路。」' }, { tone: 'funny', text: '「9 號是他。」' }] },
-    { id: 'x2', priority: 2, hashtag: '#EnzoFernandez', heat: '🔥 爆熱', topic: '處子球開張：近角抽射 1-0', summary: '1.25 億鎊終於進帳，接著變成 5-3。', reactions: [{ tone: 'positive', text: '「中場發動機。」' }, { tone: 'neutral', text: '「防線呢。」' }, { tone: 'funny', text: '「切爾西還在看。」' }] },
+    { id: 'x1', priority: 1, hashtag: '#Haaland', heat: '🔥 爆熱', topic: '歐國聯雙響：挪威 3-2 丹麥', summary: '18 分鐘先下一城，74 分鐘短角再進。週日對葡萄牙。', reactions: [{ tone: 'positive', text: '「國家隊也是機器。」' }, { tone: 'neutral', text: '「丹麥追平過。」' }, { tone: 'funny', text: '「C 羅週日見。」' }] },
+    { id: 'x2', priority: 2, hashtag: '#NationsLeague', heat: '🔥 爆熱', topic: '週六英西：Yamal 對英格蘭', summary: 'Pedri、Rodri、Gordon 同場。今晚還有法國、義大利。', reactions: [{ tone: 'positive', text: '「這才是國家隊週。」' }, { tone: 'neutral', text: '「俱樂部先放假。」' }, { tone: 'funny', text: '「克洛普首秀被 Gakpo 絕平。」' }] },
     { id: 'x3', priority: 3, hashtag: '#ManCity', heat: '🔥 高熱', topic: '5-3 桑德蘭：五輪全勝 15 分獨走', summary: '馬雷斯卡寧願 1-0。下一站安菲爾德。', reactions: [{ tone: 'positive', text: '「5/5。」' }, { tone: 'negative', text: '「丟三球瘋了。」' }, { tone: 'funny', text: '「Brobbey 才是 MVP。」' }] },
     { id: 'x4', priority: 4, hashtag: '#Barca', heat: '🔥 高熱', topic: '七輪 21 分 31 球：開季全勝放假', summary: 'Flick 寫紀錄。10/10 赫塔費回歸。', reactions: [{ tone: 'positive', text: '「西甲結束了。」' }, { tone: 'neutral', text: '「國家隊週歇口氣。」' }, { tone: 'funny', text: '「對手都是陪練。」' }] },
-    { id: 'x5', priority: 5, hashtag: '#Haaland', heat: '⚡ 熱議', topic: '81 分鐘 VAR 改判：25 支英超全進過', summary: '本季 7 場 7 球，桑德蘭終於破處。', reactions: [{ tone: 'positive', text: '「機器人。」' }, { tone: 'neutral', text: '「越位旗舉太快。」' }, { tone: 'funny', text: '「他永遠在線內。」' }] },
+    { id: 'x5', priority: 5, hashtag: '#Ronaldo', heat: '⚡ 熱議', topic: '葡萄牙 1-0：C 羅進球被吹，Felix 救場', summary: '234 場、67 分鐘被換下。週日對上 Haaland。', reactions: [{ tone: 'negative', text: '「七腳沒進。」' }, { tone: 'neutral', text: '「VAR 沒錯。」' }, { tone: 'funny', text: '「41 歲還在 A 組。」' }] },
     { id: 'x6', priority: 6, hashtag: '#ACMilan', heat: '⚡ 熱議', topic: '歐聯 0-2 後 3-0 萊切止血', summary: 'Pulisic 開張，Moreira 再進。五輪不敗。', reactions: [{ tone: 'positive', text: '「聯賽還行。」' }, { tone: 'negative', text: '「歐聯嚇到。」' }, { tone: 'neutral', text: '「薩索洛再看。」' }] },
     { id: 'x7', priority: 7, hashtag: '#Brobbey', heat: '⚡ 熱議', topic: '帽子戲法差點砸掉伊蒂哈德', summary: '三次追平，仍帶不走一分。', reactions: [{ tone: 'positive', text: '「桑德蘭能踢。」' }, { tone: 'funny', text: '「城隊門將放假。」' }, { tone: 'neutral', text: '「馬雷斯卡說對了難踢。」' }] },
     { id: 'x8', priority: 8, hashtag: '#Anfield', heat: '💬 討論', topic: '10/11 利物浦：全勝對上紅軍', summary: '國家隊週後英超大考。', reactions: [{ tone: 'positive', text: '「就等這場。」' }, { tone: 'neutral', text: '「行程殘忍。」' }, { tone: 'funny', text: '「5-3 那套帶去？」' }] },
@@ -616,6 +750,14 @@ function getTaipeiToday() {
 }
 
 function teamById(id) {
+    if (id === 'nl') {
+        return {
+            border: 'border-indigo-400/45',
+            accent: 'text-indigo-300',
+            nameZh: '歐國聯',
+            league: '國家隊',
+        };
+    }
     return FOCUS_TEAMS.find(t => t.id === id);
 }
 
