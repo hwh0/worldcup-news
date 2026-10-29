@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v33">
-    <title>⚽ 每周足球新聞 · fw-v33 · 曼城 · AC 米蘭 · 巴塞隆納</title>
+    <meta name="app-version" content="fw-v34">
+    <title>⚽ 每周足球新聞 · fw-v34 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -79,7 +79,7 @@
                 專注三支豪門：<span class="text-sky-400 font-semibold">曼城</span>（英超）·
                 <span class="text-rose-400 font-semibold">AC 米蘭</span>（意甲）·
                 <span class="text-amber-400 font-semibold">巴塞隆納</span>（西甲）。
-                每週更新戰報、轉會、備戰與社群熱議。近 48 小時先寫聯賽：維拉公園 2-1 曼城首敗，諾坎普 1-2 馬德里，烏迪內斯 0-2 米蘭。
+                每週更新戰報、轉會、備戰與社群熱議。近 48 小時：米蘭主場 2-4 波隆那，聯賽首敗；曼城聯賽盃主場 2-2 布萊頓，點球 4-3 過關。巴薩上一場是諾坎普 1-2 皇家馬德里。
             </p>
             <div id="focus-teams" class="flex flex-wrap gap-2 mt-4"></div>
         </section>
@@ -189,8 +189,8 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v33';
-const CACHE_KEY = 'weekly_football_fw_v33';
+const APP_VERSION = 'fw-v34';
+const CACHE_KEY = 'weekly_football_fw_v34';
 const NEWS_WEEK = '2026-W44';
 const NEWS_UPDATED = '2026-10-29';
 const TRENDING_LIMIT = 15;
@@ -230,7 +230,7 @@ const FOCUS_TEAMS = [
         border: 'team-card-barca',
         accent: 'text-amber-400',
         badge: 'bg-amber-950 text-amber-400',
-        blurb: '西甲這週沒有新比賽。諾坎普 1-2 之後仍是 10 戰 27 分、榜首。週六 21:00 主場阿拉維斯。',
+        blurb: '上一場諾坎普 1-2 皇家馬德里。西甲這週沒有新比賽，10 戰 27 分仍是榜首。週六 21:00 主場阿拉維斯。',
     },
 ];
 
@@ -366,7 +366,7 @@ const TRANSFER_NEWS = [
         border: 'border-rose-500/50',
         meta: '10/28 · 先發 · 58\' 換下',
         title: 'Hutchinson 先發，27\' 單刀被擋，自己沒進',
-        summary: '聖西羅 2-4。27\' 他帶球被擋下，Tomori 把鬆開的球橫過去，Cissè 近距離凌空。14\' 的追平，戰報寫的是 Theate 出球滾到 Cissè 面前。58\' 換下。不是新官宣。',
+        summary: '聖西羅對波隆那 2-4。27\' 他帶球被擋下，Tomori 把鬆開的球橫過去，Cissè 近距離凌空。14\' 的追平，戰報寫的是 Theate 出球滾到 Cissè 面前。58\' 換下。不是新官宣。',
         points: [
             '週日烏迪內斯那球仍是他的米蘭第一球。這場進球的是 Cissè。',
             'Pulisic 後段上場，魚躍頭槌被 Skorupski 托出。',
@@ -383,7 +383,7 @@ const TRANSFER_NEWS = [
         border: 'border-sky-500/50',
         meta: '10/28 · 先發 · 隊長',
         title: 'Guéhi 戴隊長袖標，週末之後留下的兩人之一',
-        summary: '伊蒂哈德 2-2。他和 Cherki 是維拉公園之後僅有的兩名留在先發的人。這場沒有進球，也沒有被換下。點球 4-3 過關。不是新官宣。',
+        summary: '伊蒂哈德對布萊頓 2-2。他和 Cherki 是維拉公園對阿斯頓維拉之後僅有的兩名留在先發的人。這場沒有進球，也沒有被換下。點球 4-3 過關。不是新官宣。',
         points: [
             'Reis 碰進 Cherki 的任意球，那是城隊第一球。',
             '週六 15:00 英國，聯賽再對布萊頓。',
@@ -400,7 +400,7 @@ const TRANSFER_NEWS = [
         border: 'border-emerald-500/40',
         meta: '10/28 · 87\' 上場',
         title: 'Enzo 87\' 才上，點球第二顆罰進',
-        summary: '先發沒有他。87\' 換下 O\'Reilly。點球前三顆是 Foden、他、Doku，三顆都進。九十分鐘沒有進球。不是新官宣。',
+        summary: '對布萊頓，先發沒有他。87\' 換下 O\'Reilly。點球前三顆是 Foden、他、Doku，三顆都進。九十分鐘沒有進球。不是新官宣。',
         points: [
             'Rulli 說賽前跟他講過，如果踢點球會撲兩球。',
             '週六聯賽再對布萊頓，先發還沒有。',
@@ -416,8 +416,8 @@ const TRANSFER_NEWS = [
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '替補席', cls: 'text-zinc-300 bg-zinc-800' }],
         border: 'border-sky-500/40',
         meta: '10/28 · 未上場',
-        title: 'Ndiaye 聯賽盃在替補席，沒有上場',
-        summary: '未上場的是 Bettinelli、他、Braithwaite、Oliver。維拉公園 52\' 那記助攻還是上一場聯賽。不是新官宣。',
+        title: 'Ndiaye 對布萊頓的聯賽盃在替補席，沒有上場',
+        summary: '未上場的是 Bettinelli、他、Braithwaite、Oliver。維拉公園對阿斯頓維拉，52\' 那記助攻還是上一場聯賽。不是新官宣。',
         points: [
             'Haaland 不在這份名單。',
             '週六 15:00 聯賽再對布萊頓。',
@@ -434,7 +434,7 @@ const TRANSFER_NEWS = [
         border: 'border-rose-500/40',
         meta: '10/28 · 先發 · 87\' 換下',
         title: 'Ramos 先發踢到 87\'，進球名單沒有他',
-        summary: '聖西羅 2-4。進球的是 Cissè 兩球，還有 Bartesaghi 的烏龍和 Mbangula 的帽子戲法。87\' 被 Comotto 換下。不是新官宣。',
+        summary: '聖西羅對波隆那 2-4。進球的是 Cissè 兩球，還有 Bartesaghi 的烏龍和 Mbangula 的帽子戲法。87\' 被 Comotto 換下。不是新官宣。',
         points: [
             'Vitík 斷下他的球，Cambiaghi 那腳打偏。',
             '週六 20:45 主場國米。',
@@ -450,8 +450,8 @@ const TRANSFER_NEWS = [
         tags: [{ text: '巴薩', cls: 'text-amber-400 bg-amber-950' }, { text: '德比', cls: 'text-amber-400 bg-amber-950' }],
         border: 'border-amber-500/50',
         meta: '10/25 · 84\' 黃牌',
-        title: 'Gordon 德比踢了，84\' 一張黃牌',
-        summary: '諾坎普 1-2。進球的是 Raphinha 61\'，還有 Mbappé 兩球。他 84\' 被記名。這週西甲沒有新比賽。不是新官宣。',
+        title: 'Gordon 對皇家馬德里踢了，84\' 一張黃牌',
+        summary: '諾坎普對皇家馬德里 1-2。進球的是 Raphinha 61\'，還有 Mbappé 兩球。他 84\' 被記名。這週西甲沒有新比賽。不是新官宣。',
         points: [
             '歐冠那球仍是 10/13 的 53\'。',
             '週六 21:00 主場阿拉維斯。',
@@ -468,7 +468,7 @@ const TRANSFER_NEWS = [
         border: 'border-amber-500/30',
         meta: '10/20 · 10/25',
         title: 'Jesus 這週的進球名單換人',
-        summary: '王子公園進球的是 Espart 55\' 和 Yamal 79\'。德比進球的是 Raphinha 61\'。兩份戰報的進球欄沒有 Jesus。這週沒有新比賽。不是新官宣。',
+        summary: '王子公園對巴黎，進球的是 Espart 55\' 和 Yamal 79\'。對皇家馬德里，進球的是 Raphinha 61\'。兩份戰報的進球欄沒有 Jesus。這週沒有新比賽。不是新官宣。',
         points: [
             'Olmo 在王子公園上半場中段受傷，換下時是第 100 場。',
             '週六主場阿拉維斯。',
@@ -484,8 +484,8 @@ const TRANSFER_NEWS = [
         tags: [{ text: '加拉塔薩雷', cls: 'text-rose-400 bg-rose-950' }, { text: '2-4', cls: 'text-red-400 bg-red-950' }],
         border: 'border-zinc-600/40',
         meta: '10/28 · 名單沒有他',
-        title: '萊奧不在聖西羅這份名單，球是 Cissè 的',
-        summary: '先發與替補都沒有他。2-4 的進球是 Cissè 兩球、Bartesaghi 烏龍、Mbangula 三球。人還在加拉塔薩雷。不是回購。',
+        title: '萊奧不在對波隆那的名單，球是 Cissè 的',
+        summary: '對波隆那的先發與替補都沒有他。2-4 的進球是 Cissè 兩球、Bartesaghi 烏龍、Mbangula 三球。人還在加拉塔薩雷。不是回購。',
         points: [
             '不是本週官宣。',
             '週六聖西羅對國米。',
@@ -500,8 +500,8 @@ const TRANSFER_NEWS = [
         tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '2-4', cls: 'text-red-400 bg-red-950' }],
         border: 'border-rose-500/50',
         meta: '10/28 · AC 米蘭 2-4 波隆那 · 聖西羅',
-        title: '主場 2-4：聯賽首敗，18 分掉到第五',
-        summary: 'Mbangula 8\' 接 Zortea 回傳，約九碼掃進。Cissè 14\' 追平，Theate 後場出球滾到他面前。27\' Hutchinson 單刀被擋，Tomori 橫傳，Cissè 近距離凌空，半場 2-1。60\' Bartesaghi 把 Miranda 的任意球碰進自己球門。62\' Miranda 再傳，Mbangula 轉過兩人。86\' Odgaard 右路橫傳，帽子戲法。',
+        title: '主場 2-4 波隆那：聯賽首敗，18 分掉到第五',
+        summary: '對波隆那。Mbangula 8\' 接 Zortea 回傳，約九碼掃進。Cissè 14\' 追平，Theate 後場出球滾到他面前。27\' Hutchinson 單刀被擋，Tomori 橫傳，Cissè 近距離凌空，半場 2-1。60\' Bartesaghi 把 Miranda 的任意球碰進自己球門。62\' Miranda 再傳，Mbangula 轉過兩人。86\' Odgaard 右路橫傳，帽子戲法。',
         points: [
             'ESPN 這頁的榜：九戰五勝三和一負、進 18 失 11、18 分、第五。國米與拉齊奧都是 25 分、淨勝球 +15，國米進 25 球排第一。羅馬 21、科莫 20。',
             'ESPN 寫，這是波隆那十多年來第一次在聖西羅的聯賽勝利。Pulisic 後段頭槌被 Skorupski 托出。Tomori 半場前受傷，中場換上 Modrić，戰報沒有寫傷名。',
@@ -516,8 +516,8 @@ const TRANSFER_NEWS = [
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '4-3', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/50',
         meta: '10/28 · 曼城 2-2 布萊頓 · 點球 4-3 · 55,345 人',
-        title: '主場 2-2，點球 4-3：聯賽盃過關',
-        summary: 'Yalcouyé 上半場約半小時先開，Rutter 傳中，人在 Bouaddi 身側。約十分鐘後 Kovačić 二十二碼擦柱追平，Samba 做球，Foden 回敲。半場剛過，Rutter 接 Hadjam 低傳再領先。終場前約二十分鐘，Reis 碰進 Cherki 的低平任意球，城隊第一球。九十分鐘 2-2，兩度追平。',
+        title: '主場 2-2 布萊頓，點球 4-3：聯賽盃過關',
+        summary: '對布萊頓。Yalcouyé 上半場約半小時先開，Rutter 傳中，人在 Bouaddi 身側。約十分鐘後 Kovačić 二十二碼擦柱追平，Samba 做球，Foden 回敲。半場剛過，Rutter 接 Hadjam 低傳再領先。終場前約二十分鐘，Reis 碰進 Cherki 的低平任意球，城隊第一球。九十分鐘 2-2，兩度追平。',
         points: [
             '點球：Foden、Fernández、Doku 先進。Kovačić 被 Steele 撲出。Rulli 撲下 Ayari，Cherki 罰進，Rulli 再撲 Dunk。他說賽前跟 Fernández 講過會撲兩球。這是他城隊第二次出賽。',
             '先發：Rulli；Lewis（Khusanov 76\'）、Reis、Guéhi（隊長）、O\'Reilly（Fernández 87\'）；Bouaddi（Aït-Nouri 46\'）、Kovačić；Foden、Cherki、Allan（Doku 61\'）、Samba（McAidoo 46\'）。Haaland 不在名單。',
@@ -532,8 +532,8 @@ const TRANSFER_NEWS = [
         tags: [{ text: '巴薩', cls: 'text-amber-400 bg-amber-950' }, { text: '1-2', cls: 'text-red-400 bg-red-950' }],
         border: 'border-amber-500/50',
         meta: '10/25 · 巴薩 1-2 皇家馬德里 · 諾坎普',
-        title: '主場 1-2：聯賽首敗，27 分仍是榜首',
-        summary: 'Mbappé 41\' 接上 Gerard Martín 的解圍，自己未必清楚球怎麼進的。Raphinha 61\' 接 Pedri 倒三角追平。87\' Camavinga 橫傳，Mbappé 推進空門。穆里尼奧的馬德里客場拿走三分。',
+        title: '主場 1-2 皇家馬德里：聯賽首敗，27 分仍是榜首',
+        summary: '對皇家馬德里。Mbappé 41\' 接上 Gerard Martín 的解圍，自己未必清楚球怎麼進的。Raphinha 61\' 接 Pedri 倒三角追平。87\' Camavinga 橫傳，Mbappé 推進空門。穆里尼奧的馬德里客場拿走三分。',
         points: [
             '西甲這週沒有新比賽。榜仍是 10 戰 27 分，領先馬競 2 分、馬德里 3 分，三隊都踢了 10 場。',
             'Gordon 84\' 黃牌。Yamal 在場，這球不是他進的。',
@@ -548,8 +548,8 @@ const TRANSFER_NEWS = [
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '2-1', cls: 'text-red-400 bg-red-950' }],
         border: 'border-sky-500/40',
         meta: '10/24 · 阿斯頓維拉 2-1 曼城',
-        title: '維拉公園 2-1：聯賽第一場輸球，21 分仍排第一',
-        summary: 'Jackson 6\' 先進。Guéhi 停球偏大，McGinn 送出直塞。Haaland 52\' 頭槌追平，Ndiaye 傳中，這是他的聯賽第九球。Jackson 60\' 接剛上場的 Mbaye，十五碼推射再領先。Suzuki 擋下多腳，Ndiaye 還打中柱。',
+        title: '作客阿斯頓維拉 2-1：聯賽第一場輸球，21 分仍排第一',
+        summary: '維拉公園對阿斯頓維拉，2-1。Jackson 6\' 先進。Guéhi 停球偏大，McGinn 送出直塞。Haaland 52\' 頭槌追平，Ndiaye 傳中，這是他的聯賽第九球。Jackson 60\' 接剛上場的 Mbaye，十五碼推射再領先。Suzuki 擋下多腳，Ndiaye 還打中柱。',
         points: [
             'BBC 榜：城隊 8 戰 21 分、進 20 失 9。阿森納同樣 21 分、進 13 失 5。淨勝球仍是城隊第一。盃賽沒有改這張榜。',
             'Foden、Lewis 半場換上 Guéhi 與 Cherki，兩人都有黃牌。',
@@ -564,8 +564,8 @@ const TRANSFER_NEWS = [
         tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '0-2', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-rose-500/40',
         meta: '10/25 · 烏迪內斯 0-2 AC 米蘭',
-        title: '客場 0-2：那一晚八戰不敗，18 分第四',
-        summary: 'Pulisic 第 6 分鐘停球後射進，球是 Modrić 從上面送的。Hutchinson 下半場約 20 分鐘補進，Jashari 的射門被 Okoye 擋出來。這是他的米蘭第一球，也是意甲第一次先發。',
+        title: '作客烏迪內斯 0-2：那一晚八戰不敗，18 分第四',
+        summary: '對烏迪內斯，客場 0-2。Pulisic 第 6 分鐘停球後射進，球是 Modrić 從上面送的。Hutchinson 下半場約 20 分鐘補進，Jashari 的射門被 Okoye 擋出來。這是他的米蘭第一球，也是意甲第一次先發。',
         points: [
             '那晚是五勝三和、進 16 失 7、18 分。週三主場 2-4 之後，變成九戰 18 分、第五。',
             'Maignan 先發。Ramos 擊中橫樑，還有一張黃牌。',
@@ -596,8 +596,8 @@ const TRANSFER_NEWS = [
         tags: [{ text: '歐聯', cls: 'text-rose-400 bg-rose-950' }, { text: '0-3', cls: 'text-red-400 bg-red-950' }],
         border: 'border-rose-500/30',
         meta: '10/22 · 伯恩茅斯 3-0 AC 米蘭',
-        title: '客場 0-3：Maignan 27\' 紅牌，兩顆點球',
-        summary: 'De Winter 手球，VAR 改判，Kluivert 罰進。Maignan 在角球推了 Tyler Adams 的臉，27\' 紅牌。Torriani 上場，Tavernier 再罰進。Adli 終場前左腳任意球，約 22 碼。米蘭整場沒有形成對攻。',
+        title: '作客伯恩茅斯 0-3：Maignan 27\' 紅牌，兩顆點球',
+        summary: '對伯恩茅斯，客場 0-3。De Winter 手球，VAR 改判，Kluivert 罰進。Maignan 在角球推了 Tyler Adams 的臉，27\' 紅牌。Torriani 上場，Tavernier 再罰進。Adli 終場前左腳任意球，約 22 碼。米蘭整場沒有形成對攻。',
         points: [
             '阿莫林說這是每個方面都難的一晚。',
             '這場是歐聯的帳。聯賽不敗停在週三聖西羅的 2-4。',
@@ -628,8 +628,8 @@ const TEAM_NEWS = [
         tags: [{ text: '4-3', cls: 'text-emerald-400 bg-emerald-950' }, { text: '21 分', cls: 'text-sky-400 bg-sky-950' }],
         border: 'border-sky-500/50',
         meta: '曼城 · 10/28',
-        title: '聯賽盃 2-2，點球 4-3 過關',
-        summary: '兩度追平。Reis 城隊第一球。Rulli 撲下最後兩顆點球。聯賽仍是 8 戰 21 分、第一。',
+        title: '聯賽盃對布萊頓 2-2，點球 4-3 過關',
+        summary: '對布萊頓，兩度追平。Reis 城隊第一球。Rulli 撲下最後兩顆點球。聯賽仍是 8 戰 21 分、第一。',
         points: ['Haaland 不在名單，金球獎第八是週一的帳。', '週六 15:00 再對布萊頓。'],
         source: '曼城官網',
     },
@@ -640,8 +640,8 @@ const TEAM_NEWS = [
         tags: [{ text: '2-4', cls: 'text-red-400 bg-red-950' }, { text: '第五', cls: 'text-rose-400 bg-rose-950' }],
         border: 'border-rose-500/50',
         meta: 'AC 米蘭 · 10/28',
-        title: '聖西羅 2-4，聯賽首敗掉到第五',
-        summary: 'Cissè 兩球，半場 2-1。Mbangula 帽子戲法，Bartesaghi 60\' 烏龍。九戰 18 分。',
+        title: '聖西羅對波隆那 2-4，聯賽首敗掉到第五',
+        summary: '對波隆那。Cissè 兩球，半場 2-1。Mbangula 帽子戲法，Bartesaghi 60\' 烏龍。九戰 18 分。',
         points: ['國米與拉齊奧同為 25 分。', '週六 20:45 主場國米，落後 7 分。'],
         source: 'Football Italia · ESPN',
     },
@@ -652,8 +652,8 @@ const TEAM_NEWS = [
         tags: [{ text: '1-2', cls: 'text-red-400 bg-red-950' }, { text: '27 分', cls: 'text-amber-400 bg-amber-950' }],
         border: 'border-amber-500/50',
         meta: '巴薩 · 10/25',
-        title: '諾坎普 1-2 之後，西甲沒有新比賽',
-        summary: 'Mbappé 兩球，Raphinha 61\'。10 戰 27 分，領先馬競 2 分、馬德里 3 分。',
+        title: '諾坎普對皇家馬德里 1-2 之後，西甲沒有新比賽',
+        summary: '對皇家馬德里。Mbappé 兩球，Raphinha 61\'。10 戰 27 分，領先馬競 2 分、馬德里 3 分。',
         points: ['亞馬爾柯帕獎連續第三年，是金球獎當晚的另一則。', '週六 21:00 主場阿拉維斯。'],
         source: 'Sports Mole · 曼城官網',
     },
@@ -671,16 +671,16 @@ const TEAM_NEWS = [
     },
 ];
 const X_TRENDING = [
-    { id: 'x1', priority: 1, hashtag: '#MCFCIV', heat: '🔥 爆熱', topic: '伊蒂哈德 2-2，點球 4-3', summary: '兩度落後。Reis 碰進任意球。Rulli 撲下最後兩顆。', reactions: [{ tone: 'positive', text: '「點球之前他就說會撲兩球。」' }, { tone: 'neutral', text: '「九十分鐘沒有領先過，還是過關。」' }, { tone: 'funny', text: '「週六同一對手，換回聯賽。」' }] },
-    { id: 'x2', priority: 2, hashtag: '#ACMilan', heat: '🔥 爆熱', topic: '聖西羅 2-4，聯賽首敗', summary: '半場 2-1。Mbangula 帽子戲法，Bartesaghi 烏龍。18 分第五。', reactions: [{ tone: 'negative', text: '「半場還領先，六十分鐘開始垮。」' }, { tone: 'neutral', text: '「分數沒加，榜從第四掉到第五。」' }, { tone: 'funny', text: '「週六進來的是 25 分的國米。」' }] },
-    { id: 'x3', priority: 3, hashtag: '#Mbangula', heat: '🔥 高熱', topic: '8\'、62\'、86\' 帽子戲法', summary: 'Zortea、Miranda、Odgaard 三次把球送進禁區。', reactions: [{ tone: 'positive', text: '「客隊三球都是他的。」' }, { tone: 'neutral', text: '「60\' 先有一記烏龍，比分才翻過來。」' }, { tone: 'funny', text: '「十多年來的聖西羅聯賽首勝，記在這三球。」' }] },
-    { id: 'x4', priority: 4, hashtag: '#Rulli', heat: '🔥 高熱', topic: '第二次出賽，點球撲兩球', summary: 'Ayari 和 Dunk。Kovačić 那顆先被 Steele 撲出。', reactions: [{ tone: 'positive', text: '「跟 Enzo 說會撲兩球，後來真的是兩球。」' }, { tone: 'neutral', text: '「90 分鐘 Rutter 那腳擦著橫樑出去。」' }, { tone: 'funny', text: '「馬雷斯卡說，到隊之後還沒練過點球。」' }] },
+    { id: 'x1', priority: 1, hashtag: '#MCFCIV', heat: '🔥 爆熱', topic: '對布萊頓 2-2，點球 4-3', summary: '兩度落後。Reis 碰進任意球。Rulli 撲下最後兩顆。', reactions: [{ tone: 'positive', text: '「點球之前他就說會撲兩球。」' }, { tone: 'neutral', text: '「九十分鐘沒有領先過，還是過關。」' }, { tone: 'funny', text: '「週六同一對手，換回聯賽。」' }] },
+    { id: 'x2', priority: 2, hashtag: '#ACMilan', heat: '🔥 爆熱', topic: '對波隆那 2-4，聯賽首敗', summary: '半場 2-1。Mbangula 帽子戲法，Bartesaghi 烏龍。18 分第五。', reactions: [{ tone: 'negative', text: '「半場還領先，六十分鐘開始垮。」' }, { tone: 'neutral', text: '「分數沒加，榜從第四掉到第五。」' }, { tone: 'funny', text: '「週六進來的是 25 分的國米。」' }] },
+    { id: 'x3', priority: 3, hashtag: '#Mbangula', heat: '🔥 高熱', topic: '波隆那客場帽子戲法，8\'、62\'、86\'', summary: '對米蘭。Zortea、Miranda、Odgaard 三次把球送進禁區。', reactions: [{ tone: 'positive', text: '「客隊三球都是他的。」' }, { tone: 'neutral', text: '「60\' 先有一記烏龍，比分才翻過來。」' }, { tone: 'funny', text: '「十多年來的聖西羅聯賽首勝，記在這三球。」' }] },
+    { id: 'x4', priority: 4, hashtag: '#Rulli', heat: '🔥 高熱', topic: '對布萊頓第二次出賽，點球撲兩球', summary: 'Ayari 和 Dunk。Kovačić 那顆先被 Steele 撲出。', reactions: [{ tone: 'positive', text: '「跟 Enzo 說會撲兩球，後來真的是兩球。」' }, { tone: 'neutral', text: '「90 分鐘 Rutter 那腳擦著橫樑出去。」' }, { tone: 'funny', text: '「馬雷斯卡說，到隊之後還沒練過點球。」' }] },
     { id: 'x5', priority: 5, hashtag: '#Haaland', heat: '⚡ 熱議', topic: '2026 金球獎第八', summary: 'Kane 第一。上季 52 球。聯賽盃這份名單沒有他。', reactions: [{ tone: 'neutral', text: '「第八，獎在 Kane 手上。」' }, { tone: 'positive', text: '「世界盃 7 球，挪威進了八強。」' }, { tone: 'funny', text: '「頒獎在週一，週三的杯子他沒碰。」' }] },
-    { id: 'x6', priority: 6, hashtag: '#ElClasico', heat: '⚡ 熱議', topic: '諾坎普 1-2，這週沒有新比賽', summary: 'Mbappé 兩球。Raphinha 61\'。27 分仍是榜首。', reactions: [{ tone: 'negative', text: '「九連勝停在主場。」' }, { tone: 'neutral', text: '「領先馬競 2 分、馬德里 3 分，週六才再踢。」' }, { tone: 'funny', text: '「第一球他自己也不確定。」' }] },
-    { id: 'x7', priority: 7, hashtag: '#Cisse', heat: '⚡ 熱議', topic: '14\'、27\'，半場 2-1 守不住', summary: '兩球都是近距離。後半段 Mbangula 連進，烏龍在中間。', reactions: [{ tone: 'positive', text: '「上半場的兩球是他的。」' }, { tone: 'negative', text: '「2-1 變成 2-4。」' }, { tone: 'neutral', text: '「Hutchinson 先發，自己沒有進球。」' }] },
-    { id: 'x8', priority: 8, hashtag: '#Reis', heat: '💬 討論', topic: '任意球碰進，城隊第一球', summary: '終場前約二十分鐘。Cherki 主罰，Foden 先帶出這記任意球。', reactions: [{ tone: 'positive', text: '「中衛把 2-2 踢出來。」' }, { tone: 'neutral', text: '「五顆點球才分出來。」' }, { tone: 'funny', text: '「先發四名青訓，進球的是這名中衛。」' }] },
+    { id: 'x6', priority: 6, hashtag: '#ElClasico', heat: '⚡ 熱議', topic: '對皇家馬德里 1-2，這週沒有新比賽', summary: 'Mbappé 兩球。Raphinha 61\'。27 分仍是榜首。', reactions: [{ tone: 'negative', text: '「九連勝停在主場。」' }, { tone: 'neutral', text: '「領先馬競 2 分、馬德里 3 分，週六才再踢。」' }, { tone: 'funny', text: '「第一球他自己也不確定。」' }] },
+    { id: 'x7', priority: 7, hashtag: '#Cisse', heat: '⚡ 熱議', topic: '對波隆那兩球，半場 2-1 守不住', summary: '兩球都是近距離。後半段波隆那的 Mbangula 連進，烏龍在中間。', reactions: [{ tone: 'positive', text: '「上半場的兩球是他的。」' }, { tone: 'negative', text: '「2-1 變成 2-4。」' }, { tone: 'neutral', text: '「Hutchinson 先發，自己沒有進球。」' }] },
+    { id: 'x8', priority: 8, hashtag: '#Reis', heat: '💬 討論', topic: '對布萊頓碰進任意球，城隊第一球', summary: '終場前約二十分鐘。Cherki 主罰，Foden 先帶出這記任意球。', reactions: [{ tone: 'positive', text: '「中衛把 2-2 踢出來。」' }, { tone: 'neutral', text: '「五顆點球才分出來。」' }, { tone: 'funny', text: '「先發四名青訓，進球的是這名中衛。」' }] },
     { id: 'x9', priority: 9, hashtag: '#Yamal', heat: '💬 討論', topic: '柯帕獎連續第三年', summary: '金球獎當晚。布阿迪在十人名單裡，獎是亞馬爾的。', reactions: [{ tone: 'positive', text: '「第三年還是他。」' }, { tone: 'neutral', text: '「德比的進球帳沒有他，獎在另一晚。」' }, { tone: 'funny', text: '「羅德里排金球第四，人已經在巴薩。」' }] },
-    { id: 'x10', priority: 10, hashtag: '#Derby', heat: '💬 討論', topic: '週六聖西羅，18 分對 25 分', summary: '紅黑剛輸 2-4。國米 9 戰 25 分，與拉齊奧同分，進球較多。', reactions: [{ tone: 'negative', text: '「落後已經是 7 分。」' }, { tone: 'neutral', text: '「這場還沒踢。」' }, { tone: 'funny', text: '「半週先把首敗交出去。」' }] },
+    { id: 'x10', priority: 10, hashtag: '#Derby', heat: '💬 討論', topic: '週六主場對國米', summary: '紅黑剛以 2-4 輸給波隆那。國米 9 戰 25 分，與拉齊奧同分，進球較多。', reactions: [{ tone: 'negative', text: '「落後已經是 7 分。」' }, { tone: 'neutral', text: '「這場還沒踢。」' }, { tone: 'funny', text: '「半週先把首敗交出去。」' }] },
 ];
 const REACTION_TONE = {
     positive: { label: '支持', cls: 'text-emerald-400 bg-emerald-950', quote: 'reaction-positive' },
