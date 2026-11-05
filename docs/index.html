@@ -6,8 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="app-version" content="fw-v36">
-    <title>⚽ 每周足球新聞 · fw-v36 · 曼城 · AC 米蘭 · 巴塞隆納</title>
+    <meta name="app-version" content="fw-v37">
+    <title>⚽ 每周足球新聞 · fw-v37 · 曼城 · AC 米蘭 · 巴塞隆納</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -79,7 +79,7 @@
                 專注三支豪門：<span class="text-sky-400 font-semibold">曼城</span>（英超）·
                 <span class="text-rose-400 font-semibold">AC 米蘭</span>（意甲）·
                 <span class="text-amber-400 font-semibold">巴塞隆納</span>（西甲）。
-                每週更新戰報、轉會、備戰與社群熱議。近 48 小時：萊比錫主場 2-3 曼城；巴薩主場 3-0 阿斯頓維拉。米蘭今晚對費倫茨瓦羅斯還沒踢。
+                每週更新戰報、轉會、備戰與社群熱議。近 48 小時：曼城客場 3-2 萊比錫；巴薩主場 3-0 阿斯頓維拉。米蘭今晚對費倫茨瓦羅斯還沒踢。
             </p>
             <div id="focus-teams" class="flex flex-wrap gap-2 mt-4"></div>
         </section>
@@ -189,8 +189,8 @@
     </div>
 
 <script>
-const APP_VERSION = 'fw-v36';
-const CACHE_KEY = 'weekly_football_fw_v36';
+const APP_VERSION = 'fw-v37';
+const CACHE_KEY = 'weekly_football_fw_v37';
 const NEWS_WEEK = '2026-W45';
 const NEWS_UPDATED = '2026-11-05';
 const TRENDING_LIMIT = 15;
@@ -499,7 +499,7 @@ const TRANSFER_NEWS = [
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '3-2', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/50',
         meta: '11/4 · RB 萊比錫 2-3 曼城 · 紅牛競技場',
-        title: '客場 3-2 萊比錫：Haaland 進致勝球',
+        title: '曼城客場 3-2 萊比錫：Haaland 進致勝球',
         summary: '對萊比錫。半場前 O\'Reilly 傳中，Lukeba 解圍碰進自己球門。半場剛過，Baku 從右路低射，Donnarumma 以為是傳中。整點之前 Fernández 頭槌，Ndiaye 左路傳中。Nusa 接剛上場的 Nkunku，左腳再追平。Haaland 滑步接 Anderson 的傳中，把比賽踢完。',
         points: [
             '這是他對萊比錫的第 13 球，九次交手。歐冠 61 場第 62 球。他說全場 13 次觸球。隊長袖標在他身上。',
@@ -515,7 +515,7 @@ const TRANSFER_NEWS = [
         tags: [{ text: '巴薩', cls: 'text-amber-400 bg-amber-950' }, { text: '3-0', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-amber-500/50',
         meta: '11/3 · 巴薩 3-0 阿斯頓維拉 · 諾坎普',
-        title: '主場 3-0 阿斯頓維拉：歐冠四戰 9 分',
+        title: '巴薩主場 3-0 阿斯頓維拉：歐冠四戰 9 分',
         summary: '對阿斯頓維拉。Yamal 開賽約 7 分鐘，預判 Buendía 的傳球，弧線進遠角。半場 1-0。Raphinha 52\' 接 Fermín，射門打到 Pau Torres 變線，Suzuki 撲錯方向。約十二分鐘後 Cancelo 過了 McGinn，Raphinha 近距離再進。',
         points: [
             '戰報寫四戰 9 分。那是週二賽後的帳，後面還有別隊的比賽，不把「暫列第二」當成今天的名次。',
@@ -531,7 +531,7 @@ const TRANSFER_NEWS = [
         tags: [{ text: 'AC 米蘭', cls: 'text-rose-400 bg-rose-950' }, { text: '3-1', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-rose-500/40',
         meta: '10/31 · AC 米蘭 3-1 國際米蘭',
-        title: '主場 3-1 國際米蘭：21 分仍第五',
+        title: '米蘭主場 3-1 國際米蘭：21 分仍第五',
         summary: '對國際米蘭。Pulisic 4\' 頭槌，Moreira 傳中。Rabiot 10\'。Bastoni 22\'。Moreira 43\' 任意球。半場 3-1。',
         points: [
             'BBC 榜到 11/1：10 戰 21 分、第五。拉齊奧 28、國米 25、羅馬 24、科莫 23。歐聯還沒開踢，這張榜沒有改。',
@@ -546,7 +546,7 @@ const TRANSFER_NEWS = [
         tags: [{ text: '巴薩', cls: 'text-amber-400 bg-amber-950' }, { text: '6-1', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-amber-500/40',
         meta: '10/31 · 巴薩 6-1 阿拉維斯',
-        title: '主場 6-1 阿拉維斯：30 分仍是榜首',
+        title: '巴薩主場 6-1 阿拉維斯：30 分仍是榜首',
         summary: '對阿拉維斯。Raphinha 兩球，Yamal 兩球，Fermín 23\'，Gordon 81\'。Mariano 84\'。半場 4-0。',
         points: [
             '11 戰 30 分，領先馬競 2 分、皇家馬德里 3 分。歐冠沒有改這張榜。',
@@ -561,7 +561,7 @@ const TRANSFER_NEWS = [
         tags: [{ text: '曼城', cls: 'text-sky-400 bg-sky-950' }, { text: '0-1', cls: 'text-red-400 bg-red-950' }],
         border: 'border-sky-500/40',
         meta: '10/31 · 曼城 0-1 布萊頓',
-        title: '主場 0-1 布萊頓：聯賽仍是第二',
+        title: '曼城主場 0-1 布萊頓：聯賽仍是第二',
         summary: '對布萊頓。Ayari 11\'。Haaland 先發沒有進球。觀眾 60,503。',
         points: [
             '9 戰 21 分、第二。阿森納 24 分，布萊頓 19 分。萊比錫是歐冠，沒有加聯賽分。',
@@ -593,7 +593,7 @@ const TEAM_NEWS = [
         tags: [{ text: '3-2', cls: 'text-emerald-400 bg-emerald-950' }, { text: '第七', cls: 'text-sky-400 bg-sky-950' }],
         border: 'border-sky-500/50',
         meta: '曼城 · 11/4',
-        title: '客場 3-2 萊比錫，歐冠暫列第七',
+        title: '曼城客場 3-2 萊比錫，歐冠暫列第七',
         summary: 'Lukeba 烏龍、Fernández 頭槌、Haaland。Baku 與 Nusa 為萊比錫進球。四戰三勝。',
         points: ['聯賽仍是對布萊頓 0-1 之後的 21 分、第二。', '週六客場諾丁漢森林，17:30 英國。'],
         source: '曼城官網',
@@ -605,7 +605,7 @@ const TEAM_NEWS = [
         tags: [{ text: '3-0', cls: 'text-emerald-400 bg-emerald-950' }, { text: '9 分', cls: 'text-amber-400 bg-amber-950' }],
         border: 'border-amber-500/50',
         meta: '巴薩 · 11/3',
-        title: '主場 3-0 阿斯頓維拉，歐冠四戰 9 分',
+        title: '巴薩主場 3-0 阿斯頓維拉，歐冠四戰 9 分',
         summary: 'Yamal 先開，Raphinha 兩球。半場 1-0。聯賽仍是對阿拉維斯 6-1 之後的 30 分。',
         points: ['週日 21:00 客場馬競。', '領先馬競仍是 2 分。'],
         source: '巴薩官網',
@@ -617,7 +617,7 @@ const TEAM_NEWS = [
         tags: [{ text: '3-1', cls: 'text-emerald-400 bg-emerald-950' }, { text: '今晚', cls: 'text-blue-300 bg-blue-950' }],
         border: 'border-rose-500/50',
         meta: 'AC 米蘭 · 11/5',
-        title: '對費倫茨瓦羅斯還沒踢，上一場是 3-1 國米',
+        title: '米蘭對費倫茨瓦羅斯還沒踢，上一場主場 3-1 國際米蘭',
         summary: '今晚聖西羅，官網寫 18:45。德比是 Pulisic、Rabiot、Moreira。21 分第五。',
         points: ['拉齊奧 28 分第一。', '週日客場熱那亞。'],
         source: 'AC 米蘭官網 · BBC',
@@ -629,23 +629,23 @@ const TEAM_NEWS = [
         tags: [{ text: 'Haaland', cls: 'text-sky-400 bg-sky-950' }, { text: '第 13 球', cls: 'text-emerald-400 bg-emerald-950' }],
         border: 'border-sky-500/30',
         meta: '曼城 · 11/4',
-        title: 'Haaland 對萊比錫進致勝球，隊長袖標',
+        title: '曼城的 Haaland 對萊比錫進致勝球，隊長袖標',
         summary: '客場 3-2。對這個對手九次交手的第 13 球。歐冠 61 場第 62 球。',
         points: ['對布萊頓先發，那場 0-1 沒有進球。', '他說這晚 13 次觸球。'],
         source: '曼城官網',
     },
 ];
 const X_TRENDING = [
-    { id: 'x1', priority: 1, hashtag: '#UCL', heat: '🔥 爆熱', topic: '客場對萊比錫 3-2', summary: 'Lukeba 烏龍先開。Baku、Nusa 各追平一次。Haaland 進最後一球。', reactions: [{ tone: 'positive', text: '「聯賽兩連敗之後，歐冠拿走三分。」' }, { tone: 'neutral', text: '「四戰三勝，暫列第七。」' }, { tone: 'funny', text: '「Haaland 說他只碰了 13 次球。」' }] },
-    { id: 'x2', priority: 2, hashtag: '#Barca', heat: '🔥 爆熱', topic: '主場對阿斯頓維拉 3-0', summary: 'Yamal 約 7 分鐘。Raphinha 52\' 再一球。半場 1-0。', reactions: [{ tone: 'positive', text: '「四戰 9 分。」' }, { tone: 'neutral', text: '「聯賽 30 分沒有因為歐冠變動。」' }, { tone: 'funny', text: '「Raphinha 追平 Ronaldinho 的 94 球。」' }] },
-    { id: 'x3', priority: 3, hashtag: '#Haaland', heat: '🔥 高熱', topic: '對萊比錫的第 13 球', summary: '隊長。Anderson 傳中，他滑步推進。歐冠第 62 球。', reactions: [{ tone: 'positive', text: '「致勝球是他的。」' }, { tone: 'neutral', text: '「Vandevoordt 先撲出他一腳。」' }, { tone: 'funny', text: '「九次交手，13 個球。」' }] },
-    { id: 'x4', priority: 4, hashtag: '#Enzo', heat: '🔥 高熱', topic: '對萊比錫頭槌再領先', summary: 'Ndiaye 左路傳中。整點之前。83\' 被 Kovačić 換下。', reactions: [{ tone: 'positive', text: '「2-1 是這顆頭槌。」' }, { tone: 'neutral', text: '「Nusa 接著又追平。」' }, { tone: 'funny', text: '「對布萊頓沒進，萊比錫補上。」' }] },
-    { id: 'x5', priority: 5, hashtag: '#Yamal', heat: '⚡ 熱議', topic: '對維拉先開，20 歲以下歐冠進球新高', summary: 'Buendía 傳球被他預判。遠角。半場 1-0 守到終場 3-0。', reactions: [{ tone: 'positive', text: '「約 7 分鐘就有球。」' }, { tone: 'neutral', text: '「後面兩球是 Raphinha。」' }, { tone: 'funny', text: '「Suzuki 撲出他終場前的另一腳。」' }] },
-    { id: 'x6', priority: 6, hashtag: '#Raphinha', heat: '⚡ 熱議', topic: '對維拉兩球，巴薩 94 球', summary: '52\' 折射，稍後近距離再進。追平 Ronaldinho。', reactions: [{ tone: 'positive', text: '「下半場兩球把 1-0 踢成 3-0。」' }, { tone: 'neutral', text: '「賽後他說今天不適合談足球。」' }, { tone: 'funny', text: '「94 球，跟 Ronaldinho 同一格。」' }] },
-    { id: 'x7', priority: 7, hashtag: '#ACMilan', heat: '⚡ 熱議', topic: '今晚對費倫茨瓦羅斯還沒踢', summary: '聖西羅，官網 18:45。上一場是對國米 3-1。', reactions: [{ tone: 'neutral', text: '「比分還沒有。」' }, { tone: 'positive', text: '「德比的 3-1 還在。」' }, { tone: 'funny', text: '「21 分第五，今晚這場不加聯賽分。」' }] },
-    { id: 'x8', priority: 8, hashtag: '#Derby', heat: '💬 討論', topic: '對國際米蘭 3-1 還是這週的聯賽', summary: 'Pulisic 4\'，Rabiot 10\'，Moreira 43\'。Bastoni 22\'。', reactions: [{ tone: 'positive', text: '「Moreira 一球兩助攻。」' }, { tone: 'neutral', text: '「第五，落後拉齊奧 7 分。」' }, { tone: 'funny', text: '「國米那球是 Bastoni。」' }] },
-    { id: 'x9', priority: 9, hashtag: '#MCFCIV', heat: '💬 討論', topic: '對布萊頓 0-1 還是聯賽最新一場', summary: 'Ayari 11\'。歐冠 3-2 沒有把 21 分加成 24 分。', reactions: [{ tone: 'negative', text: '「聯賽還是第二。」' }, { tone: 'neutral', text: '「阿森納 24 分。」' }, { tone: 'funny', text: '「週六換諾丁漢森林。」' }] },
-    { id: 'x10', priority: 10, hashtag: '#Atleti', heat: '💬 討論', topic: '週日客場對馬競還沒踢', summary: '21:00。榜上 30 分對 28 分，都踢了 11 場。', reactions: [{ tone: 'neutral', text: '「領先 2 分，這場直接對上。」' }, { tone: 'positive', text: '「歐冠 3-0 是這週的另一本帳。」' }, { tone: 'funny', text: '「阿拉維斯那場是 6-1。」' }] },
+    { id: 'x1', priority: 1, hashtag: '#UCL', heat: '🔥 爆熱', topic: '曼城客場對萊比錫 3-2', summary: 'Lukeba 烏龍先開。Baku、Nusa 各追平一次。Haaland 進最後一球。', reactions: [{ tone: 'positive', text: '「聯賽兩連敗之後，歐冠拿走三分。」' }, { tone: 'neutral', text: '「四戰三勝，暫列第七。」' }, { tone: 'funny', text: '「Haaland 說他只碰了 13 次球。」' }] },
+    { id: 'x2', priority: 2, hashtag: '#Barca', heat: '🔥 爆熱', topic: '巴薩主場對阿斯頓維拉 3-0', summary: 'Yamal 約 7 分鐘。Raphinha 52\' 再一球。半場 1-0。', reactions: [{ tone: 'positive', text: '「四戰 9 分。」' }, { tone: 'neutral', text: '「聯賽 30 分沒有因為歐冠變動。」' }, { tone: 'funny', text: '「Raphinha 追平 Ronaldinho 的 94 球。」' }] },
+    { id: 'x3', priority: 3, hashtag: '#Haaland', heat: '🔥 高熱', topic: '曼城的 Haaland 對萊比錫第 13 球', summary: '隊長。Anderson 傳中，他滑步推進。歐冠第 62 球。', reactions: [{ tone: 'positive', text: '「致勝球是他的。」' }, { tone: 'neutral', text: '「Vandevoordt 先撲出他一腳。」' }, { tone: 'funny', text: '「九次交手，13 個球。」' }] },
+    { id: 'x4', priority: 4, hashtag: '#Enzo', heat: '🔥 高熱', topic: '曼城的 Enzo 對萊比錫頭槌再領先', summary: 'Ndiaye 左路傳中。整點之前。83\' 被 Kovačić 換下。', reactions: [{ tone: 'positive', text: '「2-1 是這顆頭槌。」' }, { tone: 'neutral', text: '「Nusa 接著又追平。」' }, { tone: 'funny', text: '「對布萊頓沒進，萊比錫補上。」' }] },
+    { id: 'x5', priority: 5, hashtag: '#Yamal', heat: '⚡ 熱議', topic: '巴薩的 Yamal 對阿斯頓維拉先開', summary: 'Buendía 傳球被他預判。遠角。半場 1-0 守到終場 3-0。', reactions: [{ tone: 'positive', text: '「約 7 分鐘就有球。」' }, { tone: 'neutral', text: '「後面兩球是 Raphinha。」' }, { tone: 'funny', text: '「Suzuki 撲出他終場前的另一腳。」' }] },
+    { id: 'x6', priority: 6, hashtag: '#Raphinha', heat: '⚡ 熱議', topic: '巴薩的 Raphinha 對阿斯頓維拉兩球', summary: '52\' 折射，稍後近距離再進。追平 Ronaldinho。', reactions: [{ tone: 'positive', text: '「下半場兩球把 1-0 踢成 3-0。」' }, { tone: 'neutral', text: '「賽後他說今天不適合談足球。」' }, { tone: 'funny', text: '「94 球，跟 Ronaldinho 同一格。」' }] },
+    { id: 'x7', priority: 7, hashtag: '#ACMilan', heat: '⚡ 熱議', topic: '米蘭今晚對費倫茨瓦羅斯還沒踢', summary: '聖西羅，官網 18:45。上一場是對國米 3-1。', reactions: [{ tone: 'neutral', text: '「比分還沒有。」' }, { tone: 'positive', text: '「德比的 3-1 還在。」' }, { tone: 'funny', text: '「21 分第五，今晚這場不加聯賽分。」' }] },
+    { id: 'x8', priority: 8, hashtag: '#Derby', heat: '💬 討論', topic: '米蘭主場對國際米蘭 3-1', summary: 'Pulisic 4\'，Rabiot 10\'，Moreira 43\'。Bastoni 22\'。', reactions: [{ tone: 'positive', text: '「Moreira 一球兩助攻。」' }, { tone: 'neutral', text: '「第五，落後拉齊奧 7 分。」' }, { tone: 'funny', text: '「國米那球是 Bastoni。」' }] },
+    { id: 'x9', priority: 9, hashtag: '#MCFCIV', heat: '💬 討論', topic: '曼城主場對布萊頓 0-1', summary: 'Ayari 11\'。歐冠 3-2 沒有把 21 分加成 24 分。', reactions: [{ tone: 'negative', text: '「聯賽還是第二。」' }, { tone: 'neutral', text: '「阿森納 24 分。」' }, { tone: 'funny', text: '「週六換諾丁漢森林。」' }] },
+    { id: 'x10', priority: 10, hashtag: '#Atleti', heat: '💬 討論', topic: '巴薩週日客場對馬競還沒踢', summary: '21:00。榜上 30 分對 28 分，都踢了 11 場。', reactions: [{ tone: 'neutral', text: '「領先 2 分，這場直接對上。」' }, { tone: 'positive', text: '「歐冠 3-0 是這週的另一本帳。」' }, { tone: 'funny', text: '「阿拉維斯那場是 6-1。」' }] },
 ];
 const REACTION_TONE = {
     positive: { label: '支持', cls: 'text-emerald-400 bg-emerald-950', quote: 'reaction-positive' },
